@@ -1,9 +1,9 @@
 ---
 layout: page
-title: Yi Zhao
+title: Rui Liu
 description: 
-img: assets/img/people/yizhao.jpg
-importance: 6
+img: assets/img/people/ruiliu.jpg
+importance: 7
 category: Visiting Scholars
 ---
 
