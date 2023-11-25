@@ -3,9 +3,9 @@
 # -----------------------------------------------------------------------------
 
 title: Yonsei DataLab # the website title (if blank, full name will be used instead)
-first_name: DataLab
+first_name: Yonsei DataLab
 middle_name:
-last_name: Yonsei
+last_name: 
 email: yonseidatalab@gmail.com
 description: > # the ">" symbol means to ignore newlines until "footer_text:"
   A simple, whitespace theme for academics. Based on [*folio](https://github.com/bogoli/-folio) design.
