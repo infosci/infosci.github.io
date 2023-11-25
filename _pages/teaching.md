@@ -2,12 +2,12 @@
 layout: page
 permalink: /teaching/
 title: teaching
-description: Materials for courses you taught. Replace this text with your description.
+description:
 nav: true
 nav_order: 4
 ---
 
-Underegraduate:
+Undergraduate:
 
 * LIS2812: Introduction to Data Science
 * LIS3813: Introduction to Text Processing
