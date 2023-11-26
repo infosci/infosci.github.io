@@ -139,13 +139,12 @@ blockquote {
 
   .card-title {
     color: var(--global-text-color);
-    text-align: center;
 
   }
 
   .card-item {
     width: auto;
-    margin-bottom: 5px;
+    margin-bottom: 1px;
 
     .row {
       display: flex;
@@ -600,7 +599,7 @@ footer.sticky-bottom {
 
   .card-item {
     width: auto;
-    margin-bottom: 10px;
+    margin-bottom: 1px;
 
     .row {
       display: flex;
@@ -611,7 +610,7 @@ footer.sticky-bottom {
   .grid-sizer,
   .grid-item {
     width: 200px;
-    margin-bottom: 0px;
+    margin-bottom: 1px;
   }
 
   h2.category {
@@ -1046,6 +1045,7 @@ nav[data-toggle="toc"] {
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
+      text-align: center;
     }
 
     &:hover {
@@ -1058,7 +1058,7 @@ nav[data-toggle="toc"] {
   }
 
   .card-item {
-    margin-bottom: 10px;
+    margin-bottom: 1px;
   }
 
   .post-meta {
