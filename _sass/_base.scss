@@ -140,7 +140,7 @@ blockquote {
   .card-title {
     color: var(--global-text-color);
     text-align: center;
-    font-family: monospace;
+
   }
 
   .card-item {
@@ -643,6 +643,14 @@ footer.sticky-bottom {
 
     span {
       font-size: 1.5rem;
+    }
+  }
+
+  h5 {
+    margin-bottom: 1rem;
+
+    span {
+      font-size: 0.75rem;
     }
   }
 
