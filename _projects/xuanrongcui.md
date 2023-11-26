@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Xuanrong Cui
-description: 
+title: 
+description: Xuanrong Cui
 img: assets/img/people/xuanrongcui.jpg
 redirect: https://www.yonsei.ac.kr
 importance: 31

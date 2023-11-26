@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Xinyi Chen
-description: 
+title: 
+description: Xinyi Chen
 img: assets/img/people/xinyichen.png
 redirect: https://www.yonsei.ac.kr
 importance: 51

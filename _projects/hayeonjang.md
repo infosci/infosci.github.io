@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Hayeon Jang
-description: 
+title: 
+description: Hayeon Jang
 img: assets/img/people/hayeonjang.jpeg
 redirect: https://www.yonsei.ac.kr
 importance: 32

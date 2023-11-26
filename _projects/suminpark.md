@@ -1,7 +1,7 @@
 ---
 layout: page
-title: Sumin Park
-description: 
+title: 
+description: Sumin Park
 img: assets/img/people/suminpark.jpg
 redirect: https://www.yonsei.ac.kr
 importance: 53
