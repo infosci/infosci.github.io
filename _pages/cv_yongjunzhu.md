@@ -1,11 +1,10 @@
 ---
 layout: cv
 permalink: /yongjunzhu/
-title: cv
+title:
 nav: false
 nav_order: 
-cv_pdf: example_pdf.pdf
-description: This is a description of the page. You can modify it in 'pages/_cv.md'. You can also change or remove the top pdf download button.
+cv_pdf:
 toc:
   sidebar: left
 ---
