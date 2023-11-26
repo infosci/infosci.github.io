@@ -39,7 +39,7 @@ profiles:
     more_info: 
 
   - align: left
-    image: funder/smg.png
+    image: funder/smc.png
     content: about_project_2.md
     image_circular: false # crops the image to make it circular
     more_info: 
