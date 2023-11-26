@@ -1,7 +1,7 @@
 ---
 layout: page
-title: 
-description: Ting Jiang
+title: Ting Jiang
+description:
 img: assets/img/people/tingjiang.jpeg
 redirect: https://www.yonsei.ac.kr
 importance: 22

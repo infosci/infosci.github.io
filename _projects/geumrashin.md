@@ -1,7 +1,7 @@
 ---
 layout: page
-title: 
-description: Geumra Shin
+title: Geumra Shin
+description:
 img: assets/img/people/geumrashin.jpeg
 redirect: https://www.yonsei.ac.kr
 importance: 52
