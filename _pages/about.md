@@ -7,7 +7,7 @@ subtitle:
 profile:
   align: right
   image: campus/1.jpg
-  image_circular: false # crops the image to make it circular
+  image_circular: true # crops the image to make it circular
   more_info: >
 
 
