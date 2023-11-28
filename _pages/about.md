@@ -5,8 +5,8 @@ permalink: /
 subtitle: 
 
 profile:
-  align:
-  image: 
+  align: right
+  image: campus/1.jpg
   image_circular: false # crops the image to make it circular
   more_info: >
 
