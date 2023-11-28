@@ -18,20 +18,20 @@ social: false  # includes social icons at the bottom of the page
 ---
 [Data science](https://en.wikipedia.org/wiki/Data_science) is an interdisciplinary field that uses scientific methods, processes, algorithms, and systems to extract knowledge and insights from data. 
 
-**DataLab** at [Yonsei University](https://www.yonsei.ac.kr/) pursues data-driven research in the areas of [health informatics](https://en.wikipedia.org/wiki/Health_informatics), [science of science](https://en.wikipedia.org/wiki/Metascience), and [suicidology](https://en.wikipedia.org/wiki/Suicidology). We have been applying data science technologies to data from various domains such as publications, healthcare, social media, and data in various forms including but not limited to relational data, text data, graph data, and electronic health records data.
+**DataLab** at [Yonsei University](https://www.yonsei.ac.kr/) pursues data-driven research in the areas of [science of science](https://en.wikipedia.org/wiki/Metascience), [health informatics](https://en.wikipedia.org/wiki/Health_informatics), and [suicidology](https://en.wikipedia.org/wiki/Suicidology). We have been applying data science technologies to data from various domains such as publications, healthcare, social media, and data in various forms including but not limited to relational data, text data, graph data, and electronic health records data.
 
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/research/hinfo.jpg" title="Health Informatics" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/research/scisci.jpg" title="Health Informatics" class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/research/scisci.jpg" title="Science of Science" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/research/hinfo.jpg" title="Science of Science" class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
         {% include figure.html path="assets/img/research/suicide.jpg" title="Suicidology" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
-    Caption photos easily. On the left, a road goes through a tunnel. Middle, leaves artistically fall in a hipster photoshoot. Right, in another hipster photoshoot, a lumberjack grasps a handful of pine needles.
+    Science of Science (left), Health Informatics (center), Suicidology (right)
 </div>
