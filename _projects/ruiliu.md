@@ -3,7 +3,7 @@ layout: page
 title: Rui Liu
 description:
 img: assets/img/people/ruiliu.jpg
-redirect: https://www.yonsei.ac.kr
+redirect: http://www.linkedin.com/in/%E8%8A%AE-%E5%88%98-liurui
 importance: 42
 category: visiting scholars
 ---
