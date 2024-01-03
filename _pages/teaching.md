@@ -16,6 +16,7 @@ Undergraduate:
 
 Graudate:
 
+* LIS5000: Causal Analysis
 * LIS7035: Science of Science
 * LIS7037: Health Informatics
 * SLI6544: Databases
