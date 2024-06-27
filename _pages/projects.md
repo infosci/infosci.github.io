@@ -5,7 +5,7 @@ permalink: /people/
 description:
 nav: true
 nav_order: 1
-display_categories: [principal investigator, doctoral students, master's students, visiting scholars, research interns, alumni]
+display_categories: [principal investigator, doctoral students, master's students, visiting scholars, alumni, past visiting scholars]
 horizontal: false
 ---
 
