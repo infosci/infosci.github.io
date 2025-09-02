@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Manwhee Han, Chiyoung Song, and Kyeongeun Min joined DataLab as an assistant professor.
+Manwhee Han, Chiyoung Song, and Kyeongeun Min joined DataLab.
