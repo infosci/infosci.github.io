@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Dr. Rui Liu <br/> Zhengzhou University
+title: Dr. Rui Liu <br/> Asst. Prof. at Zhengzhou University
 description:
 img: assets/img/people/ruiliu.jpg
 redirect: http://www.linkedin.com/in/%E8%8A%AE-%E5%88%98-liurui
