@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Yi Zhao <br/> Anhui University
+title: Dr. Yi Zhao <br/> Anhui University
 description:
 img: assets/img/people/yizhao.jpg
 redirect: https://www.researchgate.net/profile/Yi-Zhao-107
