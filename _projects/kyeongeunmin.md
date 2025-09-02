@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Jeongyeon Choi
+title: Kyeongeun Min
 description:
 img: assets/img/people/kyeongeunmin.jpg
 redirect: https://minkyeongeun.github.io/
