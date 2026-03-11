@@ -5,4 +5,4 @@ inline: true
 related_posts: false
 ---
 
-Seojin Nam joined DataLab as a doctoral student.
+Seojin Nam and Jinyoung Oh joined DataLab as a doctoral student.
