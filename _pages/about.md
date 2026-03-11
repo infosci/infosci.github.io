@@ -23,13 +23,13 @@ social: false  # includes social icons at the bottom of the page
 
 <div class="row">
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/research/scisci.png" title="Mental Health Informatics" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/research/scisci.png" title="Science of Science" class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/research/mhi.png" title="Science of Science" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/research/mhi.png" title="Mental Health Informatics" class="img-fluid rounded z-depth-1" %}
     </div>
     <div class="col-sm mt-3 mt-md-0">
-        {% include figure.html path="assets/img/research/dh.png" title="Computational Suicidology" class="img-fluid rounded z-depth-1" %}
+        {% include figure.html path="assets/img/research/dh.png" title="Digital Humanities" class="img-fluid rounded z-depth-1" %}
     </div>
 </div>
 <div class="caption">
