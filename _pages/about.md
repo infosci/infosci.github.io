@@ -17,9 +17,8 @@ selected_papers: false # includes a list of papers marked as "selected={true}"
 social: false  # includes social icons at the bottom of the page
 ---
 
-[Data science](https://en.wikipedia.org/wiki/Data_science) is an interdisciplinary field that uses scientific methods, processes, algorithms, and systems to extract knowledge and insights from data. 
-
-**DataLab** at [Yonsei University](https://www.yonsei.ac.kr/) pursues data-driven research in the areas of [science of science](https://en.wikipedia.org/wiki/Metascience), [mental health informatics](https://en.wikipedia.org/wiki/Mental_health_informatics), and [computational suicidology](https://en.wikipedia.org/wiki/Suicidology). We have been applying data science technologies to data from various domains such as publications, healthcare, social media, and data in various forms including but not limited to relational data, text data, graph data, and electronic health records data.
+[Data science](https://en.wikipedia.org/wiki/Data_science) is an interdisciplinary field that integrates statistical, computational, and domain expertise to extract knowledge and insights from complex data.
+**DataLab** at [Yonsei University](https://www.yonsei.ac.kr/) conducts data-driven research in the areas of [science of science](https://en.wikipedia.org/wiki/Metascience), [mental health informatics](https://en.wikipedia.org/wiki/Mental_health_informatics), and [digital humanities](https://en.wikipedia.org/wiki/Digital_humanities). We develop and apply data science methods to diverse datasets—including scientific publications, healthcare and mental health data, social media, and cultural or historical corpora—across modalities such as relational data, text, and graphs.
 
 
 <div class="row">
