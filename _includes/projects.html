@@ -13,9 +13,12 @@
           alt="project thumbnail" -%}
         {%- endif %}
         <div class="card-body">
-          <!-- <h2 class="card-title text-lowercase">{{ project.title }}</h2> -->
-          <p class="card-text">{{ project.title }}</p>
-           <!-- <p class="card-text">{{ project.description }}</p> -->
+          <div class="person-details">
+            <p class="person-name">{{ project.title }}</p>
+            <p class="person-role{% unless project.role %} person-role-empty{% endunless %}">
+              {%- if project.role -%}{{ project.role }}{%- else -%}&nbsp;{%- endif -%}
+            </p>
+          </div>
           <div class="row ml-1 mr-1 p-0">
             {%- if project.github -%}
             <div class="github-icon">
