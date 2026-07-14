@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Hayeon Jang
+title: Hayeon Jang <br/> Researcher at Korea Health Information Service
 description:
 img: assets/img/people/hayeonjang.jpeg
 redirect: https://www.linkedin.com/in/hayeon-jang-jhy7927
