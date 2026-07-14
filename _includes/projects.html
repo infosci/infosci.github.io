@@ -8,9 +8,20 @@
       {%- endif %}
       <div class="card hoverable">
         {%- if project.img %}
-        {%- include figure.html
-          path=project.img
-          alt="project thumbnail" -%}
+        {%- assign thumb_path = project.img | remove: ".jpg" | remove: ".jpeg" | remove: ".png" | remove: ".tiff" -%}
+        <figure>
+          <picture>
+            {%- if site.imagemagick.enabled %}
+            <source srcset="{{ thumb_path | relative_url }}-480.webp" type="image/webp" />
+            {%- endif %}
+            <img
+              src="{{ project.img | relative_url }}"
+              alt="{{ project.title }} photo"
+              loading="lazy"
+              onerror="this.onerror=null; this.closest('picture').querySelector('source')?.remove();"
+            />
+          </picture>
+        </figure>
         {%- endif %}
         <div class="card-body">
           <div class="person-details">
