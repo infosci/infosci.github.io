@@ -615,10 +615,20 @@ footer.sticky-bottom {
 
   .card-body {
     padding: 0.5rem;
+    height: 5.8rem;
+    overflow: hidden;
+    display: flex;
+    align-items: flex-start;
   }
 
   .card-text {
     font-size: 0.85rem;
+    line-height: 1.3;
+    margin: 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
   }
 
   h2.category {
