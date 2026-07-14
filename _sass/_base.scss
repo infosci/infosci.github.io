@@ -609,8 +609,16 @@ footer.sticky-bottom {
 
   .grid-sizer,
   .grid-item {
-    width: 250px;
+    width: 144px;
     margin-bottom: 10px;
+  }
+
+  .card-body {
+    padding: 0.5rem;
+  }
+
+  .card-text {
+    font-size: 0.85rem;
   }
 
   h2.category {
