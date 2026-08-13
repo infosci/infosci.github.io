@@ -52,6 +52,28 @@ export function MentalHealthIcon({ className }: IconProps) {
   );
 }
 
+/** A cog: a circle with six teeth. The plainest sign for technology as an
+ * object of study, and the only one of the four that names a thing rather than
+ * a practice — which is the point, since the field studies the thing. */
+export function TechnologyStudiesIcon({ className }: IconProps) {
+  const cx = 16;
+  const cy = 20;
+  const teeth = [0, 60, 120, 180, 240, 300].map((deg) => {
+    const rad = (deg * Math.PI) / 180;
+    const [c, s] = [Math.cos(rad), Math.sin(rad)];
+    return `M${(cx + 8.6 * c).toFixed(2)} ${(cy + 8.6 * s).toFixed(2)} L${(cx + 11.6 * c).toFixed(2)} ${(cy + 11.6 * s).toFixed(2)}`;
+  });
+
+  return (
+    <svg {...SHARED} className={className ?? "h-10 w-8"}>
+      <circle cx={cx} cy={cy} r={6.6} />
+      {teeth.map((d) => (
+        <path key={d} d={d} />
+      ))}
+    </svg>
+  );
+}
+
 /** An open book. The plainest sign of the humanities, left plain on purpose —
  * every attempt to add a "digital" flourish (a node, a cursor) turned to
  * clutter at this stroke weight. The company it keeps carries the rest. */

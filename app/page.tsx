@@ -3,6 +3,7 @@ import {
   DigitalHumanitiesIcon,
   MentalHealthIcon,
   ScienceOfScienceIcon,
+  TechnologyStudiesIcon,
 } from "@/components/AreaIcons";
 import { TriadFigure } from "@/components/TriadFigure";
 
@@ -33,6 +34,20 @@ const AREAS = [
     source: {
       href: "https://amia.org/community/working-groups/mental-health-informatics",
       label: "AMIA Working Group",
+    },
+  },
+  {
+    // 4S is the field's convening body: it describes what it fosters as
+    // "social studies of science, technology, and medicine", a field that
+    // "includes Science and Technology Studies; Science, Technology, and
+    // Society". So the citation is sound whichever of those names the lab
+    // settles on for this card.
+    id: "technology-studies",
+    title: "Technology Studies",
+    Icon: TechnologyStudiesIcon,
+    source: {
+      href: "https://www.4sonline.org/what_is_4s.php",
+      label: "Society for Social Studies of Science (4S)",
     },
   },
   {
@@ -77,9 +92,9 @@ function AreaCard({
 }) {
   return (
     <section
-      className={`flex h-full flex-col items-center gap-3 rounded-2xl border border-black/[.08] px-6 py-10 text-center dark:border-white/[.145] ${className ?? ""}`}
+      className={`flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-black/[.08] px-5 py-6 text-center dark:border-white/[.145] ${className ?? ""}`}
     >
-      <area.Icon className="h-10 w-8 text-black dark:text-zinc-50" />
+      <area.Icon className="h-8 w-6 text-black dark:text-zinc-50" />
       {/* One line each. "Mental Health Informatics" is the constraint — at
           text-2xl it wrapped in a third-width column, leaving the three titles
           visually uneven. Dropped a size and pinned to nowrap; the longest
@@ -91,7 +106,7 @@ function AreaCard({
         href={area.source.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-flex items-center gap-1.5 text-xl font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
+        className="group inline-flex items-center gap-1.5 text-base font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
       >
         <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
           {area.title}
@@ -123,14 +138,17 @@ export default function Home() {
           side and one beneath, so the figure is enclosed rather than captioned.
           On a phone the grid collapses to a single column and the order becomes
           card, figure, card, card — the figure still sits among them. */}
-      <div className="mt-14 grid w-full items-center gap-6 sm:grid-cols-3">
+      <div className="mt-14 grid w-full gap-5 sm:grid-cols-3">
         <AreaCard area={AREAS[0]} />
 
-        <TriadFigure className="mx-auto h-auto w-full max-w-[19rem] text-black dark:text-zinc-50" />
+        {/* Spans both rows so the triad sits level with the four cards rather
+            than above them. Auto-placement flows the remaining cards around
+            this cell. */}
+        <TriadFigure className="mx-auto h-auto w-full max-w-[17rem] self-center text-black sm:row-span-2 dark:text-zinc-50" />
 
         <AreaCard area={AREAS[1]} />
-
-        <AreaCard area={AREAS[2]} className="sm:col-start-2" />
+        <AreaCard area={AREAS[2]} />
+        <AreaCard area={AREAS[3]} />
       </div>
 
       <Link
