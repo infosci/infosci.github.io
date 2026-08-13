@@ -19,7 +19,8 @@ export default function GrantsPage() {
         Grants
       </h1>
       <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-        Funded research led at DataLab.
+        Funding isn&apos;t why we do research. It&apos;s what lets us worry about
+        the questions instead.
       </p>
 
       <ul className="mt-14 space-y-10">
