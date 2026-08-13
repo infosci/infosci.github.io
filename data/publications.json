@@ -21,6 +21,30 @@
     "note": null
   },
   {
+    "doi": "10.1016/j.joi.2026.101802",
+    "title": "A review of the science of team science: Data sources, research methods, disciplinary characteristics, and research topics",
+    "authors": [
+      "Rui Liu",
+      "Yi Zhao",
+      "Eunji Jeon",
+      "Yi Bu",
+      "Irene Li",
+      "Yongjun Zhu"
+    ],
+    "journal": "Journal of Informetrics",
+    "volume": "20",
+    "issue": "2",
+    "pages": "101802",
+    "year": 2026,
+    "month": 6,
+    "type": "journal-article",
+    "url": "https://doi.org/10.1016/j.joi.2026.101802",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null
+  },
+  {
     "doi": "10.1016/j.knosys.2026.115460",
     "title": "Prototype learning with structural-semantic alignment for interpretable molecular relational learning",
     "authors": [
