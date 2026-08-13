@@ -19,7 +19,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 
 const MAILTO = "yonseidatalab@gmail.com";
-const PER_AREA = 3;
+const PER_AREA = 5;
 
 const AREAS = [
   {
@@ -79,7 +79,7 @@ async function recentFor(area) {
         doi: w.DOI,
         title: clean(w.title[0]),
         journal: clean(w["container-title"]?.[0] ?? ""),
-        // First author only — three papers x six names would swamp the section.
+        // First author only — five papers x six names would swamp the section.
         firstAuthor: authors[0] ?? null,
         etAl: authors.length > 1,
         year: year ?? null,

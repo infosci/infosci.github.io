@@ -29,6 +29,26 @@
       "year": 2026,
       "month": 9,
       "url": "https://doi.org/10.1016/j.joi.2026.101857"
+    },
+    {
+      "doi": "10.1016/j.joi.2026.101840",
+      "title": "Distant but bridgeable: how geographic and cognitive distance jointly shape interdisciplinary knowledge production",
+      "journal": "Journal of Informetrics",
+      "firstAuthor": "Alex J. Yang",
+      "etAl": true,
+      "year": 2026,
+      "month": 9,
+      "url": "https://doi.org/10.1016/j.joi.2026.101840"
+    },
+    {
+      "doi": "10.1016/j.joi.2026.101850",
+      "title": "The Price–Pareto growth model of networks with community structure",
+      "journal": "Journal of Informetrics",
+      "firstAuthor": "Łukasz Brzozowski",
+      "etAl": true,
+      "year": 2026,
+      "month": 9,
+      "url": "https://doi.org/10.1016/j.joi.2026.101850"
     }
   ],
   "mental-health-informatics": [
@@ -61,6 +81,26 @@
       "year": 2026,
       "month": 8,
       "url": "https://doi.org/10.2196/99749"
+    },
+    {
+      "doi": "10.2196/77507",
+      "title": "Piloting a Digital App Based on the Friendship Bench for Depression and Anxiety in Palestine: Mixed Methods Study",
+      "journal": "JMIR Mental Health",
+      "firstAuthor": "Chantal Lakis",
+      "etAl": true,
+      "year": 2026,
+      "month": 8,
+      "url": "https://doi.org/10.2196/77507"
+    },
+    {
+      "doi": "10.2196/88388",
+      "title": "Effects of Remotely Delivered and Web-Based Interventions on Depression Severity During the COVID-19 Pandemic: 3-Arm Randomized Controlled Trial",
+      "journal": "JMIR Mental Health",
+      "firstAuthor": "Zev Schuman-Olivier",
+      "etAl": true,
+      "year": 2026,
+      "month": 8,
+      "url": "https://doi.org/10.2196/88388"
     }
   ],
   "digital-humanities": [
@@ -93,6 +133,26 @@
       "year": 2026,
       "month": 8,
       "url": "https://doi.org/10.1093/llc/fqag095"
+    },
+    {
+      "doi": "10.1093/llc/fqag112",
+      "title": "Digital cultural heritage in Cyprus: mapping museums, priorities, and challenges",
+      "journal": "Digital Scholarship in the Humanities",
+      "firstAuthor": "Federica Di Biase",
+      "etAl": false,
+      "year": 2026,
+      "month": 7,
+      "url": "https://doi.org/10.1093/llc/fqag112"
+    },
+    {
+      "doi": "10.1093/llc/fqag111",
+      "title": "Correction to: Research on graph-retrieval augmented generation based on historical text knowledge graphs",
+      "journal": "Digital Scholarship in the Humanities",
+      "firstAuthor": null,
+      "etAl": false,
+      "year": 2026,
+      "month": 7,
+      "url": "https://doi.org/10.1093/llc/fqag111"
     }
   ]
 }
