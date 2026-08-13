@@ -285,5 +285,34 @@
     "edition": [
       "SSCI"
     ]
+  },
+  "Social Science & Medicine": {
+    "issn": "0277-9536",
+    "categories": [
+      "Public, Environmental & Occupational Health",
+      "Social Sciences, Biomedical"
+    ],
+    "edition": [
+      "SSCI"
+    ]
+  },
+  "Frontiers in Public Health": {
+    "issn": "2296-2565",
+    "categories": [
+      "Public, Environmental & Occupational Health"
+    ],
+    "edition": [
+      "SSCI",
+      "SCIE"
+    ]
+  },
+  "Victims & Offenders": {
+    "issn": "1556-4886",
+    "categories": [
+      "Criminology & Penology"
+    ],
+    "edition": [
+      "SSCI"
+    ]
   }
 }
