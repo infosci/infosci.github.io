@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import grants from "@/data/projects.json";
+import grants from "@/data/grants.json";
 
 export const metadata: Metadata = { title: "Grants" };
 

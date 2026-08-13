@@ -1,5 +1,11 @@
 [
   {
+    "id": "nrf-suicide-network-2025",
+    "title": "A suicide- and network-theory driven, data science-based, user-centered approach of identifying high risk suicide groups on social media",
+    "duration": "2025 - 2028",
+    "funder": "National Research Foundation of Korea"
+  },
+  {
     "id": "about_project_7",
     "title": "Understanding science of collaboration and team impact using big scholarly data",
     "duration": "2023 - 2026",
@@ -21,6 +27,6 @@
     "id": "about_project_2",
     "title": "Implementing suicidality detection using social media and national registry data",
     "duration": "2019 - 2021",
-    "funder": "National Research Foundation of Korea"
+    "funder": "Samsung Medical Center"
   }
 ]

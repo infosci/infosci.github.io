@@ -95,7 +95,7 @@ for (const file of (await readdir(join(src, "_pages")))
 
 // Newest first by the year the duration starts.
 projects.sort((a, b) => (parseInt(b.duration ?? "0") || 0) - (parseInt(a.duration ?? "0") || 0));
-await writeFile(join(root, "data/projects.json"), JSON.stringify(projects, null, 2) + "\n");
+await writeFile(join(root, "data/grants.json"), JSON.stringify(projects, null, 2) + "\n");
 
 const byRole = members.reduce((acc, m) => ({ ...acc, [m.role]: (acc[m.role] ?? 0) + 1 }), {});
 console.log(`${members.length} members (${members.filter((m) => m.photo).length} with photos)`);
