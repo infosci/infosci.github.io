@@ -49,7 +49,7 @@ export default function YongjunZhuPage() {
         <ReactMarkdown
           components={{
             h2: ({ children }) => (
-              <h2 className="mt-12 mb-5 text-sm font-medium tracking-widest text-zinc-500 uppercase first:mt-0 dark:text-zinc-500">
+              <h2 className="mt-12 mb-5 text-sm font-medium tracking-widest text-zinc-500 uppercase first:mt-0 dark:text-zinc-400">
                 {children}
               </h2>
             ),

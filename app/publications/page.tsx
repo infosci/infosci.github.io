@@ -30,7 +30,7 @@ export default function PublicationsPage() {
       <div className="mt-14 space-y-12">
         {years.map(({ year, items }) => (
           <section key={year ?? "undated"}>
-            <h2 className="text-sm font-medium tracking-widest text-zinc-500 uppercase dark:text-zinc-500">
+            <h2 className="text-sm font-medium tracking-widest text-zinc-500 uppercase dark:text-zinc-400">
               {year ?? "Undated"}
             </h2>
             <ul className="mt-5 space-y-7">
@@ -53,7 +53,7 @@ export default function PublicationsPage() {
                   <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
                     {pub.authors.join(", ")}
                   </p>
-                  <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-500">{venue(pub)}</p>
+                  <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{venue(pub)}</p>
                 </li>
               ))}
             </ul>

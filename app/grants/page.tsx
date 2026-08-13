@@ -28,7 +28,7 @@ export default function GrantsPage() {
             <h2 className="max-w-2xl leading-snug font-medium text-black dark:text-zinc-50">
               {grant.title}
             </h2>
-            <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-500">
+            <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
               {[grant.duration, grant.funder].filter(Boolean).join(" · ")}
             </p>
           </li>

@@ -89,7 +89,7 @@ export default function PeoplePage() {
       <div className="mt-14 space-y-14">
         {groups.map(({ role, people }) => (
           <section key={role}>
-            <h2 className="text-sm font-medium tracking-widest text-zinc-500 uppercase dark:text-zinc-500">
+            <h2 className="text-sm font-medium tracking-widest text-zinc-500 uppercase dark:text-zinc-400">
               {role}
             </h2>
             <ul className="mt-5 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:grid-cols-4">
