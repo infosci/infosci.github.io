@@ -14,9 +14,10 @@
 // and every label is placed by angle and radius from one centre.
 
 const CX = 160;
-const CY = 140;
+const CY = 155;
 const RT = 76; // centroid to each triangle vertex
-const RC = 118; // the ring enclosing the triad
+const RL = 100; // centroid to each vertex label
+const RC = 148; // the ring, sized to clear the longest label
 
 const point = (deg: number, radius: number) => ({
   x: CX + radius * Math.cos((deg * Math.PI) / 180),
@@ -25,22 +26,15 @@ const point = (deg: number, radius: number) => ({
 
 // -90° puts People at the top. Technology takes the right foot and Data the
 // left; the two were the other way round until the lab swapped them.
+//
+// Labels sit on their own radius and are centred there, rather than being
+// nudged off each vertex by hand. That is what lets the ring enclose them: with
+// the old offsets, "Technology" ran to roughly 160 units from the centre while
+// the ring sat at 118, so the longest label always broke out of the circle.
 const VERTICES = [
-  { label: "People", angle: -90, lx: CX, ly: CY - RT - 16, anchor: "middle" as const },
-  {
-    label: "Technology",
-    angle: 30,
-    lx: point(30, RT).x + 10,
-    ly: point(30, RT).y + 20,
-    anchor: "start" as const,
-  },
-  {
-    label: "Data",
-    angle: 150,
-    lx: point(150, RT).x - 10,
-    ly: point(150, RT).y + 20,
-    anchor: "end" as const,
-  },
+  { label: "People", angle: -90 },
+  { label: "Technology", angle: 30 },
+  { label: "Data", angle: 150 },
 ];
 
 export function TriadFigure({ className }: { className?: string }) {
@@ -52,7 +46,7 @@ export function TriadFigure({ className }: { className?: string }) {
 
   return (
     <svg
-      viewBox="0 0 320 290"
+      viewBox="0 0 320 312"
       xmlns="http://www.w3.org/2000/svg"
       className={className ?? "h-auto w-full"}
       role="img"
@@ -83,19 +77,15 @@ export function TriadFigure({ className }: { className?: string }) {
         return <circle key={v.label} cx={p.x} cy={p.y} r={5} fill="currentColor" />;
       })}
 
-      <g fill="currentColor" style={{ fontFamily: "inherit" }}>
-        {VERTICES.map((v) => (
-          <text
-            key={v.label}
-            x={v.lx}
-            y={v.ly}
-            textAnchor={v.anchor}
-            fontSize={15}
-            fontWeight={500}
-          >
-            {v.label}
-          </text>
-        ))}
+      <g fill="currentColor" textAnchor="middle" style={{ fontFamily: "inherit" }}>
+        {VERTICES.map((v) => {
+          const p = point(v.angle, RL);
+          return (
+            <text key={v.label} x={p.x} y={p.y} fontSize={15} fontWeight={500}>
+              {v.label}
+            </text>
+          );
+        })}
       </g>
     </svg>
   );
