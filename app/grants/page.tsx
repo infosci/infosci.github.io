@@ -19,8 +19,7 @@ export default function GrantsPage() {
         Grants
       </h1>
       <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-        Funding isn&apos;t why we do research. It&apos;s what lets us worry about
-        the questions instead.
+        Funding isn&apos;t why we do research. It takes the other worries away.
       </p>
 
       <ul className="mt-14 space-y-10">
