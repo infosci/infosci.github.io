@@ -120,5 +120,51 @@
     "edition": [
       "SCIE"
     ]
+  },
+  "Information Processing & Management": {
+    "issn": "0306-4573",
+    "categories": [
+      "Information Science & Library Science",
+      "Computer Science, Information Systems"
+    ],
+    "edition": [
+      "SSCI",
+      "SCIE"
+    ]
+  },
+  "Aslib Journal of Information Management": {
+    "issn": "2050-3806",
+    "categories": [
+      "Information Science & Library Science",
+      "Computer Science, Information Systems"
+    ],
+    "edition": [
+      "SSCI",
+      "SCIE"
+    ]
+  },
+  "Journal of the American Medical Informatics Association": {
+    "issn": "1067-5027",
+    "categories": [
+      "Computer Science, Interdisciplinary Applications",
+      "Health Care Sciences & Services",
+      "Medical Informatics",
+      "Information Science & Library Science",
+      "Computer Science, Information Systems"
+    ],
+    "edition": [
+      "SSCI",
+      "SCIE"
+    ]
+  },
+  "Journal of Biomedical Informatics": {
+    "issn": "1532-0464",
+    "categories": [
+      "Computer Science, Interdisciplinary Applications",
+      "Medical Informatics"
+    ],
+    "edition": [
+      "SCIE"
+    ]
   }
 }
