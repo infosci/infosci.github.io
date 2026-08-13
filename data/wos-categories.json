@@ -18,26 +18,47 @@
     "publication data holds the electronic one (JMIR: 1439-4456 here vs",
     "1438-8871 in ours), so match on venue name, not on ISSN alone."
   ],
-
   "Journal of Informetrics": {
     "issn": "1751-1577",
-    "categories": ["Computer Science, Interdisciplinary Applications", "Information Science & Library Science"],
-    "edition": ["SSCI", "SCIE"]
+    "categories": [
+      "Computer Science, Interdisciplinary Applications",
+      "Information Science & Library Science"
+    ],
+    "edition": [
+      "SSCI",
+      "SCIE"
+    ]
   },
   "Scientometrics": {
     "issn": "0138-9130",
-    "categories": ["Computer Science, Interdisciplinary Applications", "Information Science & Library Science"],
-    "edition": ["SSCI", "SCIE"]
+    "categories": [
+      "Computer Science, Interdisciplinary Applications",
+      "Information Science & Library Science"
+    ],
+    "edition": [
+      "SSCI",
+      "SCIE"
+    ]
   },
   "Journal of the Association for Information Science and Technology": {
     "issn": "2330-1635",
-    "categories": ["Information Science & Library Science", "Computer Science, Information Systems"],
-    "edition": ["SSCI", "SCIE"]
+    "categories": [
+      "Information Science & Library Science",
+      "Computer Science, Information Systems"
+    ],
+    "edition": [
+      "SSCI",
+      "SCIE"
+    ]
   },
   "Cyberpsychology, Behavior, and Social Networking": {
     "issn": "2152-2715",
-    "categories": ["Psychology, Social"],
-    "edition": ["SSCI"]
+    "categories": [
+      "Psychology, Social"
+    ],
+    "edition": [
+      "SSCI"
+    ]
   },
   "DIGITAL HEALTH": {
     "issn": "2055-2076",
@@ -47,11 +68,57 @@
       "Health Care Sciences & Services",
       "Medical Informatics"
     ],
-    "edition": ["SSCI", "SCIE"]
+    "edition": [
+      "SSCI",
+      "SCIE"
+    ]
   },
   "Journal of Medical Internet Research": {
     "issn": "1439-4456",
-    "categories": ["Health Care Sciences & Services", "Medical Informatics"],
-    "edition": ["SSCI", "SCIE"]
+    "categories": [
+      "Health Care Sciences & Services",
+      "Medical Informatics"
+    ],
+    "edition": [
+      "SSCI",
+      "SCIE"
+    ]
+  },
+  "Knowledge-Based Systems": {
+    "issn": "0950-7051",
+    "categories": [
+      "Computer Science, Artificial Intelligence"
+    ],
+    "edition": [
+      "SCIE"
+    ]
+  },
+  "Quantitative Science Studies": {
+    "issn": "2641-3337",
+    "categories": [
+      "Information Science & Library Science"
+    ],
+    "edition": [
+      "SSCI"
+    ]
+  },
+  "Library Hi Tech": {
+    "issn": "0737-8831",
+    "categories": [
+      "Information Science & Library Science"
+    ],
+    "edition": [
+      "SSCI"
+    ]
+  },
+  "Briefings in Bioinformatics": {
+    "issn": "1467-5463",
+    "categories": [
+      "Mathematical & Computational Biology",
+      "Biochemical Research Methods"
+    ],
+    "edition": [
+      "SCIE"
+    ]
   }
 }
