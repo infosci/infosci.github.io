@@ -254,5 +254,36 @@
     "edition": [
       "SCIE"
     ]
+  },
+  "Archives of Suicide Research": {
+    "issn": "1381-1118",
+    "categories": [
+      "Psychiatry",
+      "Psychology, Multidisciplinary"
+    ],
+    "edition": [
+      "SSCI"
+    ]
+  },
+  "Suicide and Life-Threatening Behavior": {
+    "issn": "0363-0234",
+    "categories": [
+      "Psychiatry",
+      "Psychology, Multidisciplinary"
+    ],
+    "edition": [
+      "SSCI"
+    ]
+  },
+  "Death Studies": {
+    "issn": "0748-1187",
+    "categories": [
+      "Social Sciences, Biomedical",
+      "Psychology, Multidisciplinary",
+      "Social Issues"
+    ],
+    "edition": [
+      "SSCI"
+    ]
   }
 }
