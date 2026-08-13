@@ -15,5 +15,41 @@
     "pdf": null,
     "code": null,
     "note": null
+  },
+  {
+    "doi": null,
+    "title": "Word semantic change: The law of differentiation vs. the law of parallel change",
+    "authors": ["Erjia Yan", "Yongjun Zhu"],
+    "journal": "Proceedings of the 16th International Conference on Scientometrics and Informetrics (ISSI 2017)",
+    "volume": null,
+    "issue": null,
+    "pages": null,
+    "year": 2017,
+    "month": null,
+    "type": "proceedings-article",
+    "url": null,
+    "venue": "ISSI",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null
+  },
+  {
+    "doi": null,
+    "title": "Distribution of researcher-level funding allocation among US federal funding agencies",
+    "authors": ["Deanna Zarrillo", "Yongjun Zhu", "Erjia Yan"],
+    "journal": "Proceedings of the 19th International Conference on Scientometrics and Informetrics (ISSI 2023)",
+    "volume": null,
+    "issue": null,
+    "pages": null,
+    "year": 2023,
+    "month": null,
+    "type": "proceedings-article",
+    "url": null,
+    "venue": "ISSI",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null
   }
 ]
