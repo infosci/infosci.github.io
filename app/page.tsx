@@ -68,6 +68,41 @@ function ExternalMark() {
   );
 }
 
+function AreaCard({
+  area,
+  className,
+}: {
+  area: (typeof AREAS)[number];
+  className?: string;
+}) {
+  return (
+    <section
+      className={`flex h-full flex-col items-center gap-3 rounded-2xl border border-black/[.08] px-6 py-10 text-center dark:border-white/[.145] ${className ?? ""}`}
+    >
+      <area.Icon className="h-10 w-8 text-black dark:text-zinc-50" />
+      {/* One line each. "Mental Health Informatics" is the constraint — at
+          text-2xl it wrapped in a third-width column, leaving the three titles
+          visually uneven. Dropped a size and pinned to nowrap; the longest
+          still clears the card at phone width.
+
+          The underline sits on the text span, not the anchor, so the arrow
+          beside it is not underlined too. */}
+      <a
+        href={area.source.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group inline-flex items-center gap-1.5 text-xl font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
+      >
+        <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
+          {area.title}
+        </span>
+        <ExternalMark />
+      </a>
+      <p className="text-xs text-zinc-400 dark:text-zinc-600">{area.source.label}</p>
+    </section>
+  );
+}
+
 export default function Home() {
   return (
     <div className="pt-6 sm:pt-10">
@@ -84,39 +119,18 @@ export default function Home() {
         meet.
       </p>
 
-      <div className="mt-14 grid w-full items-start gap-6 sm:grid-cols-3">
-        {AREAS.map((area) => (
-          <section
-            key={area.id}
-            className="flex h-full flex-col items-center gap-3 rounded-2xl border border-black/[.08] px-6 py-10 text-center dark:border-white/[.145]"
-          >
-              <area.Icon className="h-10 w-8 text-black dark:text-zinc-50" />
-              {/* One line each. "Mental Health Informatics" is the constraint —
-                  at text-2xl it wrapped in a third-width column, leaving the
-                  three titles visually uneven. Dropped a size and pinned to
-                  nowrap; the longest still clears the card at phone width. */}
-              {/* The underline sits on the text span, not the anchor, so the
-                  arrow beside it is not underlined too. */}
-              <a
-                href={area.source.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group inline-flex items-center gap-1.5 text-xl font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
-              >
-                <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
-                  {area.title}
-                </span>
-                <ExternalMark />
-              </a>
-            <p className="text-xs text-zinc-400 dark:text-zinc-600">{area.source.label}</p>
-          </section>
-        ))}
-      </div>
+      {/* The triad sits in the middle with the cards around it: one card either
+          side and one beneath, so the figure is enclosed rather than captioned.
+          On a phone the grid collapses to a single column and the order becomes
+          card, figure, card, card — the figure still sits among them. */}
+      <div className="mt-14 grid w-full items-center gap-6 sm:grid-cols-3">
+        <AreaCard area={AREAS[0]} />
 
-      {/* Wider than the Venn it replaced: the area labels sit outside the
-          triangle and "Mental Health Informatics" needs the room. */}
-      <div className="mt-16 flex justify-center">
-        <TriadFigure className="h-auto w-full max-w-2xl text-black dark:text-zinc-50" />
+        <TriadFigure className="mx-auto h-auto w-full max-w-[19rem] text-black dark:text-zinc-50" />
+
+        <AreaCard area={AREAS[1]} />
+
+        <AreaCard area={AREAS[2]} className="sm:col-start-2" />
       </div>
 
       <Link

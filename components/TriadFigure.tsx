@@ -1,54 +1,46 @@
-// Two layers, one inside the other.
+// People, data and technology — the assumption the lab works from — drawn as a
+// closed triad.
 //
-// Inside: people, data and technology, the assumption the lab works from.
-// Around it: the three research areas, each of which draws on all three.
+// The three research areas used to be text around this figure, each sitting
+// outside "its" edge, which wrongly asserted that a field belongs to two of the
+// three vertices. They are cards around the figure now, so the layout carries
+// the relation instead: the triad is one object at the centre, and every area
+// surrounds the whole of it.
 //
-// The enclosing ring is the whole point of the drawing. An earlier version put
-// each area outside the edge joining "its" two vertices, which asserted that
-// digital humanities is data-and-technology, mental health informatics is
-// technology-and-people, and so on. That is wrong: every one of these fields
-// uses all three. The ring closes the triad into a single object, so an area
-// sitting outside it relates to the whole rather than to an edge or a vertex.
-// The areas fall between vertices only because that is where the text fits.
+// The ring is what closes the triad. Without it the drawing is three points and
+// three lines; with it, it is a single thing the cards can sit around.
 //
 // Geometry is computed, not typed: vertices sit 120° apart on a circumcircle,
 // and every label is placed by angle and radius from one centre.
 
-const CX = 320;
-const CY = 175;
+const CX = 160;
+const CY = 140;
 const RT = 76; // centroid to each triangle vertex
 const RC = 118; // the ring enclosing the triad
-const RA = 140; // area labels, outside the ring
 
 const point = (deg: number, radius: number) => ({
   x: CX + radius * Math.cos((deg * Math.PI) / 180),
   y: CY + radius * Math.sin((deg * Math.PI) / 180),
 });
 
-// -90° puts a vertex at the top; the others follow at 120° intervals.
+// -90° puts People at the top. Technology takes the right foot and Data the
+// left; the two were the other way round until the lab swapped them.
 const VERTICES = [
   { label: "People", angle: -90, lx: CX, ly: CY - RT - 16, anchor: "middle" as const },
   {
-    label: "Data",
+    label: "Technology",
     angle: 30,
     lx: point(30, RT).x + 10,
     ly: point(30, RT).y + 20,
     anchor: "start" as const,
   },
   {
-    label: "Technology",
+    label: "Data",
     angle: 150,
     lx: point(150, RT).x - 10,
     ly: point(150, RT).y + 20,
     anchor: "end" as const,
   },
-];
-
-// Placed where the text has room — between vertices — not to signal a pairing.
-const AREAS = [
-  { label: "Digital Humanities", angle: 90, anchor: "middle" as const, dy: 4 },
-  { label: "Science of Science", angle: 210, anchor: "end" as const, dy: 0 },
-  { label: "Mental Health Informatics", angle: 330, anchor: "start" as const, dy: 0 },
 ];
 
 export function TriadFigure({ className }: { className?: string }) {
@@ -60,11 +52,11 @@ export function TriadFigure({ className }: { className?: string }) {
 
   return (
     <svg
-      viewBox="0 0 640 350"
+      viewBox="0 0 320 290"
       xmlns="http://www.w3.org/2000/svg"
       className={className ?? "h-auto w-full"}
       role="img"
-      aria-label="People, Data and Technology at the vertices of a triangle, enclosed by a ring, with the lab's three research areas arranged around the outside"
+      aria-label="A triangle with People, Technology and Data at its vertices, enclosed by a ring"
     >
       {/* Fainter than the triangle: it encloses rather than competes. */}
       <circle
@@ -104,24 +96,6 @@ export function TriadFigure({ className }: { className?: string }) {
             {v.label}
           </text>
         ))}
-
-        {/* Muted and a size down — the triad is the frame, the areas are what
-            gets built on it. Same order of importance as the cards above. */}
-        {AREAS.map((a) => {
-          const p = point(a.angle, RA);
-          return (
-            <text
-              key={a.label}
-              x={p.x}
-              y={p.y + a.dy}
-              textAnchor={a.anchor}
-              fontSize={13}
-              opacity={0.55}
-            >
-              {a.label}
-            </text>
-          );
-        })}
       </g>
     </svg>
   );
