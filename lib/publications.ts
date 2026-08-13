@@ -28,15 +28,23 @@ export type Publication = {
   // Ours, not Crossref's — see OWNED_FIELDS in scripts/crossref.mjs.
   // Short display name overriding `journal` — see OWNED_FIELDS.
   venue?: string | null;
+  // Conference year, when it differs from the publication year — see OWNED_FIELDS.
+  displayYear?: number | null;
   selected: boolean;
   pdf: string | null;
   code: string | null;
   note: string | null;
 };
 
+// The year a reader should see: the conference year where it differs from the
+// publisher's date, otherwise Crossref's.
+export function yearOf(pub: Publication): number | null {
+  return pub.displayYear ?? pub.year;
+}
+
 function sortByDate(a: Publication, b: Publication) {
   return (
-    (b.year ?? 0) - (a.year ?? 0) ||
+    (yearOf(b) ?? 0) - (yearOf(a) ?? 0) ||
     (b.month ?? 0) - (a.month ?? 0) ||
     a.title.localeCompare(b.title)
   );
@@ -54,9 +62,10 @@ export function getPublications(): Publication[] {
 export function getPublicationsByYear(): { year: number | null; items: Publication[] }[] {
   const groups = new Map<number | null, Publication[]>();
   for (const pub of getPublications()) {
-    const bucket = groups.get(pub.year) ?? [];
+    const year = yearOf(pub);
+    const bucket = groups.get(year) ?? [];
     bucket.push(pub);
-    groups.set(pub.year, bucket);
+    groups.set(year, bucket);
   }
   return [...groups.entries()]
     .map(([year, items]) => ({ year, items }))

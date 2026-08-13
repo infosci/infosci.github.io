@@ -150,7 +150,12 @@ export async function byTitle(title, journal) {
 // their full formal title — "Proceedings of the 32nd ACM SIGKDD Conference on
 // Knowledge Discovery and Data Mining V.2" — which is correct but unreadable
 // next to a journal name. Set it to the conventional short form.
-export const OWNED_FIELDS = ["selected", "pdf", "code", "note", "venue"];
+// `displayYear` overrides the year used for grouping and sorting. Springer
+// publishes conference proceedings in LNCS the following calendar year, so
+// Crossref dates the JIST 2012 paper to 2013 — correct as a publication date,
+// wrong as the year a reader is looking for. Set it only when the two genuinely
+// differ; the normal case is to leave it null and let Crossref decide.
+export const OWNED_FIELDS = ["selected", "pdf", "code", "note", "venue", "displayYear"];
 
 export function mergeRecord(existing, fetched) {
   const merged = { ...fetched };
