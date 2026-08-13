@@ -23,6 +23,9 @@ export default function PublicationsPage() {
       <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl dark:text-zinc-50">
         Publications
       </h1>
+      <p className="mt-4 text-zinc-600 dark:text-zinc-400">
+        Journal articles and conference papers, newest first.
+      </p>
 
       <div className="mt-14 space-y-12">
         {years.map(({ year, items }) => (

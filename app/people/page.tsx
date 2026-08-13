@@ -82,6 +82,9 @@ export default function PeoplePage() {
       <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl dark:text-zinc-50">
         People
       </h1>
+      <p className="mt-4 text-zinc-600 dark:text-zinc-400">
+        Different fields, different countries, the same questions.
+      </p>
 
       <div className="mt-14 space-y-14">
         {groups.map(({ role, people }) => (
