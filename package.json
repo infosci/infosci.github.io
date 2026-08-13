@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "add-paper": "node scripts/add-paper.mjs",
-    "optimize-photos": "node scripts/optimize-photos.mjs"
+    "optimize-photos": "node scripts/optimize-photos.mjs",
+    "fetch-reading": "node scripts/fetch-field-reading.mjs"
   },
   "dependencies": {
     "next": "^16.3.0",
