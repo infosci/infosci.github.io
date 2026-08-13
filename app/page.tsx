@@ -25,7 +25,11 @@ export default function Home() {
         Yonsei DataLab
       </h1>
 
-      <p className="mt-5 max-w-xl text-lg leading-relaxed text-zinc-600 sm:text-xl dark:text-zinc-400">
+      {/* No max-width here, unlike the other pages' prose: the line is meant to
+          read as one unbroken statement, and a measure constraint wrapped it in
+          two. It still wraps on narrow screens, which is right — forcing
+          nowrap would push it off the side on a phone. */}
+      <p className="mt-5 text-lg leading-relaxed text-zinc-600 sm:text-xl dark:text-zinc-400">
         We study people, data, and technology — and what happens where the three
         meet.
       </p>
