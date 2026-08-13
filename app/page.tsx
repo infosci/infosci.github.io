@@ -43,7 +43,12 @@ export default function Home() {
             key={area.title}
             className="flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-black/[.08] px-6 py-10 text-center dark:border-white/[.145]"
           >
-            <h2 className="text-2xl font-semibold tracking-tight text-black dark:text-zinc-50">
+            {/* One line each. "Mental Health Informatics" is the constraint —
+                at text-2xl it wrapped in a third-width column, leaving the
+                three titles visually uneven. Dropped a size and pinned to
+                nowrap; the longest still clears the card at phone width, where
+                the cards go full-bleed. */}
+            <h2 className="text-xl font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50">
               {area.title}
             </h2>
             <p className="max-w-xs text-base text-balance text-zinc-600 dark:text-zinc-400">
