@@ -166,5 +166,35 @@
     "edition": [
       "SCIE"
     ]
+  },
+  "International Journal of Medical Informatics": {
+    "issn": "1386-5056",
+    "categories": [
+      "Health Care Sciences & Services",
+      "Medical Informatics",
+      "Computer Science, Information Systems"
+    ],
+    "edition": [
+      "SCIE"
+    ]
+  },
+  "BMC Medical Informatics and Decision Making": {
+    "issn": "1472-6947",
+    "categories": [
+      "Medical Informatics"
+    ],
+    "edition": [
+      "SCIE"
+    ]
+  },
+  "Health Informatics Journal": {
+    "issn": "1460-4582",
+    "categories": [
+      "Health Care Sciences & Services",
+      "Medical Informatics"
+    ],
+    "edition": [
+      "SCIE"
+    ]
   }
 }
