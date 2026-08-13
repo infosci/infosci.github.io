@@ -37,18 +37,21 @@ const AREAS = [
     },
   },
   {
-    // EASST rather than 4S. Both are the field's learned societies and either
-    // would be defensible, but EASST names this card's exact phrase — it
-    // "represents academics and researchers in the fields of science and
-    // technology studies" — where 4S calls the field "social studies of
-    // science, technology, and medicine" and mentions STS as something it
-    // includes. Cite the one whose words match the label.
+    // The Handbook rather than a society, which puts this card in step with
+    // Science of Science: a standard reference work rather than an
+    // organisation. It carries the field's exact name, 4S sponsors it, and 4S
+    // calls it "a comprehensive and authoritative overview of the field" and
+    // the fourth "in a series of volumes that have defined the field of STS".
+    //
+    // EASST sat here briefly and was the wrong call — its wording matched this
+    // card's phrase, but it is the European association, where 4S is the
+    // international body. Phrase-matching is not authority.
     id: "science-and-technology-studies",
     title: "Science and Technology Studies",
     Icon: TechnologyStudiesIcon,
     source: {
-      href: "https://easst.net/about-easst/",
-      label: "EASST",
+      href: "https://4sonline.org/handbook_of_sts.php",
+      label: "Felt et al., Handbook of STS (2016)",
     },
   },
   {
