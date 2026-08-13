@@ -4,18 +4,12 @@ import {
   MentalHealthIcon,
   ScienceOfScienceIcon,
 } from "@/components/AreaIcons";
-import fieldReading from "@/data/field-reading.json";
+import { TriadFigure } from "@/components/TriadFigure";
 
-// Two layers here, deliberately different in tempo.
-//
 // The cards are fixed: a mark, the field's name, and the citation. Nothing on
 // them is in our words — each title links to the field's standing reference,
 // the thing that does not change from year to year, so the definitional work
 // is done by the field rather than by us.
-//
-// Beneath them, recent papers from each field's core journals, refreshed at
-// build time by scripts/fetch-field-reading.mjs. These are other people's
-// papers, not ours: /publications is where our work lives.
 //
 // Digital Humanities is cited differently on purpose. Science of science has a
 // canonical review and mental health informatics has a professional body that
@@ -52,16 +46,6 @@ const AREAS = [
   },
 ];
 
-type Paper = {
-  doi: string;
-  title: string;
-  journal: string;
-  firstAuthor: string | null;
-  etAl: boolean;
-  year: number | null;
-};
-
-const reading = fieldReading as Record<string, Paper[]>;
 
 /** The arrow that says "this leaves the site". Deliberately not in
  * AreaIcons.tsx — that file holds the three research marks, drawn in ddun.ai's
@@ -102,8 +86,10 @@ export default function Home() {
 
       <div className="mt-14 grid w-full items-start gap-6 sm:grid-cols-3">
         {AREAS.map((area) => (
-          <section key={area.id} className="flex flex-col gap-5">
-            <div className="flex flex-col items-center gap-3 rounded-2xl border border-black/[.08] px-6 py-10 text-center dark:border-white/[.145]">
+          <section
+            key={area.id}
+            className="flex h-full flex-col items-center gap-3 rounded-2xl border border-black/[.08] px-6 py-10 text-center dark:border-white/[.145]"
+          >
               <area.Icon className="h-10 w-8 text-black dark:text-zinc-50" />
               {/* One line each. "Mental Health Informatics" is the constraint —
                   at text-2xl it wrapped in a third-width column, leaving the
@@ -122,39 +108,15 @@ export default function Home() {
                 </span>
                 <ExternalMark />
               </a>
-              <p className="text-xs text-zinc-400 dark:text-zinc-600">{area.source.label}</p>
-            </div>
-
-            {/* Not in the card: the card is the field, this is this week in it. */}
-            <div className="px-1">
-              <h3 className="text-xs font-medium tracking-[0.2em] text-zinc-400 uppercase dark:text-zinc-600">
-                Latest
-              </h3>
-              <ul className="mt-3 space-y-3">
-                {(reading[area.id] ?? []).map((paper) => (
-                  <li key={paper.doi} className="text-sm leading-snug">
-                    <a
-                      href={`https://doi.org/${paper.doi}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="text-zinc-600 transition-colors hover:text-black dark:text-zinc-400 dark:hover:text-zinc-50"
-                    >
-                      {paper.title}
-                    </a>
-                    <span className="mt-0.5 block text-xs text-zinc-400 dark:text-zinc-600">
-                      {[
-                        paper.firstAuthor && `${paper.firstAuthor}${paper.etAl ? " et al." : ""}`,
-                        paper.journal,
-                      ]
-                        .filter(Boolean)
-                        .join(" · ")}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <p className="text-xs text-zinc-400 dark:text-zinc-600">{area.source.label}</p>
           </section>
         ))}
+      </div>
+
+      {/* Sized against the text column rather than the full width: at 5xl the
+          circles became a banner and stopped reading as a diagram. */}
+      <div className="mt-16 flex justify-center">
+        <TriadFigure className="h-auto w-full max-w-md text-black dark:text-zinc-50" />
       </div>
 
       <Link

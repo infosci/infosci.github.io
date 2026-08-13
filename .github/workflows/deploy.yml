@@ -4,10 +4,6 @@ on:
   push:
     branches: [master]
   workflow_dispatch:
-  # The homepage shows recent papers from each field's core journals, baked in
-  # at build time. A weekly rebuild keeps that current without anyone pushing.
-  schedule:
-    - cron: "0 3 * * 1"   # Mondays, 03:00 UTC
 
 # Required by actions/deploy-pages: it mints an OIDC token to publish.
 permissions:
@@ -38,11 +34,6 @@ jobs:
           cache: npm
 
       - run: npm ci
-
-      # Refresh the homepage's field reading. `|| true` on purpose: Crossref
-      # being slow or down must never fail a deploy — the script leaves the
-      # committed data in place and the site builds with last week's papers.
-      - run: node scripts/fetch-field-reading.mjs || true
 
       # No BASE_PATH here: this is the live site, served at the root of
       # datalab.yonsei.ac.kr. (The datalab-next preview repo sets it, because
