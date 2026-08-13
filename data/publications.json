@@ -1,5 +1,26 @@
 [
   {
+    "doi": "10.1016/j.joi.2026.101849",
+    "title": "Does the Matthew effect exist in open peer review? An empirical study of institutional prestige effects on review outcomes",
+    "authors": [
+      "Jeongyeon Choi",
+      "Yi Zhao",
+      "Yongjun Zhu"
+    ],
+    "journal": "Journal of Informetrics",
+    "volume": "20",
+    "issue": "3",
+    "pages": "101849",
+    "year": 2026,
+    "month": 9,
+    "type": "journal-article",
+    "url": "https://doi.org/10.1016/j.joi.2026.101849",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null
+  },
+  {
     "doi": "10.1016/j.knosys.2026.115460",
     "title": "Prototype learning with structural-semantic alignment for interpretable molecular relational learning",
     "authors": [
@@ -87,6 +108,29 @@
     "month": 1,
     "type": "journal-article",
     "url": "https://doi.org/10.1016/j.socscimed.2025.118828",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null
+  },
+  {
+    "doi": "10.1109/tce.2026.3702247",
+    "title": "Core-Aware Contrastive Learning with Substructure Adaptivity for Stable Drug-Drug Interaction Event Prediction in Consumer Healthcare",
+    "authors": [
+      "Peiliang Zhang",
+      "Jijun Wang",
+      "Jingling Yuan",
+      "Chao Che",
+      "Yongjun Zhu"
+    ],
+    "journal": "IEEE Transactions on Consumer Electronics",
+    "volume": null,
+    "issue": null,
+    "pages": "1-1",
+    "year": 2026,
+    "month": null,
+    "type": "journal-article",
+    "url": "https://doi.org/10.1109/tce.2026.3702247",
     "selected": false,
     "pdf": null,
     "code": null,
