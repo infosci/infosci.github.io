@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The triad from the homepage, reduced to what survives at 16px.
+
+       Both the enclosing ring and the vertex dots are dropped. Tested at real
+       favicon sizes: with the dots, a 2.6 stroke and r=3 circles merge into a
+       blob below about 32px, and the ring collapses into a smudge around it.
+       The bare outline at a heavier weight still reads as a triangle at 16.
+
+       Colour is set here rather than inherited: a favicon has no page context,
+       so currentColor would draw black on a dark tab strip. The media query is
+       honoured by the same browsers that support SVG favicons at all. -->
+  <style>
+    .mark { stroke: #171717; }
+    @media (prefers-color-scheme: dark) {
+      .mark { stroke: #fafafa; }
+    }
+  </style>
+  <path
+    class="mark"
+    d="M16 6 L25.5 22.5 L6.5 22.5 Z"
+    fill="none"
+    stroke-width="3.2"
+    stroke-linejoin="round"
+  />
+</svg>
