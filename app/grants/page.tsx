@@ -1,42 +1,36 @@
 import type { Metadata } from "next";
-import projects from "@/data/projects.json";
+import grants from "@/data/projects.json";
 
-export const metadata: Metadata = { title: "Projects" };
+export const metadata: Metadata = { title: "Grants" };
 
-type Project = {
+type Grant = {
   id: string;
   title: string;
-  terms: string[];
   duration: string | null;
   funder: string;
 };
 
-export default function ProjectsPage() {
-  const items = projects as Project[];
+export default function GrantsPage() {
+  const items = grants as Grant[];
 
   return (
     <div className="max-w-3xl pt-6 sm:pt-10">
       <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl dark:text-zinc-50">
-        Projects
+        Grants
       </h1>
       <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-        Funded research at DataLab.
+        Funded research led at DataLab.
       </p>
 
       <ul className="mt-14 space-y-10">
-        {items.map((project) => (
-          <li key={project.id}>
+        {items.map((grant) => (
+          <li key={grant.id}>
             <h2 className="max-w-2xl leading-snug font-medium text-black dark:text-zinc-50">
-              {project.title}
+              {grant.title}
             </h2>
             <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-500">
-              {[project.duration, project.funder].filter(Boolean).join(" · ")}
+              {[grant.duration, grant.funder].filter(Boolean).join(" · ")}
             </p>
-            {project.terms.length > 0 && (
-              <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-                {project.terms.join(", ")}
-              </p>
-            )}
           </li>
         ))}
       </ul>

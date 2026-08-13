@@ -12,7 +12,7 @@ const LINKS = [
   { href: "/", label: "about" },
   { href: "/people/", label: "people" },
   { href: "/publications/", label: "publications" },
-  { href: "/projects/", label: "projects" },
+  { href: "/grants/", label: "grants" },
 ];
 
 export function SiteNav() {
