@@ -21,6 +21,55 @@
     "note": null
   },
   {
+    "doi": "10.1145/3770855.3817694",
+    "title": "Cross-Domain Molecular Relational Learning: Leveraging Chemical Structure-Activity Analysis",
+    "authors": [
+      "Peiliang Zhang",
+      "Jingling Yuan",
+      "Shiqing Wu",
+      "Mengqing Hu",
+      "Chao Che",
+      "Yongjun Zhu",
+      "Lin Li"
+    ],
+    "journal": "Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2",
+    "volume": null,
+    "issue": null,
+    "pages": "6488-6499",
+    "year": 2026,
+    "month": 8,
+    "type": "proceedings-article",
+    "url": "https://doi.org/10.1145/3770855.3817694",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null
+  },
+  {
+    "doi": "10.1145/3770855.3818850",
+    "title": "Representational Alignment with Chemical Induced Fit for Molecular Relational Learning",
+    "authors": [
+      "Peiliang Zhang",
+      "Jingling Yuan",
+      "Qing Xie",
+      "Yongjun Zhu",
+      "Chao Che",
+      "Lin Li"
+    ],
+    "journal": "Proceedings of the 32nd ACM SIGKDD Conference on Knowledge Discovery and Data Mining V.2",
+    "volume": null,
+    "issue": null,
+    "pages": "12892-12903",
+    "year": 2026,
+    "month": 8,
+    "type": "proceedings-article",
+    "url": "https://doi.org/10.1145/3770855.3818850",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null
+  },
+  {
     "doi": "10.1016/j.joi.2026.101802",
     "title": "A review of the science of team science: Data sources, research methods, disciplinary characteristics, and research topics",
     "authors": [
