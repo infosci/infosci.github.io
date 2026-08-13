@@ -7,12 +7,23 @@
     "Multi-label by nature: JASIST carries two categories, DIGITAL HEALTH four.",
     "Any facet built on this has to let a paper appear under each of them.",
     "",
-    "INCOMPLETE — collected one journal at a time through the JCR interface,",
-    "which has no bulk export without a personal Clarivate account. Venues not",
-    "yet looked up are absent rather than guessed. The eleven conference papers",
-    "(SIGKDD, IJCAI, ICMR, RACS, BigComp, ICHI, ER, JIST, ISSI) have no WoS",
-    "journal category at all — they are indexed in CPCI — and Information",
-    "Research is not JCR-indexed.",
+    "COMPLETE: all 46 venues looked up. Collected one journal at a time through",
+    "the JCR interface, which has no bulk export without a personal Clarivate",
+    "account.",
+    "",
+    "\"fallback\" is the one field here that is NOT Clarivate's. Twelve venues have",
+    "no WoS subject category to read — conferences are indexed in CPCI, which",
+    "classifies by research area rather than by the JCR category scheme, and three",
+    "journals are not JCR-indexed at all. Leaving those fourteen papers with no",
+    "facet value would make them unreachable when filtering, and they are",
+    "disproportionately recent work. So each carries one of two honest values,",
+    "derived from what the venue IS rather than from what the paper is about:",
+    "  Conference proceedings  — 9 venues, 11 papers. Includes ER and JIST: both",
+    "                            are conferences whose proceedings Springer",
+    "                            publishes in LNCS, which is why Crossref types",
+    "                            them book-chapter.",
+    "  Not WoS-indexed         — 3 venues, 3 papers.",
+    "A venue has categories or a fallback, never both and never neither.",
     "",
     "issn is the ISSN JCR lists, which is sometimes the print ISSN where our",
     "publication data holds the electronic one (JMIR: 1439-4456 here vs",
@@ -373,72 +384,84 @@
     "issn": "1976-4677",
     "categories": [],
     "edition": [],
-    "note": "Not in JCR — searched and returned no results, so not SCIE/SSCI indexed"
+    "note": "Not in JCR — searched and returned no results, so not SCIE/SSCI indexed",
+    "fallback": "Not WoS-indexed"
   },
   "Journal of Asian Sociology": {
     "issn": "2671-4574",
     "categories": [],
     "edition": [],
-    "note": "Not in JCR — searched and returned no results, so not SCIE/SSCI indexed"
+    "note": "Not in JCR — searched and returned no results, so not SCIE/SSCI indexed",
+    "fallback": "Not WoS-indexed"
   },
   "ACM SIGKDD": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
+    "fallback": "Conference proceedings"
   },
   "IJCAI": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
+    "fallback": "Conference proceedings"
   },
   "ACM ICMR": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
+    "fallback": "Conference proceedings"
   },
   "ACM RACS": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
+    "fallback": "Conference proceedings"
   },
   "IEEE BigComp": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
+    "fallback": "Conference proceedings"
   },
   "IEEE ICHI": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
+    "fallback": "Conference proceedings"
   },
   "ISSI": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
+    "fallback": "Conference proceedings"
   },
   "ER — Conceptual Modeling": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "LNCS book series — no WoS journal category"
+    "note": "LNCS book series — no WoS journal category",
+    "fallback": "Conference proceedings"
   },
   "JIST": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "LNCS book series — no WoS journal category"
+    "note": "LNCS book series — no WoS journal category",
+    "fallback": "Conference proceedings"
   },
   "Information Research: An International Electronic Journal": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Not JCR-indexed"
+    "note": "Not JCR-indexed",
+    "fallback": "Not WoS-indexed"
   }
 }

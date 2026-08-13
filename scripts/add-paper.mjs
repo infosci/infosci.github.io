@@ -9,7 +9,7 @@
 
 import { readFile, writeFile } from "node:fs/promises";
 import { byDoi, mergeRecord, sortRecords } from "./crossref.mjs";
-import venueGroups from "../data/venue-groups.json" with { type: "json" };
+import wosCategories from "../data/wos-categories.json" with { type: "json" };
 
 const DATA = new URL("../data/publications.json", import.meta.url);
 
@@ -56,8 +56,13 @@ console.log(`\n${records.length} publications in data/publications.json`);
 // four new venues appear a year, so this fires rarely — but silently skipping
 // it would drop the paper out of any view faceted by discipline.
 const venue = (merged.venue ?? merged.journal ?? "").trim();
-if (venue && !(venue in venueGroups)) {
+if (venue && !(venue in wosCategories)) {
   console.log(`\nNEW VENUE: "${venue}"`);
-  console.log("   Not in data/venue-groups.json, so this paper has no discipline yet.");
-  console.log("   Look the journal up in JCR and add one line to that file.");
+  console.log("   Not in data/wos-categories.json, so this paper has no discipline yet");
+  console.log("   and no filter will reach it.");
+  console.log("\n   Look the journal up in Journal Citation Reports and copy its subject");
+  console.log("   categories in verbatim. If JCR has no record of it, give the entry an");
+  console.log('   empty categories list and a "fallback" of either "Conference');
+  console.log('   proceedings" or "Not WoS-indexed" — see the note at the top of the file.');
+  console.log("\n   Then: node scripts/check-disciplines.mjs");
 }
