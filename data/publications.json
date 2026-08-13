@@ -44,7 +44,7 @@
     "pdf": null,
     "code": null,
     "note": null,
-    "venue": "ACM SIGKDD 2026"
+    "venue": "ACM SIGKDD"
   },
   {
     "doi": "10.1145/3770855.3818850",
@@ -69,7 +69,7 @@
     "pdf": null,
     "code": null,
     "note": null,
-    "venue": "ACM SIGKDD 2026"
+    "venue": "ACM SIGKDD"
   },
   {
     "doi": "10.1016/j.joi.2026.101802",
@@ -235,6 +235,30 @@
     "note": null
   },
   {
+    "doi": "10.1145/3731715.3735088",
+    "title": "Core Inter-Category Contrastive Learning for Enhancing Robustness of Caries Classification",
+    "authors": [
+      "Peiliang Zhang",
+      "Yaru Chen",
+      "Yunjiong Liu",
+      "Chao Che",
+      "Yongjun Zhu"
+    ],
+    "journal": "Proceedings of the 2025 International Conference on Multimedia Retrieval",
+    "volume": null,
+    "issue": null,
+    "pages": "2108-2112",
+    "year": 2025,
+    "month": 6,
+    "type": "proceedings-article",
+    "url": "https://doi.org/10.1145/3731715.3735088",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null,
+    "venue": "ACM ICMR"
+  },
+  {
     "doi": "10.1089/cyber.2024.0521",
     "title": "Examining the Changes in Bullying Discourse on Reddit: A Comparative Analysis Before and After the COVID-19 Pandemic",
     "authors": [
@@ -323,6 +347,30 @@
     "pdf": null,
     "code": null,
     "note": null
+  },
+  {
+    "doi": "10.24963/ijcai.2024/882",
+    "title": "Subgraph Information Bottleneck with Causal Dependency for Stable Molecular Relational Learning",
+    "authors": [
+      "Peiliang Zhang",
+      "Jingling Yuan",
+      "Chao Che",
+      "Yongjun Zhu",
+      "Lin Li"
+    ],
+    "journal": "Proceedings of the Thirty-ThirdInternational Joint Conference on Artificial Intelligence",
+    "volume": null,
+    "issue": null,
+    "pages": "7931-7939",
+    "year": 2024,
+    "month": 8,
+    "type": "proceedings-article",
+    "url": "https://doi.org/10.24963/ijcai.2024/882",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null,
+    "venue": "IJCAI"
   },
   {
     "doi": "10.1016/j.ipm.2024.103757",
@@ -921,6 +969,31 @@
     "note": null
   },
   {
+    "doi": "10.1109/bigcomp48618.2020.00-66",
+    "title": "A Protein Embedding Model for Drug Molecular Screening",
+    "authors": [
+      "Chao Che",
+      "Min Zhu",
+      "Yongjun Zhu",
+      "Qiang Zhang",
+      "Dongsheng Zhou",
+      "Bin Wang"
+    ],
+    "journal": "2020 IEEE International Conference on Big Data and Smart Computing (BigComp)",
+    "volume": null,
+    "issue": null,
+    "pages": "251-254",
+    "year": 2020,
+    "month": 2,
+    "type": "proceedings-article",
+    "url": "https://doi.org/10.1109/bigcomp48618.2020.00-66",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null,
+    "venue": "IEEE BigComp"
+  },
+  {
     "doi": "10.1007/s11192-019-03311-9",
     "title": "Nine million book items and eleven million citations: a study of book-based scholarly communication using OpenCitations",
     "authors": [
@@ -1014,6 +1087,33 @@
     "pdf": null,
     "code": null,
     "note": null
+  },
+  {
+    "doi": "10.1109/ichi.2018.00059",
+    "title": "Comparing Sex-Specific Association Networks of Chronic Medical Conditions",
+    "authors": [
+      "Min-hyung Kim",
+      "Yongjun Zhu",
+      "Samprit Banerjee",
+      "Lauren Evans",
+      "Yiye Zhang",
+      "Fei Wang",
+      "Sang Min Park",
+      "Jyotishman Pathak"
+    ],
+    "journal": "2018 IEEE International Conference on Healthcare Informatics (ICHI)",
+    "volume": null,
+    "issue": null,
+    "pages": "368-370",
+    "year": 2018,
+    "month": 6,
+    "type": "proceedings-article",
+    "url": "https://doi.org/10.1109/ichi.2018.00059",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null,
+    "venue": "IEEE ICHI"
   },
   {
     "doi": "10.1093/jamiaopen/ooy001",
@@ -1329,6 +1429,28 @@
     "note": null
   },
   {
+    "doi": "10.1145/2811411.2811475",
+    "title": "Topological analysis of interdisciplinary scientific journals",
+    "authors": [
+      "Yongjun Zhu",
+      "Erjia Yan",
+      "Il-Yeol Song"
+    ],
+    "journal": "Proceedings of the 2015 Conference on research in adaptive and convergent systems",
+    "volume": null,
+    "issue": null,
+    "pages": "56-61",
+    "year": 2015,
+    "month": 10,
+    "type": "proceedings-article",
+    "url": "https://doi.org/10.1145/2811411.2811475",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null,
+    "venue": "ACM RACS"
+  },
+  {
     "doi": "10.1016/j.joi.2015.04.003",
     "title": "Identifying entities from scientific publications: A comparison of vocabulary- and model-based methods",
     "authors": [
@@ -1369,6 +1491,29 @@
     "note": null
   },
   {
+    "doi": "10.1007/978-3-319-25264-3_2",
+    "title": "Methodologies for Semi-automated Conceptual Data Modeling from Requirements",
+    "authors": [
+      "Il-Yeol Song",
+      "Yongjun Zhu",
+      "Hyithaek Ceong",
+      "Ornsiri Thonggoom"
+    ],
+    "journal": "Lecture Notes in Computer Science",
+    "volume": null,
+    "issue": null,
+    "pages": "18-31",
+    "year": 2015,
+    "month": null,
+    "type": "book-chapter",
+    "url": "https://doi.org/10.1007/978-3-319-25264-3_2",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null,
+    "venue": "ER — Conceptual Modeling"
+  },
+  {
     "doi": "10.1016/j.dss.2014.01.010",
     "title": "Dynamic faceted navigation in decision making using Semantic Web technology",
     "authors": [
@@ -1389,5 +1534,31 @@
     "pdf": null,
     "code": null,
     "note": null
+  },
+  {
+    "doi": "10.1007/978-3-642-37996-3_10",
+    "title": "The Dynamic Generation of Refining Categories in Ontology-Based Search",
+    "authors": [
+      "Yongjun Zhu",
+      "Dongkyu Jeon",
+      "Wooju Kim",
+      "June S. Hong",
+      "Myungjin Lee",
+      "Zhuguang Wen",
+      "Yanhua Cai"
+    ],
+    "journal": "Lecture Notes in Computer Science",
+    "volume": null,
+    "issue": null,
+    "pages": "146-158",
+    "year": 2013,
+    "month": null,
+    "type": "book-chapter",
+    "url": "https://doi.org/10.1007/978-3-642-37996-3_10",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null,
+    "venue": "JIST"
   }
 ]
