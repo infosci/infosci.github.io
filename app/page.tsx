@@ -37,22 +37,23 @@ const AREAS = [
     },
   },
   {
-    // A page whose purpose is to answer the question, which is what the card
-    // asks of it. Two earlier attempts missed that: EASST, whose wording
-    // matched the card's phrase but which is the European association rather
-    // than the field's international body; and the Handbook of STS, which is
-    // the field's standard reference but whose page reads as a book listing,
-    // so a reader lands on a publication rather than a definition.
+    // 4S: the field's international body, founded 1975, and the parallel to
+    // AMIA on the mental health card. Its page describes the field it fosters
+    // as "social studies of science, technology, and medicine", noting that
+    // field "includes Science and Technology Studies".
     //
-    // The trade-off here is the reverse: this is one university's programme
-    // page, not the field's collective voice, but it is purpose-built to
-    // define STS and traces it from the interwar period through Kuhn.
+    // Three other candidates were tried and rejected, each for a different
+    // reason worth remembering: EASST matched this card's exact phrase but is
+    // the European association, not the international one; the Handbook of STS
+    // is the field's standard reference but its page reads as a book listing;
+    // Harvard's "What is STS?" is purpose-built to define the field but speaks
+    // for one programme rather than for the field.
     id: "science-and-technology-studies",
     title: "Science and Technology Studies",
     Icon: TechnologyStudiesIcon,
     source: {
-      href: "https://sts.hks.harvard.edu/about/whatissts.html",
-      label: "Harvard STS Program",
+      href: "https://www.4sonline.org/what_is_4s.php",
+      label: "Society for Social Studies of Science (4S)",
     },
   },
   {
