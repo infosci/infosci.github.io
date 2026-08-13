@@ -1,82 +1,82 @@
-// People, data and technology at the vertices; the lab's three research areas
-// arranged around the outside.
+// Two layers, one inside the other.
 //
-// This replaced a Venn of three circles, which read as a stock diagram. A
-// triangle states the same relation more quietly: three things held apart at
-// equal distance, with everything else happening in the space between them.
+// Inside: people, data and technology, the assumption the lab works from.
+// Around it: the three research areas, each of which draws on all three.
 //
-// Geometry is computed rather than eyeballed. The vertices sit 120° apart on a
-// circumcircle about the centroid, so the triangle is equilateral. Each area
-// label sits directly outward from the midpoint of an edge — that is, rotated
-// 60° from the vertices — which is the only arrangement that keeps all three
-// equidistant from the shape and from each other.
+// The enclosing ring is the whole point of the drawing. An earlier version put
+// each area outside the edge joining "its" two vertices, which asserted that
+// digital humanities is data-and-technology, mental health informatics is
+// technology-and-people, and so on. That is wrong: every one of these fields
+// uses all three. The ring closes the triad into a single object, so an area
+// sitting outside it relates to the whole rather than to an edge or a vertex.
+// The areas fall between vertices only because that is where the text fits.
 //
-// NOTE ON MEANING: an area placed outside an edge reads as belonging to the two
-// vertices at that edge's ends. That is an assertion about the fields, not a
-// neutral layout, so the pairings here are deliberate and worth checking.
-//
-// Everything is currentColor, so the figure follows the theme toggle.
+// Geometry is computed, not typed: vertices sit 120° apart on a circumcircle,
+// and every label is placed by angle and radius from one centre.
 
-const CX = 280;
-const CY = 178;
-const RT = 92; // centroid to each vertex
-// Edge midpoints sit at the inradius, RT/2. Labels go a fixed step beyond
-// that, not on some larger circle — at 108 they floated free of the shape.
-const RL = 80;
+const CX = 320;
+const CY = 175;
+const RT = 76; // centroid to each triangle vertex
+const RC = 118; // the ring enclosing the triad
+const RA = 140; // area labels, outside the ring
 
-// -90° puts a vertex at the top; the other two follow at 120° intervals.
-const VERTEX_ANGLES = [-90, 30, 150];
 const point = (deg: number, radius: number) => ({
   x: CX + radius * Math.cos((deg * Math.PI) / 180),
   y: CY + radius * Math.sin((deg * Math.PI) / 180),
 });
 
+// -90° puts a vertex at the top; the others follow at 120° intervals.
 const VERTICES = [
-  { label: "People", ...point(VERTEX_ANGLES[0], RT), lx: CX, ly: CY - RT - 18, anchor: "middle" as const },
+  { label: "People", angle: -90, lx: CX, ly: CY - RT - 16, anchor: "middle" as const },
   {
     label: "Data",
-    ...point(VERTEX_ANGLES[1], RT),
-    lx: point(VERTEX_ANGLES[1], RT).x + 16,
-    ly: point(VERTEX_ANGLES[1], RT).y + 22,
+    angle: 30,
+    lx: point(30, RT).x + 10,
+    ly: point(30, RT).y + 20,
     anchor: "start" as const,
   },
   {
     label: "Technology",
-    ...point(VERTEX_ANGLES[2], RT),
-    lx: point(VERTEX_ANGLES[2], RT).x - 16,
-    ly: point(VERTEX_ANGLES[2], RT).y + 22,
+    angle: 150,
+    lx: point(150, RT).x - 10,
+    ly: point(150, RT).y + 20,
     anchor: "end" as const,
   },
 ];
 
-// Edge midpoint directions: 60° offset from the vertices, so each label sits
-// outside the edge joining the two vertices it draws on.
-//
-//   90°  is the Data–Technology edge   -> Digital Humanities: corpora, computed
-//   210° is the Technology–People edge -> Mental Health Informatics, which AMIA
-//                                          places at "the interface of
-//                                          informatics and mental health"
-//   330° is the People–Data edge       -> Science of Science: scientists and the
-//                                          record they leave behind
-//
-// Each field of course touches all three. These are the two that dominate.
+// Placed where the text has room — between vertices — not to signal a pairing.
 const AREAS = [
-  { label: "Digital Humanities", ...point(90, RL), anchor: "middle" as const, dy: 14 },
-  { label: "Mental Health Informatics", ...point(210, RL), anchor: "end" as const, dy: 0 },
-  { label: "Science of Science", ...point(330, RL), anchor: "start" as const, dy: 0 },
+  { label: "Digital Humanities", angle: 90, anchor: "middle" as const, dy: 4 },
+  { label: "Science of Science", angle: 210, anchor: "end" as const, dy: 0 },
+  { label: "Mental Health Informatics", angle: 330, anchor: "start" as const, dy: 0 },
 ];
 
 export function TriadFigure({ className }: { className?: string }) {
-  const path = VERTICES.map((v, i) => `${i === 0 ? "M" : "L"}${v.x} ${v.y}`).join(" ") + " Z";
+  const path =
+    VERTICES.map((v, i) => {
+      const p = point(v.angle, RT);
+      return `${i === 0 ? "M" : "L"}${p.x} ${p.y}`;
+    }).join(" ") + " Z";
 
   return (
     <svg
-      viewBox="0 0 560 300"
+      viewBox="0 0 640 350"
       xmlns="http://www.w3.org/2000/svg"
       className={className ?? "h-auto w-full"}
       role="img"
-      aria-label="A triangle with People, Data and Technology at its vertices, and the lab's three research areas arranged around it"
+      aria-label="People, Data and Technology at the vertices of a triangle, enclosed by a ring, with the lab's three research areas arranged around the outside"
     >
+      {/* Fainter than the triangle: it encloses rather than competes. */}
+      <circle
+        cx={CX}
+        cy={CY}
+        r={RC}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth={1}
+        opacity={0.22}
+      />
+
       <path
         d={path}
         fill="none"
@@ -86,9 +86,10 @@ export function TriadFigure({ className }: { className?: string }) {
         opacity={0.5}
       />
 
-      {VERTICES.map((v) => (
-        <circle key={v.label} cx={v.x} cy={v.y} r={5} fill="currentColor" />
-      ))}
+      {VERTICES.map((v) => {
+        const p = point(v.angle, RT);
+        return <circle key={v.label} cx={p.x} cy={p.y} r={5} fill="currentColor" />;
+      })}
 
       <g fill="currentColor" style={{ fontFamily: "inherit" }}>
         {VERTICES.map((v) => (
@@ -104,20 +105,23 @@ export function TriadFigure({ className }: { className?: string }) {
           </text>
         ))}
 
-        {/* Muted and a size down: the vertices are the frame, the areas are what
-            sits in it. Same order of importance as the cards above. */}
-        {AREAS.map((a) => (
-          <text
-            key={a.label}
-            x={a.x}
-            y={a.y + a.dy}
-            textAnchor={a.anchor}
-            fontSize={13}
-            opacity={0.55}
-          >
-            {a.label}
-          </text>
-        ))}
+        {/* Muted and a size down — the triad is the frame, the areas are what
+            gets built on it. Same order of importance as the cards above. */}
+        {AREAS.map((a) => {
+          const p = point(a.angle, RA);
+          return (
+            <text
+              key={a.label}
+              x={p.x}
+              y={p.y + a.dy}
+              textAnchor={a.anchor}
+              fontSize={13}
+              opacity={0.55}
+            >
+              {a.label}
+            </text>
+          );
+        })}
       </g>
     </svg>
   );
