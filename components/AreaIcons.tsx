@@ -18,19 +18,18 @@ const SHARED = {
   fill: "none",
 };
 
-/** Three nodes and the edges between them — a citation graph. Science of
- * science studies the structure science makes of itself, so the sign is the
- * structure, not the subject. */
+/** An atom: a nucleus with three orbits. The mark was a triangle of linked
+ * nodes — apt for a field that studies citation structure, but at 32px it read
+ * as a generic network diagram rather than as science. The atom is the sign
+ * everyone already knows, which is what a card title needs beside it. */
 export function ScienceOfScienceIcon({ className }: IconProps) {
   return (
     <svg {...SHARED} className={className ?? "h-10 w-8"}>
-      <circle cx="16" cy="12" r="3" />
-      <circle cx="7" cy="29" r="3" />
-      <circle cx="25" cy="29" r="3" />
-      {/* Edges stop short of each node so the strokes never touch. */}
-      <path d="M14.6 14.7 L8.4 26.3" />
-      <path d="M17.4 14.7 L23.6 26.3" />
-      <path d="M10 29 H22" />
+      <circle cx="16" cy="20" r="2.6" />
+      {/* Three ellipses on one centre, 60° apart. */}
+      <ellipse cx="16" cy="20" rx="11.5" ry="5" />
+      <ellipse cx="16" cy="20" rx="11.5" ry="5" transform="rotate(60 16 20)" />
+      <ellipse cx="16" cy="20" rx="11.5" ry="5" transform="rotate(120 16 20)" />
     </svg>
   );
 }
@@ -52,24 +51,24 @@ export function MentalHealthIcon({ className }: IconProps) {
   );
 }
 
-/** A cog: a circle with six teeth. The plainest sign for technology as an
- * object of study, and the only one of the four that names a thing rather than
- * a practice — which is the point, since the field studies the thing. */
+/** A microchip: a die inside a package, with pins on all four sides. The mark
+ * was a cog, which at this size read as a settings button rather than as
+ * technology. A chip is unambiguous, and it is a made object — right for a
+ * field that studies technology as something people build and live with. */
 export function TechnologyStudiesIcon({ className }: IconProps) {
-  const cx = 16;
-  const cy = 20;
-  const teeth = [0, 60, 120, 180, 240, 300].map((deg) => {
-    const rad = (deg * Math.PI) / 180;
-    const [c, s] = [Math.cos(rad), Math.sin(rad)];
-    return `M${(cx + 8.6 * c).toFixed(2)} ${(cy + 8.6 * s).toFixed(2)} L${(cx + 11.6 * c).toFixed(2)} ${(cy + 11.6 * s).toFixed(2)}`;
-  });
-
   return (
     <svg {...SHARED} className={className ?? "h-10 w-8"}>
-      <circle cx={cx} cy={cy} r={6.6} />
-      {teeth.map((d) => (
-        <path key={d} d={d} />
-      ))}
+      <rect x="9" y="13" width="14" height="14" rx="2.5" />
+      <rect x="13.5" y="17.5" width="5" height="5" rx="1" />
+      {/* Two pins per side, so no edge is left bare. */}
+      <path d="M13 13 V9" />
+      <path d="M19 13 V9" />
+      <path d="M13 27 V31" />
+      <path d="M19 27 V31" />
+      <path d="M9 17 H5" />
+      <path d="M9 23 H5" />
+      <path d="M23 17 H27" />
+      <path d="M23 23 H27" />
     </svg>
   );
 }

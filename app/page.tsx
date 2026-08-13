@@ -95,7 +95,10 @@ function AreaCard({
     <section
       className={`flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-black/[.08] px-5 py-6 text-center dark:border-white/[.145] ${className ?? ""}`}
     >
-      <area.Icon className="h-8 w-6 text-black dark:text-zinc-50" />
+      {/* h-10 rather than h-8: the atom and the microchip carry more internal
+          detail than the marks they replaced, and at 32px their strokes nearly
+          touched. */}
+      <area.Icon className="h-10 w-8 text-black dark:text-zinc-50" />
       {/* Titles wrap. They were pinned to one line while "Mental Health
           Informatics" was the longest; "Science and Technology Studies" does
           not fit a quarter-width card at any size worth reading, so nowrap
