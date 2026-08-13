@@ -348,5 +348,97 @@
       "SCIE",
       "SSCI"
     ]
+  },
+  "Data & Knowledge Engineering": {
+    "issn": "0169-023X",
+    "categories": [
+      "Computer Science, Artificial Intelligence",
+      "Computer Science, Information Systems"
+    ],
+    "edition": [
+      "SCIE"
+    ]
+  },
+  "Expert Systems": {
+    "issn": "0266-4720",
+    "categories": [
+      "Computer Science, Theory & Methods",
+      "Computer Science, Artificial Intelligence"
+    ],
+    "edition": [
+      "SCIE"
+    ]
+  },
+  "Journal of Computing Science and Engineering": {
+    "issn": "1976-4677",
+    "categories": [],
+    "edition": [],
+    "note": "Not in JCR — searched and returned no results, so not SCIE/SSCI indexed"
+  },
+  "Journal of Asian Sociology": {
+    "issn": "2671-4574",
+    "categories": [],
+    "edition": [],
+    "note": "Not in JCR — searched and returned no results, so not SCIE/SSCI indexed"
+  },
+  "ACM SIGKDD": {
+    "issn": null,
+    "categories": [],
+    "edition": [],
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+  },
+  "IJCAI": {
+    "issn": null,
+    "categories": [],
+    "edition": [],
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+  },
+  "ACM ICMR": {
+    "issn": null,
+    "categories": [],
+    "edition": [],
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+  },
+  "ACM RACS": {
+    "issn": null,
+    "categories": [],
+    "edition": [],
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+  },
+  "IEEE BigComp": {
+    "issn": null,
+    "categories": [],
+    "edition": [],
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+  },
+  "IEEE ICHI": {
+    "issn": null,
+    "categories": [],
+    "edition": [],
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+  },
+  "ISSI": {
+    "issn": null,
+    "categories": [],
+    "edition": [],
+    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories"
+  },
+  "ER — Conceptual Modeling": {
+    "issn": null,
+    "categories": [],
+    "edition": [],
+    "note": "LNCS book series — no WoS journal category"
+  },
+  "JIST": {
+    "issn": null,
+    "categories": [],
+    "edition": [],
+    "note": "LNCS book series — no WoS journal category"
+  },
+  "Information Research: An International Electronic Journal": {
+    "issn": null,
+    "categories": [],
+    "edition": [],
+    "note": "Not JCR-indexed"
   }
 }
