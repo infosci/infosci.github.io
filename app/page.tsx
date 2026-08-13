@@ -1,4 +1,9 @@
 import Link from "next/link";
+import {
+  DigitalHumanitiesIcon,
+  MentalHealthIcon,
+  ScienceOfScienceIcon,
+} from "@/components/AreaIcons";
 
 // The three areas as cards, matching ddun.ai's gate: rounded-2xl, a hairline
 // border, centered copy. Name and one line each — the people/data/technology
@@ -7,14 +12,17 @@ const AREAS = [
   {
     title: "Science of Science",
     blurb: "How research gets made, and what makes it matter.",
+    Icon: ScienceOfScienceIcon,
   },
   {
     title: "Mental Health Informatics",
     blurb: "What data reveals about mental health, and the people it reaches.",
+    Icon: MentalHealthIcon,
   },
   {
     title: "Digital Humanities",
     blurb: "Computational readings of the cultural and historical record.",
+    Icon: DigitalHumanitiesIcon,
   },
 ];
 
@@ -43,6 +51,7 @@ export default function Home() {
             key={area.title}
             className="flex h-full flex-col items-center justify-center gap-3 rounded-2xl border border-black/[.08] px-6 py-10 text-center dark:border-white/[.145]"
           >
+            <area.Icon className="h-10 w-8 text-black dark:text-zinc-50" />
             {/* One line each. "Mental Health Informatics" is the constraint —
                 at text-2xl it wrapped in a third-width column, leaving the
                 three titles visually uneven. Dropped a size and pinned to
