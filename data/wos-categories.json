@@ -314,5 +314,39 @@
     "edition": [
       "SSCI"
     ]
+  },
+  "IEEE Transactions on Consumer Electronics": {
+    "issn": "0098-3063",
+    "categories": [
+      "Telecommunications",
+      "Engineering, Electrical & Electronic"
+    ],
+    "edition": [
+      "SCIE"
+    ]
+  },
+  "Engineering Applications of Artificial Intelligence": {
+    "issn": "0952-1976",
+    "categories": [
+      "Engineering, Multidisciplinary",
+      "Computer Science, Artificial Intelligence",
+      "Automation & Control Systems",
+      "Engineering, Electrical & Electronic"
+    ],
+    "edition": [
+      "SCIE"
+    ]
+  },
+  "Decision Support Systems": {
+    "issn": "0167-9236",
+    "categories": [
+      "Operations Research & Management Science",
+      "Computer Science, Artificial Intelligence",
+      "Computer Science, Information Systems"
+    ],
+    "edition": [
+      "SCIE",
+      "SSCI"
+    ]
   }
 }
