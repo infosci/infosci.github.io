@@ -1,0 +1,265 @@
+{
+  "review": [
+    {
+      "matchScore": 107,
+      "similarity": 1,
+      "bibTitle": "Multi-Category Fusion Contrastive Learning with Core Data Selection for Robust RGB Image-based Dental Caries Classification",
+      "matchedTitle": "Multi-Category Fusion Contrastive Learning with Core Data Selection for Robust RGB Image-based Dental Caries Classification",
+      "bibJournal": "Information Fusion",
+      "matchedJournal": "Information Fusion",
+      "doi": "10.1016/j.inffus.2025.103390",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 87,
+      "similarity": 1,
+      "bibTitle": "Understanding Double Stigma Toward Minority Groups on Social Media in the COVID-19 Pandemic: Findings from South Korea",
+      "matchedTitle": "Understanding Double Stigma Toward Minority Groups on Social Media in the COVID-19 Pandemic: Findings from South Korea",
+      "bibJournal": "Journal of Asian Sociology",
+      "matchedJournal": "Journal of Asian Sociology",
+      "doi": "10.21588/dns.2024.53.3.004",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 107,
+      "similarity": 1,
+      "bibTitle": "Do more heads imply better performance? An empirical study of team thought leaders' impact on scientific team performance",
+      "matchedTitle": "Do more heads imply better performance? An empirical study of team thought leaders' impact on scientific team performance",
+      "bibJournal": "Information Processing & Management",
+      "matchedJournal": "Information Processing & Management",
+      "doi": "10.1016/j.ipm.2024.103757",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 87,
+      "similarity": 1,
+      "bibTitle": "NCH-DDA: Neighborhood contrastive learning heterogeneous network for drug–disease association predictions",
+      "matchedTitle": "NCH-DDA: Neighborhood contrastive learning heterogeneous network for drug–disease association prediction",
+      "bibJournal": "Expert Systems with Applications",
+      "matchedJournal": "Expert Systems with Applications",
+      "doi": "10.1016/j.eswa.2023.121855",
+      "exactTitle": false
+    },
+    {
+      "matchScore": 99,
+      "similarity": 1,
+      "bibTitle": "CariesFG: A fine-grained RGB image classification framework with attention mechanism for dental caries",
+      "matchedTitle": "CariesFG: A fine-grained RGB image classification framework with attention mechanism for dental caries",
+      "bibJournal": "Engineering Applications of Artificial Intelligence",
+      "matchedJournal": "Engineering Applications of Artificial Intelligence",
+      "doi": "10.1016/j.engappai.2023.106306",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 104,
+      "similarity": 1,
+      "bibTitle": "IEA-GNN: Anchor-aware graph neural network fused with information entropy for node classification and link prediction",
+      "matchedTitle": "IEA-GNN: Anchor-aware graph neural network fused with information entropy for node classification and link prediction",
+      "bibJournal": "Information Sciences",
+      "matchedJournal": "Information Sciences",
+      "doi": "10.1016/j.ins.2023.03.022",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 85,
+      "similarity": 1,
+      "bibTitle": "An Exploratory Study of Medical Journal’s Twitter Use: Metadata, Networks, and Content Analyses",
+      "matchedTitle": "An Exploratory Study of Medical Journal’s Twitter Use: Metadata, Networks, and Content Analyses",
+      "bibJournal": "Journal of Medical Internet Research",
+      "matchedJournal": "Journal of Medical Internet Research",
+      "doi": "10.2196/43521",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 76,
+      "similarity": 1,
+      "bibTitle": "Recommendations with residual connections and negative sampling based on knowledge graphs",
+      "matchedTitle": "Recommendations with residual connections and negative sampling based on knowledge graphs",
+      "bibJournal": "Knowledge-Based Systems",
+      "matchedJournal": "Knowledge-Based Systems",
+      "doi": "10.1016/j.knosys.2022.110049",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 72,
+      "similarity": 1,
+      "bibTitle": "Bi-graph attention network for aspect category sentiment classification",
+      "matchedTitle": "Bi-graph attention network for aspect category sentiment classification",
+      "bibJournal": "Knowledge-Based Systems",
+      "matchedJournal": "Knowledge-Based Systems",
+      "doi": "10.1016/j.knosys.2022.109972",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 63,
+      "similarity": 1,
+      "bibTitle": "Understanding the Research Landscape of Deep Learning in Biomedical Science: Scientometric Analysis",
+      "matchedTitle": "Understanding the Research Landscape of Deep Learning in Biomedical Science: Scientometric Analysis",
+      "bibJournal": "Journal of Medical Internet Research",
+      "matchedJournal": "Journal of Medical Internet Research",
+      "doi": "10.2196/28114",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 70,
+      "similarity": 1,
+      "bibTitle": "Analyzing China’s research collaboration with the United States in high-impact and high-technology research",
+      "matchedTitle": "Analyzing China’s research collaboration with the United States in high-impact and high-technology research",
+      "bibJournal": "Quantitative Science Studies",
+      "matchedJournal": "Quantitative Science Studies",
+      "doi": "10.1162/qss_a_00098",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 82,
+      "similarity": 1,
+      "bibTitle": "Analyzing academic mobility of U.S. professors based on ORCID data and the Carnegie Classification",
+      "matchedTitle": "Analyzing academic mobility of U.S. professors based on ORCID data and the Carnegie Classification",
+      "bibJournal": "Quantitative Science Studies",
+      "matchedJournal": "Quantitative Science Studies",
+      "doi": "10.1162/qss_a_00088",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 65,
+      "similarity": 1,
+      "bibTitle": "Mapping scientific landscapes in UMLS research: a scientometric review",
+      "matchedTitle": "Mapping scientific landscapes in UMLS research: a scientometric review",
+      "bibJournal": "Journal of the American Medical Informatics Association",
+      "matchedJournal": "Journal of the American Medical Informatics Association",
+      "doi": "10.1093/jamia/ocaa107",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 43,
+      "similarity": 1,
+      "bibTitle": "Network embedding in biomedical data science",
+      "matchedTitle": "Network embedding in biomedical data science",
+      "bibJournal": "Briefings in Bioinformatics",
+      "matchedJournal": "Briefings in Bioinformatics",
+      "doi": "10.1093/bib/bby117",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 54,
+      "similarity": 1,
+      "bibTitle": "Drug knowledge bases and their applications in biomedical informatics research",
+      "matchedTitle": "Drug knowledge bases and their applications in biomedical informatics research",
+      "bibJournal": "Briefings in Bioinformatics",
+      "matchedJournal": "Briefings in Bioinformatics",
+      "doi": "10.1093/bib/bbx169",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 103,
+      "similarity": 1,
+      "bibTitle": "Association networks in a matched case-control design – Co-occurrence patterns of preexisting chronic medical conditions in patients with major depression versus their matched controls",
+      "matchedTitle": "Association networks in a matched case-control design – Co-occurrence patterns of preexisting chronic medical conditions in patients with major depression versus their matched controls",
+      "bibJournal": "Journal of Biomedical Informatics",
+      "matchedJournal": "Journal of Biomedical Informatics",
+      "doi": "10.1016/j.jbi.2018.09.016",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 98,
+      "similarity": 1,
+      "bibTitle": "Understanding the research landscape of major depressive disorder via literature mining: an entity-level analysis of PubMed data from 1948 to 2017",
+      "matchedTitle": "Understanding the research landscape of major depressive disorder via literature mining: an entity-level analysis of PubMed data from 1948 to 2017",
+      "bibJournal": "JAMIA Open",
+      "matchedJournal": "JAMIA Open",
+      "doi": "10.1093/jamiaopen/ooy001",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 58,
+      "similarity": 1,
+      "bibTitle": "Tracking word semantic change in biomedical literature",
+      "matchedTitle": "Tracking word semantic change in biomedical literature",
+      "bibJournal": "International Journal of Medical Informatics",
+      "matchedJournal": "International Journal of Medical Informatics",
+      "doi": "10.1016/j.ijmedinf.2017.11.006",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 68,
+      "similarity": 1,
+      "bibTitle": "A natural language interface to a graph-based bibliographic information retrieval system",
+      "matchedTitle": "A natural language interface to a graph-based bibliographic information retrieval system",
+      "bibJournal": "Data & Knowledge Engineering",
+      "matchedJournal": "Data & Knowledge Engineering",
+      "doi": "10.1016/j.datak.2017.06.006",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 85,
+      "similarity": 1,
+      "bibTitle": "Examining academic ranking and inequality in library and information science through faculty hiring networks",
+      "matchedTitle": "Examining academic ranking and inequality in library and information science through faculty hiring networks",
+      "bibJournal": "Journal of Informetrics",
+      "matchedJournal": "Journal of Informetrics",
+      "doi": "10.1016/j.joi.2017.04.007",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 80,
+      "similarity": 1,
+      "bibTitle": "Searching bibliographic data using graphs: A visual graph query interface",
+      "matchedTitle": "Searching bibliographic data using graphs: A visual graph query interface",
+      "bibJournal": "Journal of Informetrics",
+      "matchedJournal": "Journal of Informetrics",
+      "doi": "10.1016/j.joi.2016.09.005",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 55,
+      "similarity": 1,
+      "bibTitle": "A Model-Based Method for Information Alignment: A Case Study on Educational Standards",
+      "matchedTitle": "A Model-Based Method for Information Alignment: A Case Study on Educational Standards",
+      "bibJournal": "Journal of Computing Science and Engineering",
+      "matchedJournal": "Journal of Computing Science and Engineering",
+      "doi": "10.5626/jcse.2016.10.3.85",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 73,
+      "similarity": 1,
+      "bibTitle": "Identifying entities from scientific publications: A comparison of vocabulary- and model-based methods",
+      "matchedTitle": "Identifying entities from scientific publications: A comparison of vocabulary- and model-based methods",
+      "bibJournal": "Journal of Informetrics",
+      "matchedJournal": "Journal of Informetrics",
+      "doi": "10.1016/j.joi.2015.04.003",
+      "exactTitle": true
+    },
+    {
+      "matchScore": 80,
+      "similarity": 1,
+      "bibTitle": "Dynamic faceted navigation in decision making using Semantic Web technology",
+      "matchedTitle": "Dynamic faceted navigation in decision making using Semantic Web technology",
+      "bibJournal": "Decision Support Systems",
+      "matchedJournal": "Decision Support Systems",
+      "doi": "10.1016/j.dss.2014.01.010",
+      "exactTitle": true
+    }
+  ],
+  "unresolved": [
+    {
+      "similarity": 0.6,
+      "bibTitle": "An investigation of the intellectual structure of opinion mining research",
+      "rejectedTitle": "Mapping the intellectual structure of electronic commerce research: 1997-2006",
+      "rejectedDoi": "10.1504/ijeb.2010.030714",
+      "fromBib": {
+        "title": "An investigation of the intellectual structure of opinion mining research",
+        "authors": [
+          "Yongjun Zhu",
+          "Meen Chul Kim",
+          "Chaomei Chen"
+        ],
+        "journal": "Information Research: An International Electronic Journal",
+        "volume": "22",
+        "pages": "paper739",
+        "year": 2017
+      }
+    }
+  ],
+  "failures": []
+}

@@ -1,0 +1,77 @@
+[
+  {
+    "id": "about_project_7",
+    "title": "Understanding science of collaboration and team impact using big scholarly data",
+    "terms": [
+      "Science of Science",
+      "Team Science"
+    ],
+    "duration": "2023 - 2026",
+    "funder": "National Research Foundation of Korea"
+  },
+  {
+    "id": "about_project_6",
+    "title": "Transdisciplinary Study for Resilience of Abused Children: Brain, Data Science, Technology & Social Work",
+    "terms": [
+      "Health Informatics",
+      "Social Welfare",
+      "Mental Health",
+      "Brain Science"
+    ],
+    "duration": "2022 - 2025",
+    "funder": "National Research Foundation of Korea"
+  },
+  {
+    "id": "about_project_4",
+    "title": "Analyzing social determinants of suicide in South Korea: Developing SDOH framework for suicide and identifying high risk groups",
+    "terms": [
+      "Suicidology",
+      "Social Determinants of Health"
+    ],
+    "duration": "2021 - 2024",
+    "funder": "National Research Foundation of Korea"
+  },
+  {
+    "id": "about_project_5",
+    "title": "A Study on Digital Communication Incivility: Developing Measurement Scales and an Integrated Theoretical Model to Recover Healthy Communication",
+    "terms": [
+      "Communication",
+      "Social Media",
+      "Natural Language Processing"
+    ],
+    "duration": "2021 - 2027",
+    "funder": "National Research Foundation of Korea"
+  },
+  {
+    "id": "about_project_1",
+    "title": "Drug repurposing for Parkinson’s disease through text mining scientific literature",
+    "terms": [
+      "Health Informatics",
+      "Text Mining"
+    ],
+    "duration": "2019 - 2020",
+    "funder": "National Research Foundation of Korea"
+  },
+  {
+    "id": "about_project_2",
+    "title": "Implementing suicidality detection using social media and national registry data",
+    "terms": [
+      "Suicidology",
+      "Social Media",
+      "National Registry Data"
+    ],
+    "duration": "2019 - 2021",
+    "funder": "National Research Foundation of Korea"
+  },
+  {
+    "id": "about_project_3",
+    "title": "Longitudinal Effects of Sexual Assault on Mental Health: Developing Smart Health Care Program Based on Integrative Theoretical Model",
+    "terms": [
+      "Health Informatics",
+      "Social Welfare",
+      "Mental Health"
+    ],
+    "duration": "2019 - 2022",
+    "funder": "National Research Foundation of Korea"
+  }
+]

@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+/* Theme is class-driven, not OS-driven — the same contract as ddun.ai: the site
+   defaults to dark (the `dark` class is set on <html> in layout.tsx) and the
+   toggle flips it to light, persisting the choice. Every `dark:` utility keys
+   off this same class rather than prefers-color-scheme. */
+@custom-variant dark (&:where(.dark, .dark *));
+
+:root {
+  --background: #fafafa;
+  --foreground: #171717;
+  color-scheme: light;
+}
+
+.dark {
+  --background: #000000;
+  --foreground: #fafafa;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  /* Google Sans Flex, the same face ddun.ai uses, so the two sites read as one
+     family. Latin only (50KB) — this site's content is English, and the one
+     Korean string (the university name) falls back to the system UI face rather
+     than pulling a full CJK font for a single line. */
+  --font-sans: var(--font-google-sans-flex), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
