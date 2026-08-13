@@ -35,14 +35,19 @@ export function ScienceOfScienceIcon({ className }: IconProps) {
   );
 }
 
-/** A head with a pulse inside it — the mind, measured. Deliberately not the
- * bare heartbeat ddun.ai's Lives wears, nor the head-and-bust of its Solitude:
- * the informatics is the signal read from within the person. */
+/** A heart held inside a head. The lab's work here is depression and
+ * suicidology, and a network or a pulse inside the head would describe the
+ * method while saying nothing about the point of it. The earlier mark was a
+ * plain circle around a pulse, which read as a gauge rather than a mind — the
+ * open profile, with its gap at the jaw, is what makes it a head.
+ *
+ * A heart reads warmer than clinical. On this subject that is the right
+ * register: the people behind the data are the reason for it. */
 export function MentalHealthIcon({ className }: IconProps) {
   return (
     <svg {...SHARED} className={className ?? "h-10 w-8"}>
-      <circle cx="16" cy="20" r="10" />
-      <path d="M9 20 h2.6 l2.2 -5.4 l3 10 l2.2 -4.6 H23" />
+      <path d="M23 32 v-4.5 a10.5 10.5 0 1 0 -8 3.2 v1.3" />
+      <path d="M16.2 23 c-3.9 -3.2 -5.6 -5.4 -3.7 -7.6 c1.6 -1.8 3.7 -0.5 3.7 1 c0 -1.5 2.1 -2.8 3.7 -1 c1.9 2.2 0.2 4.4 -3.7 7.6 z" />
     </svg>
   );
 }
