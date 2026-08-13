@@ -9,6 +9,7 @@
 
 import { readFile, writeFile } from "node:fs/promises";
 import { byDoi, mergeRecord, sortRecords } from "./crossref.mjs";
+import venueGroups from "../data/venue-groups.json" with { type: "json" };
 
 const DATA = new URL("../data/publications.json", import.meta.url);
 
@@ -50,3 +51,13 @@ console.log(`  ${merged.authors.join(", ")}`);
 console.log(`  ${merged.journal} ${merged.year ?? "?"}  ${merged.doi}`);
 if (gaps.length) console.log(`  (no ${gaps.join(", ")} yet — normal before an issue is assigned)`);
 console.log(`\n${records.length} publications in data/publications.json`);
+
+// A venue is classified once and then covers every future paper in it. Roughly
+// four new venues appear a year, so this fires rarely — but silently skipping
+// it would drop the paper out of any view faceted by discipline.
+const venue = (merged.venue ?? merged.journal ?? "").trim();
+if (venue && !(venue in venueGroups)) {
+  console.log(`\nNEW VENUE: "${venue}"`);
+  console.log("   Not in data/venue-groups.json, so this paper has no discipline yet.");
+  console.log("   Look the journal up in JCR and add one line to that file.");
+}

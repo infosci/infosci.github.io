@@ -18,7 +18,9 @@
     "selected": false,
     "pdf": null,
     "code": null,
-    "note": null
+    "note": null,
+    "venue": null,
+    "displayYear": null
   },
   {
     "doi": "10.1145/3770855.3817694",
