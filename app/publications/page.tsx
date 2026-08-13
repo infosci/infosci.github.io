@@ -24,7 +24,7 @@ export default function PublicationsPage() {
         Publications
       </h1>
       <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-        Journal articles and conference papers, newest first.
+        Every paper has a shelf life. These are ours, newest first.
       </p>
 
       <div className="mt-14 space-y-12">
