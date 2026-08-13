@@ -37,21 +37,22 @@ const AREAS = [
     },
   },
   {
-    // The Handbook rather than a society, which puts this card in step with
-    // Science of Science: a standard reference work rather than an
-    // organisation. It carries the field's exact name, 4S sponsors it, and 4S
-    // calls it "a comprehensive and authoritative overview of the field" and
-    // the fourth "in a series of volumes that have defined the field of STS".
+    // A page whose purpose is to answer the question, which is what the card
+    // asks of it. Two earlier attempts missed that: EASST, whose wording
+    // matched the card's phrase but which is the European association rather
+    // than the field's international body; and the Handbook of STS, which is
+    // the field's standard reference but whose page reads as a book listing,
+    // so a reader lands on a publication rather than a definition.
     //
-    // EASST sat here briefly and was the wrong call — its wording matched this
-    // card's phrase, but it is the European association, where 4S is the
-    // international body. Phrase-matching is not authority.
+    // The trade-off here is the reverse: this is one university's programme
+    // page, not the field's collective voice, but it is purpose-built to
+    // define STS and traces it from the interwar period through Kuhn.
     id: "science-and-technology-studies",
     title: "Science and Technology Studies",
     Icon: TechnologyStudiesIcon,
     source: {
-      href: "https://4sonline.org/handbook_of_sts.php",
-      label: "Felt et al., Handbook of STS (2016)",
+      href: "https://sts.hks.harvard.edu/about/whatissts.html",
+      label: "Harvard STS Program",
     },
   },
   {
