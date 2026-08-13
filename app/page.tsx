@@ -152,9 +152,14 @@ export default function Home() {
         <AreaCard area={AREAS[0]} />
 
         {/* Spans both rows so the triad sits level with the four cards rather
-            than above them. Auto-placement flows the remaining cards around
-            this cell. */}
-        <TriadFigure className="mx-auto h-auto w-full max-w-[17rem] self-center text-black sm:row-span-2 dark:text-zinc-50" />
+            than above them; auto-placement flows the remaining cards around it.
+
+            order-first on mobile, where the grid collapses to one column: in
+            DOM order the figure sits second, which stacked it between the
+            first card and the other three and broke the run. Leading with it
+            also reads better — the triad is the assumption, the cards are what
+            is built on it. */}
+        <TriadFigure className="mx-auto h-auto w-full max-w-[17rem] self-center text-black max-sm:order-first sm:row-span-2 dark:text-zinc-50" />
 
         <AreaCard area={AREAS[1]} />
         <AreaCard area={AREAS[2]} />
