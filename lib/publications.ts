@@ -26,6 +26,8 @@ export type Publication = {
   type: string | null;
   url: string | null;
   // Ours, not Crossref's — see OWNED_FIELDS in scripts/crossref.mjs.
+  // Short display name overriding `journal` — see OWNED_FIELDS.
+  venue?: string | null;
   selected: boolean;
   pdf: string | null;
   code: string | null;

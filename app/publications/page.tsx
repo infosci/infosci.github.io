@@ -6,10 +6,13 @@ export const metadata: Metadata = { title: "Publications" };
 // "Journal of Informetrics 20(1), 101766" — assembled rather than templated,
 // because online-first papers legitimately have no volume, issue, or pages yet
 // and the punctuation has to survive their absence.
+//
+// pub.venue, when set, replaces the container name only — the locator still
+// follows, so page ranges survive the shortening.
 function venue(pub: Publication) {
   const issue = pub.issue ? `(${pub.issue})` : "";
   const locator = [`${pub.volume ?? ""}${issue}`.trim(), pub.pages].filter(Boolean).join(", ");
-  return [pub.journal, locator].filter(Boolean).join(" ");
+  return [pub.venue ?? pub.journal, locator].filter(Boolean).join(" ");
 }
 
 export default function PublicationsPage() {

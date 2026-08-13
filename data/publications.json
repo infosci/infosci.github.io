@@ -43,7 +43,8 @@
     "selected": false,
     "pdf": null,
     "code": null,
-    "note": null
+    "note": null,
+    "venue": "ACM SIGKDD 2026"
   },
   {
     "doi": "10.1145/3770855.3818850",
@@ -67,7 +68,8 @@
     "selected": false,
     "pdf": null,
     "code": null,
-    "note": null
+    "note": null,
+    "venue": "ACM SIGKDD 2026"
   },
   {
     "doi": "10.1016/j.joi.2026.101802",

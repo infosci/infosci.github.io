@@ -145,7 +145,12 @@ export async function byTitle(title, journal) {
 // Fields the site owns and Crossref must never clobber. Refetching a paper
 // updates its bibliographic facts (a preprint gaining volume/pages, say) while
 // leaving every editorial choice made about it intact.
-export const OWNED_FIELDS = ["selected", "pdf", "code", "note"];
+//
+// `venue` overrides the container name on display. Crossref gives proceedings
+// their full formal title — "Proceedings of the 32nd ACM SIGKDD Conference on
+// Knowledge Discovery and Data Mining V.2" — which is correct but unreadable
+// next to a journal name. Set it to the conventional short form.
+export const OWNED_FIELDS = ["selected", "pdf", "code", "note", "venue"];
 
 export function mergeRecord(existing, fetched) {
   const merged = { ...fetched };
