@@ -16,7 +16,11 @@
 const CX = 160;
 const CY = 155;
 const RT = 76; // centroid to each triangle vertex
-const RL = 100; // centroid to each vertex label
+const DOT = 5; // vertex dot radius
+const CLEAR = 19; // gap between dot edge and label, identical for all three
+const CAP = 11; // cap height at 15px, so a label below a dot clears by CLEAR too
+const DESC = 4; // descender depth — "People" has one, so a label above a dot
+// hangs lower than its baseline and would otherwise sit closer than the others
 const RC = 148; // the ring, sized to clear the longest label
 
 const point = (deg: number, radius: number) => ({
@@ -27,15 +31,22 @@ const point = (deg: number, radius: number) => ({
 // -90° puts People at the top. Technology takes the right foot and Data the
 // left; the two were the other way round until the lab swapped them.
 //
-// Labels sit on their own radius and are centred there, rather than being
-// nudged off each vertex by hand. That is what lets the ring enclose them: with
-// the old offsets, "Technology" ran to roughly 160 units from the centre while
-// the ring sat at 118, so the longest label always broke out of the circle.
+// Labels are offset vertically from their dot, not radially outward from the
+// centre. Radial placement looks even on paper — every label the same distance
+// out — but the text runs horizontally while the offset runs diagonally, so
+// each bottom label's inner edge swings back toward its own dot. "Technology"
+// ended up overlapping its dot's vertical band while "People", sitting straight
+// above, had a clean gap. Offsetting vertically gives all three the same
+// clearance, which is what the eye actually reads.
 const VERTICES = [
-  { label: "People", angle: -90 },
-  { label: "Technology", angle: 30 },
-  { label: "Data", angle: 150 },
+  { label: "People", angle: -90, above: true },
+  { label: "Technology", angle: 30, above: false },
+  { label: "Data", angle: 150, above: false },
 ];
+
+// Baseline for a label sitting above or below its dot, with equal visible gap.
+const labelY = (vertexY: number, above: boolean) =>
+  above ? vertexY - DOT - CLEAR - DESC : vertexY + DOT + CLEAR + CAP;
 
 export function TriadFigure({ className }: { className?: string }) {
   const path =
@@ -79,9 +90,15 @@ export function TriadFigure({ className }: { className?: string }) {
 
       <g fill="currentColor" textAnchor="middle" style={{ fontFamily: "inherit" }}>
         {VERTICES.map((v) => {
-          const p = point(v.angle, RL);
+          const p = point(v.angle, RT);
           return (
-            <text key={v.label} x={p.x} y={p.y} fontSize={15} fontWeight={500}>
+            <text
+              key={v.label}
+              x={p.x}
+              y={labelY(p.y, v.above)}
+              fontSize={15}
+              fontWeight={500}
+            >
               {v.label}
             </text>
           );
