@@ -83,7 +83,7 @@ export default function PeoplePage() {
         People
       </h1>
       <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-        Different fields, different countries, shared methods.
+        Different backgrounds, unique perspectives, and one lab.
       </p>
 
       <div className="mt-14 space-y-14">
