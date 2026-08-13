@@ -37,17 +37,18 @@ const AREAS = [
     },
   },
   {
-    // 4S is the field's convening body: it describes what it fosters as
-    // "social studies of science, technology, and medicine", a field that
-    // "includes Science and Technology Studies; Science, Technology, and
-    // Society". So the citation is sound whichever of those names the lab
-    // settles on for this card.
+    // EASST rather than 4S. Both are the field's learned societies and either
+    // would be defensible, but EASST names this card's exact phrase — it
+    // "represents academics and researchers in the fields of science and
+    // technology studies" — where 4S calls the field "social studies of
+    // science, technology, and medicine" and mentions STS as something it
+    // includes. Cite the one whose words match the label.
     id: "science-and-technology-studies",
     title: "Science and Technology Studies",
     Icon: TechnologyStudiesIcon,
     source: {
-      href: "https://www.4sonline.org/what_is_4s.php",
-      label: "Society for Social Studies of Science (4S)",
+      href: "https://easst.net/about-easst/",
+      label: "EASST",
     },
   },
   {
@@ -107,7 +108,7 @@ function AreaCard({
         href={area.source.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-flex items-center gap-1.5 text-base font-semibold tracking-tight text-balance text-black dark:text-zinc-50"
+        className="group inline-flex min-h-12 items-center gap-1.5 text-base font-semibold tracking-tight text-balance text-black dark:text-zinc-50"
       >
         <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
           {area.title}
