@@ -113,10 +113,10 @@ export default function Home() {
         ))}
       </div>
 
-      {/* Sized against the text column rather than the full width: at 5xl the
-          circles became a banner and stopped reading as a diagram. */}
+      {/* Wider than the Venn it replaced: the area labels sit outside the
+          triangle and "Mental Health Informatics" needs the room. */}
       <div className="mt-16 flex justify-center">
-        <TriadFigure className="h-auto w-full max-w-md text-black dark:text-zinc-50" />
+        <TriadFigure className="h-auto w-full max-w-2xl text-black dark:text-zinc-50" />
       </div>
 
       <Link
