@@ -224,5 +224,35 @@
     "edition": [
       "SCIE"
     ]
+  },
+  "Expert Systems with Applications": {
+    "issn": "0957-4174",
+    "categories": [
+      "Operations Research & Management Science",
+      "Computer Science, Artificial Intelligence",
+      "Engineering, Electrical & Electronic"
+    ],
+    "edition": [
+      "SCIE"
+    ]
+  },
+  "Information Sciences": {
+    "issn": "0020-0255",
+    "categories": [
+      "Computer Science, Information Systems"
+    ],
+    "edition": [
+      "SCIE"
+    ]
+  },
+  "Information Fusion": {
+    "issn": "1566-2535",
+    "categories": [
+      "Computer Science, Theory & Methods",
+      "Computer Science, Artificial Intelligence"
+    ],
+    "edition": [
+      "SCIE"
+    ]
   }
 }
