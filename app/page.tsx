@@ -8,9 +8,10 @@ import fieldReading from "@/data/field-reading.json";
 
 // Two layers here, deliberately different in tempo.
 //
-// The cards are fixed. Each title links to the field's standing reference —
-// the thing that does not change from year to year — so the definitional work
-// is done by the field, not by us.
+// The cards are fixed: a mark, the field's name, and the citation. Nothing on
+// them is in our words — each title links to the field's standing reference,
+// the thing that does not change from year to year, so the definitional work
+// is done by the field rather than by us.
 //
 // Beneath them, recent papers from each field's core journals, refreshed at
 // build time by scripts/fetch-field-reading.mjs. These are other people's
@@ -25,7 +26,6 @@ const AREAS = [
   {
     id: "science-of-science",
     title: "Science of Science",
-    blurb: "How research gets made, and what makes it matter.",
     Icon: ScienceOfScienceIcon,
     source: {
       href: "https://www.science.org/doi/10.1126/science.aao0185",
@@ -35,7 +35,6 @@ const AREAS = [
   {
     id: "mental-health-informatics",
     title: "Mental Health Informatics",
-    blurb: "What data reveals about mental health, and the people it reaches.",
     Icon: MentalHealthIcon,
     source: {
       href: "https://amia.org/community/working-groups/mental-health-informatics",
@@ -45,7 +44,6 @@ const AREAS = [
   {
     id: "digital-humanities",
     title: "Digital Humanities",
-    blurb: "Computational readings of the cultural and historical record.",
     Icon: DigitalHumanitiesIcon,
     source: {
       href: "https://dhdebates.gc.cuny.edu/read/untitled-88c11800-9446-469b-a3be-3fdb36bfbd1e/section/f5640d43-b8eb-4d49-bc4b-eb31a16f3d06",
@@ -98,9 +96,6 @@ export default function Home() {
               >
                 {area.title}
               </a>
-              <p className="max-w-xs text-base text-balance text-zinc-600 dark:text-zinc-400">
-                {area.blurb}
-              </p>
               <p className="text-xs text-zinc-400 dark:text-zinc-600">{area.source.label}</p>
             </div>
 
