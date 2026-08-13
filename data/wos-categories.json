@@ -196,5 +196,33 @@
     "edition": [
       "SCIE"
     ]
+  },
+  "Journal of Data and Information Science": {
+    "issn": "2096-157X",
+    "categories": [
+      "Information Science & Library Science"
+    ],
+    "edition": [
+      "SSCI"
+    ]
+  },
+  "JAMIA Open": {
+    "issn": "2574-2531",
+    "categories": [
+      "Health Care Sciences & Services",
+      "Medical Informatics"
+    ],
+    "edition": [
+      "SCIE"
+    ]
+  },
+  "PLOS ONE": {
+    "issn": "1932-6203",
+    "categories": [
+      "Multidisciplinary Sciences"
+    ],
+    "edition": [
+      "SCIE"
+    ]
   }
 }
