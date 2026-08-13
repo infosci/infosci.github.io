@@ -11,11 +11,17 @@
 // appear under each of them — filing it under only the first would hide it from
 // a reader browsing the others.
 //
-// Twelve venues have no WoS category at all and carry a `fallback` instead; see
-// the comment at the top of the JSON for why, and why it is still fixed
-// metadata rather than a judgement.
+// Two sources, because Clarivate classifies two ways. A journal's categories
+// belong to the journal, so they are keyed by venue. A conference proceeding is
+// classified per record — ISSI 2017 carries two categories, ISSI 2023 is not
+// indexed at all — so those are keyed by paper.
+//
+// Eight papers are genuinely absent from the Core Collection and carry a
+// `fallback` instead; see the comment at the top of the JSON for why that is
+// still fixed metadata rather than a judgement.
 
 import wosCategories from "@/data/wos-categories.json";
+import byPaper from "@/data/wos-categories-by-paper.json";
 import { getPublications, type Publication } from "./publications";
 
 type VenueEntry = {
@@ -24,22 +30,38 @@ type VenueEntry = {
   edition: string[];
   note?: string;
   fallback?: string;
+  perPaper?: boolean;
 };
 
-const VENUES = wosCategories as unknown as Record<string, VenueEntry>;
+type PaperEntry = { categories: string[]; wosId: string | null };
 
-// The two values standing in for a WoS category. Listed last in the facet: they
-// say where a paper appeared, not what field it belongs to, so they read as
-// outside the scheme rather than as more of it.
-export const NON_WOS = ["Conference proceedings", "Not WoS-indexed"];
+const VENUES = wosCategories as unknown as Record<string, VenueEntry>;
+const PAPERS = byPaper as unknown as Record<string, PaperEntry>;
+
+// Stands in where Clarivate has nothing to say. Listed last in the facet: it
+// reports an absence rather than naming a field, so it should not sit among
+// values that do.
+export const NOT_INDEXED = "Not WoS-indexed";
 
 export const venueOf = (pub: Publication) => (pub.venue ?? pub.journal ?? "").trim();
 
-/** Every discipline a paper is filed under. Empty only for a venue missing from
- *  the data — scripts/check-disciplines.mjs fails the build on one of those. */
+// Conference records are keyed by DOI where there is one, by exact title where
+// there is not — the two ISSI papers predate the lab's DOIs.
+const paperKey = (pub: Publication) => pub.doi?.toLowerCase() ?? pub.title;
+
+/** Every discipline a paper is filed under. Empty when the venue is missing from
+ *  the data, or when a conference paper has no per-record entry yet — both fail
+ *  scripts/check-disciplines.mjs rather than passing as uncategorized. */
 export function disciplinesOf(pub: Publication): string[] {
   const entry = VENUES[venueOf(pub)];
   if (!entry) return [];
+
+  if (entry.perPaper) {
+    const record = PAPERS[paperKey(pub)];
+    if (!record) return [];
+    return record.categories.length ? record.categories : [NOT_INDEXED];
+  }
+
   if (entry.categories.length) return entry.categories;
   return entry.fallback ? [entry.fallback] : [];
 }
@@ -57,7 +79,7 @@ export function getDisciplineFacets(): DisciplineFacet[] {
     .map(([name, count]) => ({ name, count }))
     .sort(
       (a, b) =>
-        Number(NON_WOS.includes(a.name)) - Number(NON_WOS.includes(b.name)) ||
+        Number(a.name === NOT_INDEXED) - Number(b.name === NOT_INDEXED) ||
         b.count - a.count ||
         a.name.localeCompare(b.name),
     );

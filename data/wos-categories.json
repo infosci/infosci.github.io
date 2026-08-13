@@ -1,29 +1,33 @@
 {
   "_comment": [
-    "Web of Science subject categories per venue, read from Journal Citation",
-    "Reports (2025 JCR year) via Yonsei's subscription. Clarivate's own",
-    "classification — not derived, not inferred.",
+    "Web of Science subject categories per venue. Clarivate's own classification —",
+    "not derived, not inferred. Read from Journal Citation Reports (2025 JCR year)",
+    "through Yonsei's subscription, except where a note says otherwise.",
     "",
     "Multi-label by nature: JASIST carries two categories, DIGITAL HEALTH four.",
     "Any facet built on this has to let a paper appear under each of them.",
     "",
-    "COMPLETE: all 46 venues looked up. Collected one journal at a time through",
-    "the JCR interface, which has no bulk export without a personal Clarivate",
-    "account.",
+    "COMPLETE: all 46 venues looked up.",
     "",
-    "\"fallback\" is the one field here that is NOT Clarivate's. Twelve venues have",
-    "no WoS subject category to read — conferences are indexed in CPCI, which",
-    "classifies by research area rather than by the JCR category scheme, and three",
-    "journals are not JCR-indexed at all. Leaving those fourteen papers with no",
-    "facet value would make them unreachable when filtering, and they are",
-    "disproportionately recent work. So each carries one of two honest values,",
-    "derived from what the venue IS rather than from what the paper is about:",
-    "  Conference proceedings  — 9 venues, 11 papers. Includes ER and JIST: both",
-    "                            are conferences whose proceedings Springer",
-    "                            publishes in LNCS, which is why Crossref types",
-    "                            them book-chapter.",
-    "  Not WoS-indexed         — 3 venues, 3 papers.",
-    "A venue has categories or a fallback, never both and never neither.",
+    "Three kinds of entry:",
+    "  categories non-empty  — a journal, every paper in it inherits these.",
+    "  perPaper: true        — a conference or book series. Proceedings are",
+    "                          classified per record, not per venue: ISSI 2017 is",
+    "                          in CPCI-S with two categories while ISSI 2023 is not",
+    "                          indexed at all. Look these up in",
+    "                          data/wos-categories-by-paper.json. A paper in one of",
+    "                          these venues with no entry there fails the check",
+    "                          script rather than falling back silently.",
+    "  fallback              — searched and genuinely absent from the Core",
+    "                          Collection. The one field here that is not",
+    "                          Clarivate's; it exists so those papers still answer",
+    "                          to a filter instead of vanishing from it.",
+    "",
+    "A caution learned the hard way: absent from JCR does NOT mean unclassified.",
+    "JCR covers journals only, because it exists to compute impact factors. ESCI",
+    "titles and every conference proceeding are classified in the Core Collection",
+    "but have no JCR entry. Information Research is the example — no JCR record,",
+    "but its papers carry an SSCI category.",
     "",
     "issn is the ISSN JCR lists, which is sometimes the print ISSN where our",
     "publication data holds the electronic one (JMIR: 1439-4456 here vs",
@@ -384,84 +388,87 @@
     "issn": "1976-4677",
     "categories": [],
     "edition": [],
-    "note": "Not in JCR — searched and returned no results, so not SCIE/SSCI indexed",
+    "note": "Searched by paper title in the Core Collection on 2026-08-14: no hit. Not in JCR either.",
     "fallback": "Not WoS-indexed"
   },
   "Journal of Asian Sociology": {
     "issn": "2671-4574",
     "categories": [],
     "edition": [],
-    "note": "Not in JCR — searched and returned no results, so not SCIE/SSCI indexed",
+    "note": "Searched by paper title in the Core Collection on 2026-08-14: no hit. Not in JCR either.",
     "fallback": "Not WoS-indexed"
   },
   "ACM SIGKDD": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
-    "fallback": "Conference proceedings"
+    "perPaper": true,
+    "note": "Conference or book series — classified per record, see data/wos-categories-by-paper.json"
   },
   "IJCAI": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
-    "fallback": "Conference proceedings"
+    "perPaper": true,
+    "note": "Conference or book series — classified per record, see data/wos-categories-by-paper.json"
   },
   "ACM ICMR": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
-    "fallback": "Conference proceedings"
+    "perPaper": true,
+    "note": "Conference or book series — classified per record, see data/wos-categories-by-paper.json"
   },
   "ACM RACS": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
-    "fallback": "Conference proceedings"
+    "perPaper": true,
+    "note": "Conference or book series — classified per record, see data/wos-categories-by-paper.json"
   },
   "IEEE BigComp": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
-    "fallback": "Conference proceedings"
+    "perPaper": true,
+    "note": "Conference or book series — classified per record, see data/wos-categories-by-paper.json"
   },
   "IEEE ICHI": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
-    "fallback": "Conference proceedings"
+    "perPaper": true,
+    "note": "Conference or book series — classified per record, see data/wos-categories-by-paper.json"
   },
   "ISSI": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "Conference proceedings — indexed in CPCI, which has no WoS subject categories",
-    "fallback": "Conference proceedings"
+    "perPaper": true,
+    "note": "Conference or book series — classified per record, see data/wos-categories-by-paper.json"
   },
   "ER — Conceptual Modeling": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "LNCS book series — no WoS journal category",
-    "fallback": "Conference proceedings"
+    "perPaper": true,
+    "note": "Conference or book series — classified per record, see data/wos-categories-by-paper.json"
   },
   "JIST": {
     "issn": null,
     "categories": [],
     "edition": [],
-    "note": "LNCS book series — no WoS journal category",
-    "fallback": "Conference proceedings"
+    "perPaper": true,
+    "note": "Conference or book series — classified per record, see data/wos-categories-by-paper.json"
   },
   "Information Research: An International Electronic Journal": {
     "issn": null,
-    "categories": [],
-    "edition": [],
-    "note": "Not JCR-indexed",
-    "fallback": "Not WoS-indexed"
+    "categories": [
+      "Information Science & Library Science"
+    ],
+    "edition": [
+      "SSCI"
+    ],
+    "note": "Read from the Core Collection record, not JCR: the journal has no current JCR entry but its records carry an SSCI category."
   }
 }

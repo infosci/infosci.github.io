@@ -56,7 +56,15 @@ console.log(`\n${records.length} publications in data/publications.json`);
 // four new venues appear a year, so this fires rarely — but silently skipping
 // it would drop the paper out of any view faceted by discipline.
 const venue = (merged.venue ?? merged.journal ?? "").trim();
-if (venue && !(venue in wosCategories)) {
+const entry = wosCategories[venue];
+
+if (entry?.perPaper) {
+  console.log(`\nCONFERENCE PAPER: "${venue}" is classified per record, not per venue.`);
+  console.log(`   Search the title in Web of Science and add "${merged.doi.toLowerCase()}"`);
+  console.log("   to data/wos-categories-by-paper.json — empty categories if there is no");
+  console.log("   hit yet, which is normal for a conference held in the last year or so.");
+  console.log("\n   Then: node scripts/check-disciplines.mjs");
+} else if (venue && !entry) {
   console.log(`\nNEW VENUE: "${venue}"`);
   console.log("   Not in data/wos-categories.json, so this paper has no discipline yet");
   console.log("   and no filter will reach it.");

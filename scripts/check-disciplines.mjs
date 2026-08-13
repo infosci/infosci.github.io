@@ -11,6 +11,11 @@
 //
 // Counts sum to more than 72: the source is multi-label, so a JAMIA paper is
 // counted under all five of its categories.
+//
+// Two sources: journals are classified per venue, conferences per record. A
+// conference paper missing from the per-record file is a failure, not a
+// fallback — otherwise a newly indexed paper would sit in "Not WoS-indexed"
+// forever without anyone noticing.
 
 import { readFile } from "node:fs/promises";
 
@@ -18,14 +23,21 @@ const root = new URL("..", import.meta.url);
 const read = async (f) => JSON.parse(await readFile(new URL(f, root), "utf8"));
 
 const venues = await read("data/wos-categories.json");
+const byPaper = await read("data/wos-categories-by-paper.json");
 const pubs = [...(await read("data/publications.json")), ...(await read("data/manual-publications.json"))];
 
-const NON_WOS = ["Conference proceedings", "Not WoS-indexed"];
+const NOT_INDEXED = "Not WoS-indexed";
 
 const venueOf = (p) => (p.venue || p.journal || "").trim();
+const paperKey = (p) => (p.doi ? p.doi.toLowerCase() : p.title);
 const disciplinesOf = (p) => {
   const e = venues[venueOf(p)];
   if (!e) return [];
+  if (e.perPaper) {
+    const r = byPaper[paperKey(p)];
+    if (!r) return [];
+    return r.categories.length ? r.categories : [NOT_INDEXED];
+  }
   if (e.categories.length) return e.categories;
   return e.fallback ? [e.fallback] : [];
 };
@@ -42,7 +54,7 @@ for (const p of pubs) {
 }
 const ordered = [...byValue.entries()].sort(
   (a, b) =>
-    Number(NON_WOS.includes(a[0])) - Number(NON_WOS.includes(b[0])) ||
+    Number(a[0] === NOT_INDEXED) - Number(b[0] === NOT_INDEXED) ||
     b[1].length - a[1].length ||
     a[0].localeCompare(b[0]),
 );
@@ -71,18 +83,28 @@ if (mode === "--tsv") {
       `${byValue.size} facet values\n`,
   );
   for (const [d, items] of ordered) {
-    const tag = NON_WOS.includes(d) ? " ·" : "  ";
+    const tag = d === NOT_INDEXED ? " ·" : "  ";
     console.log(`${String(items.length).padStart(3)}${tag} ${d}`);
   }
   const perPaper = pubs.map((p) => disciplinesOf(p).length);
   const avg = (perPaper.reduce((a, b) => a + b, 0) / pubs.length).toFixed(1);
   console.log(`\n${labelled.size}/${pubs.length} papers placed, ${avg} disciplines each on average`);
-  console.log("· marks the two values standing in where WoS has no category");
+  console.log("· marks the value standing in where the Core Collection has no record");
 }
 
 if (unmapped.length) {
-  console.error(`\n${unmapped.length} paper(s) with no discipline — look the venue up in JCR`);
-  console.error("and add it to data/wos-categories.json:");
-  for (const v of new Set(unmapped.map(venueOf))) console.error(`  - ${v}`);
+  console.error(`\n${unmapped.length} paper(s) with no discipline:`);
+  for (const p of unmapped) {
+    const e = venues[venueOf(p)];
+    if (e && e.perPaper) {
+      console.error(`  - ${p.title}`);
+      console.error(`      ${venueOf(p)} is classified per record. Search the title in`);
+      console.error(`      Web of Science and add "${paperKey(p)}" to`);
+      console.error("      data/wos-categories-by-paper.json (empty categories if no hit).");
+    } else {
+      console.error(`  - ${venueOf(p)}`);
+      console.error("      Unknown venue. Look it up and add it to data/wos-categories.json.");
+    }
+  }
   process.exit(1);
 }

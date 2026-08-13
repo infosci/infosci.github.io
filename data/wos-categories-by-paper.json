@@ -1,0 +1,111 @@
+{
+  "_comment": [
+    "Web of Science categories for individual conference and book-series records,",
+    "read from Web of Science Core Collection through Yonsei's subscription on",
+    "2026-08-14. Clarivate's own classification, like the venue file.",
+    "",
+    "This file exists because conference proceedings are classified PER RECORD,",
+    "not per venue. ISSI 2017 is in CPCI-S and carries two categories; ISSI 2023",
+    "is not indexed at all. One venue, two answers — so data/wos-categories.json,",
+    "which is keyed by venue, cannot hold this.",
+    "",
+    "Journals are the opposite: the category belongs to the journal and every",
+    "paper in it inherits the same one. Those stay in the venue file.",
+    "",
+    "Keyed by DOI, lowercased. The two ISSI papers have no DOI and are keyed by",
+    "their exact title instead.",
+    "",
+    "Records with an empty categories list were searched by title and returned no",
+    "hit in the Core Collection. For the 2025 and 2026 papers that is probably",
+    "just lag — CPCI indexes a conference months after it happens — so those are",
+    "worth re-checking rather than treated as settled. checked records the date so",
+    "a re-run knows how stale this is."
+  ],
+  "10.1007/978-3-319-25264-3_2": {
+    "wosId": "WOS:000374291100002",
+    "index": "CPCI-S",
+    "categories": [
+      "Computer Science, Artificial Intelligence",
+      "Computer Science, Information Systems",
+      "Computer Science, Theory & Methods"
+    ],
+    "checked": "2026-08-14"
+  },
+  "Word semantic change: The law of differentiation vs. the law of parallel change": {
+    "wosId": "WOS:000508234900132",
+    "index": "CPCI-S",
+    "categories": [
+      "Computer Science, Interdisciplinary Applications",
+      "Information Science & Library Science"
+    ],
+    "checked": "2026-08-14"
+  },
+  "10.1109/ichi.2018.00059": {
+    "wosId": "WOS:000853207500052",
+    "index": "CPCI-S",
+    "categories": [
+      "Computer Science, Artificial Intelligence",
+      "Computer Science, Information Systems",
+      "Health Care Sciences & Services",
+      "Medical Informatics"
+    ],
+    "checked": "2026-08-14"
+  },
+  "10.1109/bigcomp48618.2020.00-66": {
+    "wosId": "WOS:000569987500044",
+    "index": "CPCI-S",
+    "categories": [
+      "Computer Science, Theory & Methods"
+    ],
+    "checked": "2026-08-14"
+  },
+  "10.24963/ijcai.2024/882": {
+    "wosId": "WOS:001634925300240",
+    "index": "CPCI-S",
+    "categories": [
+      "Computer Science, Artificial Intelligence",
+      "Computer Science, Theory & Methods"
+    ],
+    "checked": "2026-08-14",
+    "note": "WoS files this as IJCAI 2025 (34th, Montreal) with ACL as publisher. Both look wrong: the publisher DOI is 10.24963/ijcai.2024/882 and Crossref says 33rd, August 2024. Our year follows the DOI."
+  },
+  "10.1007/978-3-642-37996-3_10": {
+    "wosId": null,
+    "index": null,
+    "categories": [],
+    "checked": "2026-08-14"
+  },
+  "10.1145/2811411.2811475": {
+    "wosId": null,
+    "index": null,
+    "categories": [],
+    "checked": "2026-08-14"
+  },
+  "Distribution of researcher-level funding allocation among US federal funding agencies": {
+    "wosId": null,
+    "index": null,
+    "categories": [],
+    "checked": "2026-08-14"
+  },
+  "10.1145/3731715.3735088": {
+    "wosId": null,
+    "index": null,
+    "categories": [],
+    "checked": "2026-08-14",
+    "note": "ICMR 2025 — likely still awaiting CPCI indexing, worth re-checking"
+  },
+  "10.1145/3770855.3817694": {
+    "wosId": null,
+    "index": null,
+    "categories": [],
+    "checked": "2026-08-14",
+    "note": "KDD 2026 — likely still awaiting CPCI indexing, worth re-checking"
+  },
+  "10.1145/3770855.3818850": {
+    "wosId": null,
+    "index": null,
+    "categories": [],
+    "checked": "2026-08-14",
+    "note": "KDD 2026 — likely still awaiting CPCI indexing, worth re-checking"
+  }
+}
