@@ -42,8 +42,8 @@ const AREAS = [
     // "includes Science and Technology Studies; Science, Technology, and
     // Society". So the citation is sound whichever of those names the lab
     // settles on for this card.
-    id: "technology-studies",
-    title: "Technology Studies",
+    id: "science-and-technology-studies",
+    title: "Science and Technology Studies",
     Icon: TechnologyStudiesIcon,
     source: {
       href: "https://www.4sonline.org/what_is_4s.php",
@@ -95,10 +95,11 @@ function AreaCard({
       className={`flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-black/[.08] px-5 py-6 text-center dark:border-white/[.145] ${className ?? ""}`}
     >
       <area.Icon className="h-8 w-6 text-black dark:text-zinc-50" />
-      {/* One line each. "Mental Health Informatics" is the constraint — at
-          text-2xl it wrapped in a third-width column, leaving the three titles
-          visually uneven. Dropped a size and pinned to nowrap; the longest
-          still clears the card at phone width.
+      {/* Titles wrap. They were pinned to one line while "Mental Health
+          Informatics" was the longest; "Science and Technology Studies" does
+          not fit a quarter-width card at any size worth reading, so nowrap
+          gave way to text-balance, which splits the two-line titles evenly
+          rather than leaving one word stranded.
 
           The underline sits on the text span, not the anchor, so the arrow
           beside it is not underlined too. */}
@@ -106,7 +107,7 @@ function AreaCard({
         href={area.source.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-flex items-center gap-1.5 text-base font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
+        className="group inline-flex items-center gap-1.5 text-base font-semibold tracking-tight text-balance text-black dark:text-zinc-50"
       >
         <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
           {area.title}
