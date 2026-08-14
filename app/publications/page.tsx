@@ -18,7 +18,7 @@ export default function PublicationsPage() {
         Every paper has a shelf life. These are ours, newest first.
       </p>
 
-      <div className="mt-8 border-b border-zinc-200 dark:border-zinc-800" />
+      <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
 
       <PublicationsExplorer papers={papers} schemes={schemes} network={network} />
     </div>

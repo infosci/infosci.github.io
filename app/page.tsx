@@ -148,11 +148,13 @@ export default function Home() {
         meet.
       </p>
 
+      <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
+
       {/* The triad sits in the middle with the cards around it: one card either
           side and one beneath, so the figure is enclosed rather than captioned.
           On a phone the grid collapses to a single column and the order becomes
           card, figure, card, card — the figure still sits among them. */}
-      <div className="mt-14 grid w-full gap-5 sm:grid-cols-3">
+      <div className="mt-10 grid w-full gap-5 sm:grid-cols-3">
         <AreaCard area={AREAS[0]} />
 
         {/* Spans both rows so the triad sits level with the four cards rather

@@ -49,7 +49,7 @@ export default function GrantsPage() {
         way.
       </p>
 
-      <div className="mt-8 border-b border-zinc-200 dark:border-zinc-800" />
+      <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
 
       <ul className="mt-10 space-y-10">
         {items.map((grant) => {

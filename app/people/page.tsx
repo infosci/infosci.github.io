@@ -48,7 +48,7 @@ export default function PeoplePage() {
         others went.
       </p>
 
-      <div className="mt-8 border-b border-zinc-200 dark:border-zinc-800" />
+      <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
 
       <PeopleExplorer people={people} />
     </div>
