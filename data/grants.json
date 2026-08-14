@@ -2,31 +2,31 @@
   {
     "id": "nrf-suicide-network-2025",
     "title": "A suicide- and network-theory driven, data science-based, user-centered approach of identifying high risk suicide groups on social media",
-    "duration": "2025 - 2028",
+    "duration": "2025–2028",
     "funder": "National Research Foundation of Korea"
   },
   {
-    "id": "about_project_7",
+    "id": "nrf-team-science-2023",
     "title": "Understanding science of collaboration and team impact using big scholarly data",
-    "duration": "2023 - 2026",
+    "duration": "2023–2026",
     "funder": "National Research Foundation of Korea"
   },
   {
-    "id": "about_project_4",
+    "id": "nrf-suicide-sdoh-2021",
     "title": "Analyzing social determinants of suicide in South Korea: Developing SDOH framework for suicide and identifying high risk groups",
-    "duration": "2021 - 2024",
+    "duration": "2021–2024",
     "funder": "National Research Foundation of Korea"
   },
   {
-    "id": "about_project_1",
+    "id": "nrf-drug-repurposing-2019",
     "title": "Drug repurposing for Parkinson’s disease through text mining scientific literature",
-    "duration": "2019 - 2020",
+    "duration": "2019–2020",
     "funder": "National Research Foundation of Korea"
   },
   {
-    "id": "about_project_2",
+    "id": "smc-suicidality-detection-2019",
     "title": "Implementing suicidality detection using social media and national registry data",
-    "duration": "2019 - 2021",
+    "duration": "2019–2021",
     "funder": "Samsung Medical Center"
   }
 ]

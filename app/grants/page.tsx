@@ -10,9 +10,12 @@ type Grant = {
   funder: string;
 };
 
-/** "2023 - 2026" to its two years. Null duration sorts last and counts as ended. */
+/** "2023–2026" to its two years. Accepts hyphen, en dash or em dash, because the
+ *  data uses an en dash and a hand-typed entry will not. A duration that fails
+ *  to parse sorts last and counts as ended, so a mismatch here would silently
+ *  mark every grant finished rather than throwing. */
 function years(duration: string | null) {
-  const m = duration?.match(/(\d{4})\s*-\s*(\d{4})/);
+  const m = duration?.match(/(\d{4})\s*[-–—]\s*(\d{4})/);
   return m ? { from: Number(m[1]), to: Number(m[2]) } : { from: 0, to: 0 };
 }
 
