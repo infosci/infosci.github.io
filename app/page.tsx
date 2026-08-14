@@ -3,6 +3,7 @@ import {
   DigitalHumanitiesIcon,
   MentalHealthIcon,
   ScienceOfScienceIcon,
+  SuicidologyIcon,
   TechnologyStudiesIcon,
 } from "@/components/AreaIcons";
 import { TriadFigure } from "@/components/TriadFigure";
@@ -34,6 +35,28 @@ const AREAS = [
     source: {
       href: "https://amia.org/community/working-groups/mental-health-informatics",
       label: "AMIA Working Group",
+    },
+  },
+  {
+    // The one card whose field has no standing reference of its own. The others
+    // each link to something that does not change from year to year — a review,
+    // a professional body, a book chapter. "Computational suicidology" has no
+    // canonical definition, no association, no naming paper: it is a direction
+    // of work rather than an established field, and the honest citation is the
+    // nearest review of the methods it uses. Cox et al. is that — the field's
+    // own review journal, and its title is very nearly this card's.
+    //
+    // Franklin et al. (2017) was the alternative, and is the more famous paper:
+    // fifty years of risk factors meta-analysed to near-chance prediction, which
+    // is the finding that sent this work computational in the first place. It
+    // was passed over because it is the reason for the field rather than an
+    // account of it, and every other card here describes rather than motivates.
+    id: "computational-suicidology",
+    title: "Computational Suicidology",
+    Icon: SuicidologyIcon,
+    source: {
+      href: "https://doi.org/10.1016/j.cpr.2020.101940",
+      label: "Cox et al., Clinical Psychology Review (2020)",
     },
   },
   {
@@ -186,7 +209,7 @@ export default function Home() {
 
       <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
 
-      {/* Three across, two beneath.
+      {/* Three across, three beneath.
           
           The triad is not among them. It used to sit in the middle with the
           cards arranged around it, which read as a mapping — as though each
@@ -204,6 +227,7 @@ export default function Home() {
         <AreaCard area={AREAS[2]} />
         <AreaCard area={AREAS[3]} />
         <AreaCard area={AREAS[4]} />
+        <AreaCard area={AREAS[5]} />
       </div>
     </div>
   );

@@ -73,6 +73,38 @@ export function TechnologyStudiesIcon({ className }: IconProps) {
   );
 }
 
+/** One point, ringed, among others that are not.
+ *
+ * The subject rules out most of what an icon might reach for, and rightly: no
+ * imagery of harm, nothing clinical, nothing that would be grim to meet on a
+ * homepage. What is left is the work itself — finding, in a population, the
+ * person at risk — which is what the lab's grants describe and what a ring
+ * around a single point says without saying anything else.
+ *
+ * The asymmetry is not decoration, it is the whole design. Drawn first with six
+ * points spaced evenly around a centred ring, it was the theme toggle's sun
+ * almost exactly — and that sun sits in the nav on the same page. Rays are
+ * regular and short; a population is neither. So the ring sits up and to the
+ * left and the points trail away from it, which no sun does.
+ *
+ * The points are also deliberately not joined. This is not a network; it is a
+ * population, and at 40px a few dots and a ring could be read as either.
+ */
+export function SuicidologyIcon({ className }: IconProps) {
+  return (
+    <svg {...SHARED} className={className ?? "h-10 w-8"}>
+      <circle cx="11" cy="15" r="6.5" />
+      <circle cx="11" cy="15" r="2" fill="currentColor" stroke="none" />
+      {/* Irregular on purpose — spacing, distance and size all vary. */}
+      <circle cx="24" cy="11" r="1.5" fill="currentColor" stroke="none" />
+      <circle cx="28" cy="20" r="1.4" fill="currentColor" stroke="none" />
+      <circle cx="24" cy="29" r="1.6" fill="currentColor" stroke="none" />
+      <circle cx="15" cy="33" r="1.4" fill="currentColor" stroke="none" />
+      <circle cx="6" cy="29" r="1.5" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
 /** A person tied to two others: head and shoulders at the top, two plain nodes
  * below, three links closing the triangle. A bare node-and-edge graph was
  * rejected for the science of science card as too generic — here the shoulders
