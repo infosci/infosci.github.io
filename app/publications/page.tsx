@@ -10,7 +10,11 @@ export default function PublicationsPage() {
   const network = getNetwork();
 
   return (
-    <div className="max-w-5xl pt-6 sm:pt-10">
+    // Held to max-w-3xl, the rule's width, like People and Grants. The page
+    // ran to max-w-5xl so the network could have a wider column, which put the
+    // graph and the scheme tabs 208px past the right end of the rule above
+    // them — the page looked like it had two right edges.
+    <div className="max-w-3xl pt-6 sm:pt-10">
       <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl dark:text-zinc-50">
         Publications
       </h1>

@@ -358,8 +358,16 @@ function ExploreView({ papers, schemes, network }: Props) {
       {/* A definite height for the row, so the chips box ends level with the
           graph instead of the tallest column setting the height. Without it the
           chips content inflates the row and the alignment is lost. Only from lg,
-          where the two sit side by side. */}
-      <div className="mt-6 grid items-stretch gap-8 lg:h-[32rem] lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+          where the two sit side by side.
+          
+          5fr/6fr rather than 2fr/3fr. The row is 736px now that the page is
+          held to the rule's width, and at 2fr/3fr the chips column came to
+          268px of usable space against the 278px "Operations Research &
+          Management Science" needs — the label wrapped inside its own pill.
+          This gives it 308px. Chips are left able to wrap on purpose: a longer
+          category name than any in the data today should fold rather than
+          spill out of the box. */}
+      <div className="mt-6 grid items-stretch gap-8 lg:h-[32rem] lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
         <div className="flex min-h-0 flex-col">
         <p className="min-h-[4.25rem] text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
           <span className="font-medium text-black dark:text-zinc-200">
