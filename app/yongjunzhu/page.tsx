@@ -20,8 +20,11 @@ export default function YongjunZhuPage() {
 
   return (
     <div className="max-w-3xl pt-6 sm:pt-10">
+      {/* A different file from the one on the People page, which still shows
+          yongjunzhu2.webp. The two were the same photo until now, so changing
+          this one means changing this path and nothing in members.json. */}
       <Image
-        src={asset("/people/yongjunzhu2.webp")}
+        src={asset("/people/yongjunzhu-portrait.webp")}
         alt=""
         width={160}
         height={160}
