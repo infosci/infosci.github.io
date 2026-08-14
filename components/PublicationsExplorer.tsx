@@ -303,7 +303,14 @@ function NetworkView({ papers, schemes, network }: Props) {
           ))}
         </div>
 
-        <p className="mt-4 max-w-2xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+      </div>
+
+      {/* Two ways to narrow the same set, side by side: pick a value on the
+          left, or a paper on the right. Stacked below lg, where two columns
+          would leave the graph too narrow to read. */}
+      <div className="mt-6 grid items-start gap-8 lg:grid-cols-2">
+        <div>
+        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
           <span className="font-medium text-black dark:text-zinc-200">
             {scheme.basis === "venue" ? "Assigned to the venue" : "Assigned to the paper"}
           </span>
@@ -321,17 +328,11 @@ function NetworkView({ papers, schemes, network }: Props) {
             Clarivate&rsquo;s definition ↗
           </a>
         </p>
-      </div>
 
-      {/* Two ways to narrow the same set, side by side: pick a value on the
-          left, or a paper on the right. Stacked below lg, where two columns
-          would leave the graph too narrow to read. */}
-      <div className="mt-6 grid items-start gap-8 lg:grid-cols-2">
-        <div>
         {/* One frame around the whole set. The chips vary in width because the
             names do, but the box gives them a single edge to sit inside so they
             read as one control rather than as loose scattered lozenges. */}
-        <div className="rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
+        <div className="mt-5 rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
           <div className="flex flex-wrap gap-1.5">
             <ValueBox
               label="All papers"
@@ -370,8 +371,7 @@ function NetworkView({ papers, schemes, network }: Props) {
       <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
         <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
         Two papers are connected when their titles share two or more words, ignoring ordinary
-        ones like <em>of</em>, <em>the</em> and <em>with</em>. This rule is ours; the grouping
-        above is Clarivate&rsquo;s.
+        ones like <em>of</em>, <em>the</em> and <em>with</em>.
       </p>
 
       <div className="mt-4 overflow-x-auto">
@@ -451,7 +451,7 @@ function NetworkView({ papers, schemes, network }: Props) {
           and anything below a growing box gets shoved down the page. Lines are
           clamped so a 184-character title cannot overflow it on a narrow
           screen — the full title is a tap away in the list below. */}
-      <div className="mt-2 h-36 overflow-hidden border-t border-zinc-200 pt-3 sm:h-28 dark:border-zinc-800">
+      <div className="mt-2 h-56 overflow-hidden border-t border-zinc-200 pt-3 sm:h-48 dark:border-zinc-800">
         {active ? (
           <div>
             <p className="line-clamp-2 leading-snug font-medium text-black dark:text-zinc-50">
@@ -473,7 +473,7 @@ function NetworkView({ papers, schemes, network }: Props) {
               {" · "}
               {valuesFor(active, schemeId).join(" · ") || "no value in this scheme"}
             </p>
-            <p className="mt-1 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
+            <p className="mt-1 line-clamp-3 text-sm text-zinc-600 dark:text-zinc-400">
               {neighbours.size === 0 ? (
                 <>Shares fewer than two content words with anything else shown.</>
               ) : (
