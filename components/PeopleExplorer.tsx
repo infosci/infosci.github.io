@@ -104,6 +104,13 @@ export default function PeopleExplorer({ people }: { people: Member[] }) {
 
   const ordered = order ? order.map((slug) => bySlug.get(slug)!) : people;
 
+  // Colour by default. Mono is the better-looking grid — the photos were taken
+  // over years in different countries on different phones, and colour is what
+  // advertises that — but it is a reading of the people, not a fact about them,
+  // so it is offered rather than imposed. Not remembered between visits: the
+  // page should open the same way for everyone.
+  const [mono, setMono] = useState(false);
+
   const counts = useMemo(() => {
     const c = new Map<string, number>();
     for (const p of people) {
@@ -145,10 +152,38 @@ export default function PeopleExplorer({ people }: { people: Member[] }) {
         ))}
       </div>
 
-      <ul className="mt-10 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:grid-cols-4">
+      {/* Its own row, right-aligned. It cannot join the chips — they leave 29px
+          of the 768 and this needs 118 — and the separation is honest anyway:
+          the chips choose who is on the page, this only changes how they are
+          drawn. Same pill as the view toggle on Publications. */}
+      <div className="mt-4 flex justify-end">
+        <div
+          className="inline-flex rounded-full border border-zinc-300 dark:border-zinc-700"
+          role="group"
+          aria-label="Photo treatment"
+        >
+          {([false, true] as const).map((v) => (
+            <button
+              key={String(v)}
+              type="button"
+              onClick={() => setMono(v)}
+              aria-pressed={mono === v}
+              className={`rounded-full border border-transparent px-2.5 py-1 text-xs transition-colors ${
+                mono === v
+                  ? "bg-black text-white dark:bg-zinc-100 dark:text-black"
+                  : "text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-zinc-100"
+              }`}
+            >
+              {v ? "Mono" : "Colour"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <ul className="mt-6 grid grid-cols-2 gap-x-5 gap-y-8 sm:grid-cols-3 md:grid-cols-4">
         {shown.map((person) => (
           <li key={person.slug}>
-            <Person person={person} />
+            <Person person={person} mono={mono} />
           </li>
         ))}
       </ul>
@@ -186,7 +221,7 @@ function Chip({
   );
 }
 
-function Person({ person }: { person: Member }) {
+function Person({ person, mono }: { person: Member; mono: boolean }) {
   const body = (
     <>
       {person.photo ? (
@@ -196,7 +231,17 @@ function Person({ person }: { person: Member }) {
           alt=""
           width={240}
           height={240}
-          className="aspect-square w-full rounded-lg object-cover"
+          // A CSS filter rather than a second set of files: reversible, and it
+          // leaves the colour originals in place for a poster or a talk page.
+          // The slight contrast lift is there because desaturating a photo
+          // flattens it — grayscale alone came out muddy on the darker ones.
+          //
+          // The colour state names its filters at their identity values rather
+          // than dropping them. filter: none does not interpolate, so without
+          // this the fade runs going to mono and snaps coming back.
+          className={`aspect-square w-full rounded-lg object-cover transition duration-300 ${
+            mono ? "contrast-[1.08] grayscale" : "contrast-100 grayscale-0"
+          }`}
         />
       ) : (
         <div className="aspect-square w-full rounded-lg bg-zinc-200 dark:bg-zinc-800" />

@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import ReactMarkdown from "react-markdown";
 import { readMarkdown } from "@/lib/markdown";
-import { asset } from "@/lib/assets";
 
 // The route is /yongjunzhu/ rather than /people/yongjunzhu/ because that is the
 // URL the old site used and the one that exists in other people's links and
 // citations. Keeping it costs nothing; breaking it would be silent.
+//
+// No photograph here on purpose. The People page carries the face; this page is
+// the record — names, appointments, degrees, posts, awards — and a portrait at
+// the top of it only competed with the first line of that record.
 const doc = readMarkdown("yongjunzhu");
 
 export const metadata: Metadata = {
@@ -20,22 +22,10 @@ export default function YongjunZhuPage() {
 
   return (
     <div className="max-w-3xl pt-6 sm:pt-10">
-      {/* A different file from the one on the People page, which still shows
-          yongjunzhu2.webp. The two were the same photo until now, so changing
-          this one means changing this path and nothing in members.json. */}
-      <Image
-        src={asset("/people/yongjunzhu-portrait.webp")}
-        alt=""
-        width={160}
-        height={160}
-        priority
-        className="size-28 rounded-lg object-cover"
-      />
-
       {/* All three names on one line at one size — the English name is not a
           display heading here, it is one of three ways to write the same name.
           Still an h1 for document structure; only the styling is quiet. */}
-      <h1 className="mt-6 text-xl font-medium text-black dark:text-zinc-50">
+      <h1 className="text-xl font-medium text-black dark:text-zinc-50">
         {[meta.name, meta.alsoKnownAs].filter(Boolean).join(" · ")}
       </h1>
       {/* Role and affiliation on separate lines, not joined by a separator —
