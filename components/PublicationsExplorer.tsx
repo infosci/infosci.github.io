@@ -20,7 +20,7 @@
 // in a title, and that rule is written out under the network rather than left
 // for the reader to infer from the lines.
 
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import type { FacetPaper, Scheme, SchemeId } from "@/lib/publication-facets";
 import { valuesFor } from "@/lib/publication-facets";
 import { NOT_INDEXED } from "@/lib/disciplines";
@@ -170,9 +170,6 @@ function NetworkView({ papers, schemes, network }: Props) {
   const [picked, setPicked] = useState<string | null>(null);
   const [moved, setMoved] = useState<Record<string, { x: number; y: number }>>({});
   const svgRef = useRef<SVGSVGElement>(null);
-  const chipsRef = useRef<HTMLDivElement>(null);
-  const [expanded, setExpanded] = useState(false);
-  const [overflows, setOverflows] = useState(false);
   const dragging = useRef<string | null>(null);
 
   const scheme = schemes.find((s) => s.id === schemeId)!;
@@ -186,26 +183,8 @@ function NetworkView({ papers, schemes, network }: Props) {
   );
   const visible = useMemo(() => new Set(shown.map((p) => p.key)), [shown]);
 
-  // Collapsed by default so the box is the same size whichever scheme is on:
-  // the three carry 14, 20 and 25 chips, which swung the box between 459 and
-  // 749 pixels and shoved everything below it around.
-  const CHIPS_COLLAPSED = 240;
-
-  useEffect(() => {
-    const el = chipsRef.current;
-    if (!el) return;
-    // Against the collapsed limit, not the current height, so the control does
-    // not vanish the moment it expands.
-    const check = () => setOverflows(el.scrollHeight > CHIPS_COLLAPSED + 1);
-    check();
-    const ro = new ResizeObserver(check);
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, [schemeId, expanded]);
-
   function chooseScheme(id: SchemeId) {
     setSchemeId(id);
-    setExpanded(false);
     const next = schemes.find((s) => s.id === id)!;
     if (value !== ALL && !next.values.some((v) => v.name === value)) setValue(ALL);
   }
@@ -284,18 +263,6 @@ function NetworkView({ papers, schemes, network }: Props) {
 
   const active = (picked && visible.has(picked) ? byKey.get(picked) : null) ?? null;
 
-  // Why this paper sits where it does: the words joining it to its neighbours,
-  // commonest first.
-  const linkWords = useMemo(() => {
-    if (!picked) return [] as string[];
-    const tally = new Map<string, number>();
-    for (const e of shownEdges) {
-      if (e.a !== picked && e.b !== picked) continue;
-      for (const w of e.words) tally.set(w, (tally.get(w) ?? 0) + 1);
-    }
-    return [...tally.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([w]) => w);
-  }, [picked, shownEdges]);
-
   // The papers on the other end of each line, most words in common first.
   const linked = useMemo(() => {
     if (!picked) return [] as { paper: FacetPaper; words: string[] }[];
@@ -350,8 +317,12 @@ function NetworkView({ papers, schemes, network }: Props) {
       {/* Two ways to narrow the same set, side by side: pick a value on the
           left, or a paper on the right. Stacked below lg, where two columns
           would leave the graph too narrow to read. */}
-      <div className="mt-6 grid items-start gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
-        <div>
+      {/* A definite height for the row, so the chips box ends level with the
+          graph instead of the tallest column setting the height. Without it the
+          chips content inflates the row and the alignment is lost. Only from lg,
+          where the two sit side by side. */}
+      <div className="mt-6 grid items-stretch gap-8 lg:h-[25rem] lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+        <div className="flex min-h-0 flex-col">
         <p className="min-h-[4.25rem] text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
           <span className="font-medium text-black dark:text-zinc-200">
             {scheme.basis === "venue" ? "Assigned to the venue" : "Assigned to the paper"}
@@ -374,12 +345,11 @@ function NetworkView({ papers, schemes, network }: Props) {
         {/* One frame around the whole set. The chips vary in width because the
             names do, but the box gives them a single edge to sit inside so they
             read as one control rather than as loose scattered lozenges. */}
-        <div className="mt-5 rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
-          <div
-            ref={chipsRef}
-            className="flex flex-wrap gap-1.5 overflow-hidden"
-            style={{ maxHeight: expanded ? undefined : CHIPS_COLLAPSED }}
-          >
+        <div className="mt-5 flex min-h-0 flex-1 flex-col rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
+          {/* Takes whatever height the column has and scrolls past that, so the
+              box ends level with the graph whichever scheme is showing and
+              however many values it has. */}
+          <div className="flex min-h-0 flex-1 flex-wrap gap-1.5 overflow-y-auto">
             <ValueBox
               label="All papers"
               count={papers.length}
@@ -396,15 +366,6 @@ function NetworkView({ papers, schemes, network }: Props) {
               />
             ))}
           </div>
-          {overflows && (
-            <button
-              type="button"
-              onClick={() => setExpanded((v) => !v)}
-              className="mt-2 text-xs text-zinc-600 underline decoration-zinc-300 underline-offset-2 hover:text-black dark:text-zinc-400 dark:decoration-zinc-600 dark:hover:text-zinc-100"
-            >
-              {expanded ? "Show fewer" : `Show all ${scheme.values.length}`}
-            </button>
-          )}
           {/* One footnote slot, tall enough for the longest of them, so the box
               is the same height whichever scheme is showing. */}
           <div className="mt-3 min-h-[4.5rem] border-t border-zinc-200 pt-3 text-xs leading-relaxed text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
@@ -425,7 +386,7 @@ function NetworkView({ papers, schemes, network }: Props) {
         </div>
         </div>
 
-        <div>
+        <div className="flex min-h-0 flex-col">
       <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
         <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
           <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
@@ -444,13 +405,12 @@ function NetworkView({ papers, schemes, network }: Props) {
         )}
       </div>
 
-      <div className="mt-4 overflow-x-auto">
+      <div className="mt-4 min-h-0 flex-1 overflow-x-auto">
         <svg
           ref={svgRef}
           viewBox={viewBox}
           preserveAspectRatio="xMidYMid meet"
-          className="w-full min-w-[20rem] text-black dark:text-zinc-100"
-          style={{ height: "20rem" }}
+          className="h-full min-h-[16rem] w-full min-w-[20rem] text-black dark:text-zinc-100"
           role="img"
           aria-label={`Network of ${shown.length} papers linked by shared title words`}
         >
@@ -522,6 +482,10 @@ function NetworkView({ papers, schemes, network }: Props) {
                   onPointerCancel={() => {
                     dragging.current = null;
                   }}
+                  // Redundant beside onPointerDown for a real pointer, but
+                  // assistive tech can synthesise a bare click with no pointer
+                  // events at all, and that should still select the paper.
+                  onClick={() => setPicked(d.key)}
                   // touch-none stops a drag from scrolling the page instead.
                   style={{ cursor: "grab", outline: "none", touchAction: "none" }}
                 >
@@ -530,54 +494,6 @@ function NetworkView({ papers, schemes, network }: Props) {
               );
             })}
         </svg>
-      </div>
-
-      {/* Directly under the graph, because hovering a node whose only feedback
-          was a highlighted row far below the fold looked like doing nothing.
-          Fixed height so the diagram does not jump as the card fills. */}
-      {/* A fixed height, not a minimum: this fills and empties on every hover,
-          and anything below a growing box gets shoved down the page. Lines are
-          clamped so a 184-character title cannot overflow it on a narrow
-          screen — the full title is a tap away in the list below. */}
-      <div className="mt-2 h-56 overflow-hidden border-t border-zinc-200 pt-3 sm:h-48 dark:border-zinc-800">
-        {active ? (
-          <div>
-            <p className="line-clamp-2 leading-snug font-medium text-black dark:text-zinc-50">
-              {active.url ? (
-                <a
-                  href={active.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:underline"
-                >
-                  {active.title}
-                </a>
-              ) : (
-                active.title
-              )}
-            </p>
-            <p className="mt-1 line-clamp-1 text-sm text-zinc-500 dark:text-zinc-400">
-              {[active.venue, active.year].filter(Boolean).join(" · ")}
-              {" · "}
-              {valuesFor(active, schemeId).join(" · ") || "no value in this scheme"}
-            </p>
-            <p className="mt-1 line-clamp-3 text-sm text-zinc-600 dark:text-zinc-400">
-              {neighbours.size === 0 ? (
-                <>Shares fewer than two content words with anything else shown.</>
-              ) : (
-                <>
-                  Linked to {neighbours.size} {neighbours.size === 1 ? "paper" : "papers"} by{" "}
-                  <span className="text-black dark:text-zinc-200">{linkWords.join(", ")}</span>
-                </>
-              )}
-            </p>
-          </div>
-        ) : (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Hover, tap or tab through a circle to see the paper and what connects it. Bigger
-            circles have more links.
-          </p>
-        )}
       </div>
 
         </div>
