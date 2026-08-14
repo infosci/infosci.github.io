@@ -362,9 +362,9 @@ function NetworkView({ papers, schemes, network }: Props) {
 
       <p className="mt-6 max-w-2xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
         <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
-        Two papers are connected when their titles share two or more content words. Function
-        words and research boilerplate &mdash; <em>of</em>, <em>using</em>, <em>framework</em>{" "}
-        &mdash; do not count. This rule is ours; the grouping above is Clarivate&rsquo;s.
+        Two papers are connected when their titles share two or more words, ignoring ordinary
+        ones like <em>of</em>, <em>the</em> and <em>with</em>. This rule is ours; the grouping
+        above is Clarivate&rsquo;s.
       </p>
 
       <div className="mt-4 overflow-x-auto">

@@ -1,20 +1,24 @@
 // The paper network, laid out at build time.
 //
 // Two papers are joined when their titles share at least two meaningful words.
-// One shared word is far too loose — "data" alone links 478 pairs into a single
-// hairball of all 72 papers — while two shared words means a genuine overlap of
-// subject: drug AND molecular, suicide AND social. That gives 96 edges.
+// One shared word is far too loose — "data" alone links hundreds of pairs into a
+// single hairball of all 72 papers — while two shared words means a genuine
+// overlap of subject: drug AND molecular, suicide AND social. That gives 133
+// edges, which is dense but still legible.
 //
 // Which words count is decided by data/title-stopwords.json, the one list on
-// this site that is ours rather than Clarivate's. Words are lightly stemmed
-// first, so networks and network are the same word.
+// this site that is ours rather than Clarivate's. Only ordinary function words
+// are dropped. An earlier version also dropped research boilerplate, which was
+// wrong here: peer review and research methods are this lab's subject, not
+// throat-clearing. Words are lightly stemmed first, so networks and network are
+// the same word.
 //
 // Deliberately NOT built on the classification. Papers in the same category all
 // share it by definition, so those edges would draw 586 lines repeating what
 // the filter already said. The filter answers "what is this about"; the lines
 // answer "which papers are about the same things". Two channels, two questions.
 //
-// 18 papers share two words with nothing else and so have no line. They are
+// 11 papers share two words with nothing else and so have no line. They are
 // drawn, not dropped — a paper on its own subject is a real fact, and hiding it
 // would flatter the picture.
 //
@@ -26,7 +30,11 @@
 import { getFacetData, type FacetPaper } from "./publication-facets";
 import stopwords from "@/data/title-stopwords.json";
 
-const STOP = new Set([...stopwords.function, ...stopwords.boilerplate]);
+// Only the lists named in "applied" are in force. The boilerplate list is kept
+// in that file but switched off — see the note there for why.
+const STOP = new Set(
+  stopwords.applied.flatMap((k) => (stopwords as unknown as Record<string, string[]>)[k]),
+);
 
 /** Plural and -ies folding, enough to collapse networks/network and
  *  studies/study without pulling in a stemmer. */
@@ -48,8 +56,8 @@ export function contentWords(title: string): Map<string, string> {
   return out;
 }
 
-/** Lower to 1 to join papers on any shared word (478 edges, one hairball);
- *  raise to 3 for only the closest pairs (29 edges, 39 papers left alone). */
+/** Lower to 1 to join papers on any shared word (a single hairball of all 72);
+ *  raise to 3 for only the closest pairs (40 edges, 35 papers left alone). */
 const MIN_SHARED = 2;
 
 export type NetNode = { key: string; x: number; y: number; degree: number };
