@@ -57,6 +57,31 @@ const ROLE_ORDER = [
 
 export default function PeopleExplorer({ people }: { people: Member[] }) {
   const [role, setRole] = useState<string>(ALL);
+  // Slugs in display order. null means "as the server sent them", which the
+  // first render must use — a fresh draw here would not match the prerendered
+  // HTML and React would swap the whole grid out on load. Every later order
+  // comes from a click, which happens after mount, where Math.random is safe.
+  const [order, setOrder] = useState<string[] | null>(null);
+
+  const bySlug = useMemo(() => new Map(people.map((p) => [p.slug, p])), [people]);
+
+  // A new arrangement on every chip, so the grid never settles into an order
+  // that could be read as a ranking.
+  const reshuffle = () => {
+    const slugs = people.map((p) => p.slug);
+    for (let i = slugs.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [slugs[i], slugs[j]] = [slugs[j], slugs[i]];
+    }
+    setOrder(slugs);
+  };
+
+  const pick = (next: string) => {
+    setRole(next);
+    reshuffle();
+  };
+
+  const ordered = order ? order.map((slug) => bySlug.get(slug)!) : people;
 
   const counts = useMemo(() => {
     const c = new Map<string, number>();
@@ -64,7 +89,7 @@ export default function PeopleExplorer({ people }: { people: Member[] }) {
     return ROLE_ORDER.filter((r) => c.has(r)).map((r) => ({ role: r, count: c.get(r)! }));
   }, [people]);
 
-  const shown = role === ALL ? people : people.filter((p) => p.role === role);
+  const shown = role === ALL ? ordered : ordered.filter((p) => p.role === role);
 
   return (
     <>
@@ -73,7 +98,7 @@ export default function PeopleExplorer({ people }: { people: Member[] }) {
           label="Everyone"
           count={people.length}
           on={role === ALL}
-          onClick={() => setRole(ALL)}
+          onClick={() => pick(ALL)}
         />
         {counts.map(({ role: r, count }) => (
           <Chip
@@ -81,7 +106,7 @@ export default function PeopleExplorer({ people }: { people: Member[] }) {
             label={CHIP_LABEL[r] ?? r}
             count={count}
             on={role === r}
-            onClick={() => setRole(role === r ? ALL : r)}
+            onClick={() => pick(role === r ? ALL : r)}
           />
         ))}
       </div>
