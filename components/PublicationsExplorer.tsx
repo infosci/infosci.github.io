@@ -28,7 +28,6 @@
 import { useCallback, useMemo, useRef, useState } from "react";
 import type { FacetPaper, Scheme, SchemeId } from "@/lib/publication-facets";
 import { valuesFor } from "@/lib/publication-facets";
-import { NOT_INDEXED } from "@/lib/disciplines";
 import type { Network } from "@/lib/publication-network";
 import { NODE_R } from "@/lib/publication-network";
 
@@ -404,17 +403,6 @@ function ExploreView({ papers, schemes, network }: Props) {
                 </div>
               </div>
             ))}
-          </div>
-          {/* One footnote slot, tall enough for the longest of them, so the box
-              is the same height whichever scheme is showing. */}
-          <div className="mt-3 min-h-[3.5rem] border-t border-zinc-200 pt-3 text-xs leading-relaxed text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
-            {scheme.values.some((v) => v.name === NOT_INDEXED) && (
-              <p>
-                Every value here is Clarivate&rsquo;s except{" "}
-                <span className="text-black dark:text-zinc-200">{NOT_INDEXED}</span>, which is
-                ours and marks papers Web of Science has no record of.
-              </p>
-            )}
           </div>
         </div>
         </div>
