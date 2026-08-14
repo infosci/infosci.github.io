@@ -1,4 +1,3 @@
-import Link from "next/link";
 import {
   DigitalHumanitiesIcon,
   MentalHealthIcon,
@@ -139,11 +138,11 @@ export default function Home() {
         Yonsei DataLab
       </h1>
 
-      {/* No max-width here, unlike the other pages' prose: the line is meant to
-          read as one unbroken statement, and a measure constraint wrapped it in
-          two. It still wraps on narrow screens, which is right — forcing
-          nowrap would push it off the side on a phone. */}
-      <p className="mt-5 text-lg leading-relaxed text-zinc-600 sm:text-xl dark:text-zinc-400">
+      {/* Set exactly as the other three pages set their standfirst — same size,
+          same gap under the title — so the rule below lands at the same height
+          on all four. It used to run larger here, which pushed the rule down
+          and made the home page sit differently from the rest of the site. */}
+      <p className="mt-4 text-zinc-600 dark:text-zinc-400">
         We study people, data, and technology — and what happens where the three
         meet.
       </p>
@@ -171,13 +170,6 @@ export default function Home() {
         <AreaCard area={AREAS[2]} />
         <AreaCard area={AREAS[3]} />
       </div>
-
-      <Link
-        href="/publications/"
-        className="mt-14 inline-block rounded-full border border-black/15 px-5 py-2 text-sm font-medium text-black transition-colors hover:bg-black/[.04] dark:border-white/20 dark:text-zinc-50 dark:hover:bg-white/[.06]"
-      >
-        Read our work
-      </Link>
     </div>
   );
 }
