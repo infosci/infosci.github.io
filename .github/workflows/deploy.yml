@@ -35,6 +35,17 @@ jobs:
 
       - run: npm ci
 
+      # Fails the deploy when a paper has no Web of Science categories — an
+      # unknown venue, or a conference paper missing from the per-record file.
+      # Such a paper still renders in the List view and silently disappears
+      # from every filter in Explore, so nothing on the site itself surfaces
+      # the gap. This step is what does.
+      #
+      # It gates categories only. Citation Topics are legitimately absent for
+      # ten papers — the Core Collection has no topic for them yet — so a
+      # missing topic is not a build failure.
+      - run: npm run check
+
       # No BASE_PATH here: this is the live site, served at the root of
       # datalab.yonsei.ac.kr. (The datalab-next preview repo sets it, because
       # it is served from a subpath.) public/CNAME carries the custom domain

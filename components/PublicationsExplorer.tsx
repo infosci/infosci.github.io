@@ -75,9 +75,7 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
       </div>
 
       {view === "list" ? (
-        <div className="mt-12 max-w-3xl">
-          <PaperList papers={papers} />
-        </div>
+        <SearchableList papers={papers} />
       ) : (
         <ExploreView papers={papers} schemes={schemes} network={network} />
       )}
@@ -150,6 +148,81 @@ function PaperEntry({
         </p>
       )}
     </li>
+  );
+}
+
+/** The List view, with a text filter over it.
+ *
+ *  Every word has to hit, in any field and in any order, so "choi matthew"
+ *  finds the peer-review paper and "sigkdd 2026" finds this year's conference
+ *  work. One long substring would match neither.
+ *
+ *  It searches what the entry shows — title, authors, venue, year — and
+ *  nothing it hides. A hit on an invisible field reads as a bug: the paper
+ *  appears, and the reason it appeared is nowhere on screen.
+ *
+ *  Distinct from the chips in Explore, and deliberately so. The chips carry
+ *  Clarivate's values and can only ever offer what Web of Science recorded;
+ *  this is a plain string match on our own record of the paper, which is why
+ *  it lives over the plain list. */
+function SearchableList({ papers }: { papers: FacetPaper[] }) {
+  const [query, setQuery] = useState("");
+
+  const terms = useMemo(
+    () => query.toLowerCase().split(/\s+/).filter(Boolean),
+    [query],
+  );
+
+  const shown = useMemo(() => {
+    if (!terms.length) return papers;
+    return papers.filter((p) => {
+      const hay = [p.title, p.authors.join(" "), venueLine(p), p.year ?? ""]
+        .join(" ")
+        .toLowerCase();
+      return terms.every((t) => hay.includes(t));
+    });
+  }, [papers, terms]);
+
+  return (
+    <div className="mt-10 max-w-3xl">
+      <div className="flex flex-wrap items-center gap-3">
+        {/* A chip's shape and border, since it sits in the same family of
+            controls — but 16px on a phone, because iOS zooms the page when it
+            focuses an input under that size, and the 12px it takes from sm up
+            is only for matching the chips on a pointer device. */}
+        <input
+          type="search"
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
+          placeholder="Search title, author, venue"
+          aria-label="Search publications"
+          className="w-64 rounded-full border border-zinc-300 px-2.5 py-1 text-base text-black placeholder:text-zinc-500 focus:border-zinc-500 focus:outline-none sm:text-xs dark:border-zinc-700 dark:text-zinc-100 dark:placeholder:text-zinc-400"
+        />
+        {terms.length > 0 && (
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            {shown.length} of {papers.length}
+          </p>
+        )}
+      </div>
+
+      {shown.length > 0 ? (
+        <div className="mt-12">
+          <PaperList papers={shown} />
+        </div>
+      ) : (
+        <p className="mt-12 text-sm text-zinc-500 dark:text-zinc-400">
+          No paper matches every word of that. Try one word, or{" "}
+          <button
+            type="button"
+            onClick={() => setQuery("")}
+            className="underline underline-offset-2 hover:text-black dark:hover:text-zinc-100"
+          >
+            clear the search
+          </button>
+          .
+        </p>
+      )}
+    </div>
   );
 }
 
