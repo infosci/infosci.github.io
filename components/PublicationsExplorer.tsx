@@ -76,6 +76,63 @@ function venueLine(pub: FacetPaper) {
   return [pub.venue, locator].filter(Boolean).join(" ");
 }
 
+/** One paper, rendered the same way wherever it appears.
+ *
+ *  highlighted marks the paper under the pointer with a left rule rather than a
+ *  padded background: it changes only horizontal metrics, so nothing below it
+ *  moves as the selection changes. A padded background did move the page, and
+ *  cancelling that with a negative margin then fought the list's own spacing.
+ *
+ *  shared names the words joining this paper to the selected one, shown only in
+ *  the connected list where that is the reason it is on screen. */
+function PaperEntry({
+  pub,
+  highlighted,
+  shared,
+  onSelect,
+}: {
+  pub: FacetPaper;
+  highlighted?: boolean;
+  shared?: string[];
+  onSelect?: () => void;
+}) {
+  return (
+    <li
+      className={
+        highlighted ? "-ml-4 border-l-2 border-black pl-3.5 dark:border-zinc-100" : undefined
+      }
+    >
+      <h3 className="leading-snug font-medium text-black dark:text-zinc-50">
+        {pub.url ? (
+          <a href={pub.url} target="_blank" rel="noopener noreferrer" className="hover:underline">
+            {pub.title}
+          </a>
+        ) : (
+          pub.title
+        )}
+      </h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+        {pub.authors.join(", ")}
+      </p>
+      <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{venueLine(pub)}</p>
+      {shared && shared.length > 0 && (
+        <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+          Shares{" "}
+          <span className="text-black dark:text-zinc-200">{shared.join(", ")}</span>
+          {onSelect && (
+            <>
+              {" · "}
+              <button type="button" onClick={onSelect} className="underline underline-offset-2">
+                centre on this
+              </button>
+            </>
+          )}
+        </p>
+      )}
+    </li>
+  );
+}
+
 function PaperList({ papers, highlight }: { papers: FacetPaper[]; highlight?: string | null }) {
   const years = useMemo(() => {
     const groups = new Map<number | null, FacetPaper[]>();
@@ -96,35 +153,7 @@ function PaperList({ papers, highlight }: { papers: FacetPaper[]; highlight?: st
           </h2>
           <ul className="mt-5 space-y-7">
             {items.map((pub) => (
-              <li
-                key={pub.key}
-                // The node under the pointer and its entry here are the same
-                // paper, so selecting one marks the other.
-                className={
-                  highlight === pub.key
-                    ? "-mx-3 rounded-sm bg-zinc-100 px-3 py-2 dark:bg-zinc-900"
-                    : undefined
-                }
-              >
-                <h3 className="leading-snug font-medium text-black dark:text-zinc-50">
-                  {pub.url ? (
-                    <a
-                      href={pub.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="hover:underline"
-                    >
-                      {pub.title}
-                    </a>
-                  ) : (
-                    pub.title
-                  )}
-                </h3>
-                <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                  {pub.authors.join(", ")}
-                </p>
-                <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{venueLine(pub)}</p>
-              </li>
+              <PaperEntry key={pub.key} pub={pub} highlighted={highlight === pub.key} />
             ))}
           </ul>
         </section>
@@ -224,6 +253,21 @@ function NetworkView({ papers, schemes, network }: Props) {
     }
     return [...tally.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([w]) => w);
   }, [picked, shownEdges]);
+
+  // The papers on the other end of each line, most words in common first.
+  const linked = useMemo(() => {
+    if (!picked) return [] as { paper: FacetPaper; words: string[] }[];
+    return shownEdges
+      .filter((e) => e.a === picked || e.b === picked)
+      .map((e) => ({ paper: byKey.get(e.a === picked ? e.b : e.a), words: e.words }))
+      .filter((x): x is { paper: FacetPaper; words: string[] } => Boolean(x.paper))
+      .sort(
+        (a, b) =>
+          b.words.length - a.words.length ||
+          (b.paper.year ?? 0) - (a.paper.year ?? 0) ||
+          a.paper.title.localeCompare(b.paper.title),
+      );
+  }, [picked, shownEdges, byKey]);
   const neighbours = useMemo(() => {
     const s = new Set<string>();
     if (!picked) return s;
@@ -316,7 +360,14 @@ function NetworkView({ papers, schemes, network }: Props) {
         </div>
       </div>
 
-      <div className="mt-8 overflow-x-auto">
+      <p className="mt-6 max-w-2xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+        <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
+        Two papers are connected when their titles share two or more content words. Function
+        words and research boilerplate &mdash; <em>of</em>, <em>using</em>, <em>framework</em>{" "}
+        &mdash; do not count. This rule is ours; the grouping above is Clarivate&rsquo;s.
+      </p>
+
+      <div className="mt-4 overflow-x-auto">
         <svg
           viewBox={viewBox}
           preserveAspectRatio="xMidYMid meet"
@@ -389,10 +440,14 @@ function NetworkView({ papers, schemes, network }: Props) {
       {/* Directly under the graph, because hovering a node whose only feedback
           was a highlighted row far below the fold looked like doing nothing.
           Fixed height so the diagram does not jump as the card fills. */}
-      <div className="mt-2 min-h-24 border-t border-zinc-200 pt-3 dark:border-zinc-800">
+      {/* A fixed height, not a minimum: this fills and empties on every hover,
+          and anything below a growing box gets shoved down the page. Lines are
+          clamped so a 184-character title cannot overflow it on a narrow
+          screen — the full title is a tap away in the list below. */}
+      <div className="mt-2 h-36 overflow-hidden border-t border-zinc-200 pt-3 sm:h-28 dark:border-zinc-800">
         {active ? (
           <div>
-            <p className="leading-snug font-medium text-black dark:text-zinc-50">
+            <p className="line-clamp-2 leading-snug font-medium text-black dark:text-zinc-50">
               {active.url ? (
                 <a
                   href={active.url}
@@ -406,12 +461,12 @@ function NetworkView({ papers, schemes, network }: Props) {
                 active.title
               )}
             </p>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+            <p className="mt-1 line-clamp-1 text-sm text-zinc-500 dark:text-zinc-400">
               {[active.venue, active.year].filter(Boolean).join(" · ")}
               {" · "}
               {valuesFor(active, schemeId).join(" · ") || "no value in this scheme"}
             </p>
-            <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+            <p className="mt-1 line-clamp-2 text-sm text-zinc-600 dark:text-zinc-400">
               {neighbours.size === 0 ? (
                 <>Shares fewer than two content words with anything else shown.</>
               ) : (
@@ -430,22 +485,50 @@ function NetworkView({ papers, schemes, network }: Props) {
         )}
       </div>
 
-      {/* How the lines are drawn, stated where the lines are. */}
-      <p className="mt-6 max-w-2xl border-t border-zinc-200 pt-3 text-sm leading-relaxed text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
-        <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
-        Two papers are connected when their titles share two or more content words. Function
-        words and research boilerplate &mdash; <em>of</em>, <em>using</em>, <em>framework</em>{" "}
-        &mdash; do not count. This rule is ours; the grouping above is Clarivate&rsquo;s.
-      </p>
-
       <div className="mt-8 border-t border-zinc-200 pt-6 dark:border-zinc-800">
-        <p className="text-sm text-zinc-500 dark:text-zinc-400">
-          {shown.length} {shown.length === 1 ? "paper" : "papers"} · {shownEdges.length}{" "}
-          {shownEdges.length === 1 ? "link" : "links"}
-          {value !== ALL && <> · {value}</>}
-        </p>
+        <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            {active ? (
+              <>
+                {linked.length === 0
+                  ? "This paper on its own — nothing shares two words with it"
+                  : `This paper and the ${linked.length} it links to`}
+                {value !== ALL && <> · within {value}</>}
+              </>
+            ) : (
+              <>
+                {shown.length} {shown.length === 1 ? "paper" : "papers"} · {shownEdges.length}{" "}
+                {shownEdges.length === 1 ? "link" : "links"}
+                {value !== ALL && <> · {value}</>}
+              </>
+            )}
+          </p>
+          {active && (
+            <button
+              type="button"
+              onClick={() => setPicked(null)}
+              className="text-sm text-zinc-600 underline decoration-zinc-300 underline-offset-2 hover:text-black dark:text-zinc-400 dark:decoration-zinc-600 dark:hover:text-zinc-100"
+            >
+              Show all {shown.length}
+            </button>
+          )}
+        </div>
         <div className="mt-8">
-          <PaperList papers={shown} highlight={picked} />
+          {active ? (
+            <ul className="space-y-7">
+              <PaperEntry pub={active} highlighted />
+              {linked.map(({ paper, words }) => (
+                <PaperEntry
+                  key={paper.key}
+                  pub={paper}
+                  shared={words}
+                  onSelect={() => setPicked(paper.key)}
+                />
+              ))}
+            </ul>
+          ) : (
+            <PaperList papers={shown} highlight={picked} />
+          )}
         </div>
       </div>
     </>
