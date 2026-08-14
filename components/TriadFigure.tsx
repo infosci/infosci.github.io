@@ -3,12 +3,18 @@
 //
 // The three research areas used to be text around this figure, each sitting
 // outside "its" edge, which wrongly asserted that a field belongs to two of the
-// three vertices. They are cards around the figure now, so the layout carries
-// the relation instead: the triad is one object at the centre, and every area
-// surrounds the whole of it.
+// three vertices. They are cards below it now, so the layout carries the
+// relation instead: every area draws on the whole of the triad.
 //
-// The ring is what closes the triad. Without it the drawing is three points and
-// three lines; with it, it is a single thing the cards can sit around.
+// A ring used to enclose all this. It existed to close the drawing into one
+// object for the cards to sit around, back when they surrounded it — and once
+// the figure moved up beside the title, that job was gone. What remained was
+// cost: the ring set the viewBox, and the triangle and its labels only spanned
+// about 190 of its 320 units, so a third of the figure's height was empty
+// margin. Cropping to the drawing made the triangle about 1.6x larger at the
+// same rendered height, without touching the layout. It also left the cards as
+// the only closed shapes on the page, so the triad reads as a diagram rather
+// than as a badge.
 //
 // Geometry is computed, not typed: vertices sit 120° apart on a circumcircle,
 // and every label is placed by angle and radius from one centre.
@@ -21,7 +27,6 @@ const CLEAR = 19; // gap between dot edge and label, identical for all three
 const CAP = 11; // cap height at 15px, so a label below a dot clears by CLEAR too
 const DESC = 4; // descender depth — "People" has one, so a label above a dot
 // hangs lower than its baseline and would otherwise sit closer than the others
-const RC = 148; // the ring, sized to clear the longest label
 
 const point = (deg: number, radius: number) => ({
   x: CX + radius * Math.cos((deg * Math.PI) / 180),
@@ -57,23 +62,16 @@ export function TriadFigure({ className }: { className?: string }) {
 
   return (
     <svg
-      viewBox="0 0 320 312"
+      // Cropped to the drawing, with six units of air. Left edge is the "Data"
+      // label, right edge "Technology", top the cap of "People", bottom the
+      // descenders in the two lower labels — all wider than the triangle
+      // itself, which is why the box is not centred on the geometry.
+      viewBox="72 32 202 208"
       xmlns="http://www.w3.org/2000/svg"
       className={className ?? "h-auto w-full"}
       role="img"
-      aria-label="A triangle with People, Technology and Data at its vertices, enclosed by a ring"
+      aria-label="A triangle with People, Technology and Data at its vertices"
     >
-      {/* Fainter than the triangle: it encloses rather than competes. */}
-      <circle
-        cx={CX}
-        cy={CY}
-        r={RC}
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={1}
-        opacity={0.22}
-      />
-
       <path
         d={path}
         fill="none"
@@ -85,10 +83,16 @@ export function TriadFigure({ className }: { className?: string }) {
 
       {VERTICES.map((v) => {
         const p = point(v.angle, RT);
-        return <circle key={v.label} cx={p.x} cy={p.y} r={5} fill="currentColor" />;
+        return (
+          <circle key={v.label} cx={p.x} cy={p.y} r={5} fill="currentColor" />
+        );
       })}
 
-      <g fill="currentColor" textAnchor="middle" style={{ fontFamily: "inherit" }}>
+      <g
+        fill="currentColor"
+        textAnchor="middle"
+        style={{ fontFamily: "inherit" }}
+      >
         {VERTICES.map((v) => {
           const p = point(v.angle, RT);
           return (
