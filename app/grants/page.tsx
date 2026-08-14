@@ -49,7 +49,9 @@ export default function GrantsPage() {
         way.
       </p>
 
-      <ul className="mt-14 space-y-10">
+      <div className="mt-8 border-b border-zinc-200 dark:border-zinc-800" />
+
+      <ul className="mt-10 space-y-10">
         {items.map((grant) => {
           // Mark the running ones rather than the finished ones: only two of
           // five are live, so this is the quieter mark, and "is this lab funded
