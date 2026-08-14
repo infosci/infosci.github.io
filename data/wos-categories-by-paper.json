@@ -12,8 +12,8 @@
     "Journals are the opposite: the category belongs to the journal and every",
     "paper in it inherits the same one. Those stay in the venue file.",
     "",
-    "Keyed by DOI, lowercased. The two ISSI papers have no DOI and are keyed by",
-    "their exact title instead.",
+    "Keyed by DOI, lowercased. The 2017 ISSI paper has no DOI and is keyed by its",
+    "exact title instead; the 2023 one has a Zenodo DOI.",
     "",
     "Records with an empty categories list were searched by title and returned no",
     "hit in the Core Collection. For the 2025 and 2026 papers that is probably",
@@ -81,7 +81,7 @@
     "categories": [],
     "checked": "2026-08-14"
   },
-  "Distribution of researcher-level funding allocation among US federal funding agencies": {
+  "10.5281/zenodo.8432318": {
     "wosId": null,
     "index": null,
     "categories": [],

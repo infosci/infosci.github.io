@@ -2,7 +2,11 @@
   {
     "doi": null,
     "title": "An investigation of the intellectual structure of opinion mining research",
-    "authors": ["Yongjun Zhu", "Meen Chul Kim", "Chaomei Chen"],
+    "authors": [
+      "Yongjun Zhu",
+      "Meen Chul Kim",
+      "Chaomei Chen"
+    ],
     "journal": "Information Research: An International Electronic Journal",
     "volume": "22",
     "issue": null,
@@ -19,7 +23,10 @@
   {
     "doi": null,
     "title": "Word semantic change: The law of differentiation vs. the law of parallel change",
-    "authors": ["Erjia Yan", "Yongjun Zhu"],
+    "authors": [
+      "Erjia Yan",
+      "Yongjun Zhu"
+    ],
     "journal": "Proceedings of the 16th International Conference on Scientometrics and Informetrics (ISSI 2017)",
     "volume": null,
     "issue": null,
@@ -27,7 +34,7 @@
     "year": 2017,
     "month": null,
     "type": "proceedings-article",
-    "url": null,
+    "url": "https://www.issi-society.org/publications/issi-conference-proceedings/proceedings-of-issi-2017/",
     "venue": "ISSI",
     "selected": false,
     "pdf": null,
@@ -35,9 +42,13 @@
     "note": null
   },
   {
-    "doi": null,
+    "doi": "10.5281/zenodo.8432318",
     "title": "Distribution of researcher-level funding allocation among US federal funding agencies",
-    "authors": ["Deanna Zarrillo", "Yongjun Zhu", "Erjia Yan"],
+    "authors": [
+      "Deanna Zarrillo",
+      "Yongjun Zhu",
+      "Erjia Yan"
+    ],
     "journal": "Proceedings of the 19th International Conference on Scientometrics and Informetrics (ISSI 2023)",
     "volume": null,
     "issue": null,
@@ -45,7 +56,7 @@
     "year": 2023,
     "month": null,
     "type": "proceedings-article",
-    "url": null,
+    "url": "https://zenodo.org/records/8432318",
     "venue": "ISSI",
     "selected": false,
     "pdf": null,
