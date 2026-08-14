@@ -23,6 +23,10 @@
     "                          Clarivate's; it exists so those papers still answer",
     "                          to a filter instead of vanishing from it.",
     "",
+    "researchAreas appears where a record carries a Research Area but no subject",
+    "category — that happens outside the Core Collection, and is the one direction",
+    "in which the two schemes differ in coverage rather than in granularity.",
+    "",
     "A caution learned the hard way: absent from JCR does NOT mean unclassified.",
     "JCR covers journals only, because it exists to compute impact factors. ESCI",
     "titles and every conference proceeding are classified in the Core Collection",
@@ -395,8 +399,11 @@
     "issn": "2671-4574",
     "categories": [],
     "edition": [],
-    "note": "Searched by paper title in the Core Collection on 2026-08-14: no hit. Not in JCR either.",
-    "fallback": "Not WoS-indexed"
+    "researchAreas": [
+      "Sociology"
+    ],
+    "fallback": "Not WoS-indexed",
+    "note": "Not in the Core Collection, so no subject category. But its record in the KCI-Korean Journal Database (KJD:ART003135933) carries the Research Area \"Sociology (provided by Clarivate)\". Research Areas span every WoS database; subject categories do not. Checked 2026-08-14."
   },
   "ACM SIGKDD": {
     "issn": null,
