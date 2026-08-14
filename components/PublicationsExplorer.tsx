@@ -199,7 +199,31 @@ function NetworkView({ papers, schemes, network }: Props) {
     ) as string[];
   }, [papers, schemeId]);
 
+  // Degree of what is actually on screen, so a node's size reflects the current
+  // selection rather than its standing in the full network.
+  const degreeOf = useMemo(() => {
+    const m = new Map<string, number>();
+    for (const e of shownEdges) {
+      m.set(e.a, (m.get(e.a) ?? 0) + 1);
+      m.set(e.b, (m.get(e.b) ?? 0) + 1);
+    }
+    return m;
+  }, [shownEdges]);
+  const maxDegree = Math.max(1, ...degreeOf.values());
+
   const active = (picked && visible.has(picked) ? byKey.get(picked) : null) ?? null;
+
+  // Why this paper sits where it does: the words joining it to its neighbours,
+  // commonest first.
+  const linkWords = useMemo(() => {
+    if (!picked) return [] as string[];
+    const tally = new Map<string, number>();
+    for (const e of shownEdges) {
+      if (e.a !== picked && e.b !== picked) continue;
+      for (const w of e.words) tally.set(w, (tally.get(w) ?? 0) + 1);
+    }
+    return [...tally.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0])).map(([w]) => w);
+  }, [picked, shownEdges]);
   const neighbours = useMemo(() => {
     const s = new Set<string>();
     if (!picked) return s;
@@ -333,12 +357,18 @@ function NetworkView({ papers, schemes, network }: Props) {
                   key={d.key}
                   cx={d.x}
                   cy={d.y}
-                  r={isPicked ? NODE_R * 1.4 : NODE_R}
+                  // Well-connected papers read larger. Unlinked papers stay
+                  // visible rather than shrinking to nothing.
+                  r={
+                    isPicked
+                      ? NODE_R * 1.6
+                      : NODE_R * (0.8 + 0.55 * Math.sqrt((degreeOf.get(d.key) ?? 0) / maxDegree))
+                  }
                   className={
                     isPicked
                       ? "fill-current"
                       : neighbours.has(d.key)
-                        ? "fill-zinc-700 dark:fill-zinc-300"
+                        ? "fill-zinc-800 dark:fill-zinc-200"
                         : "fill-zinc-500 dark:fill-zinc-500"
                   }
                   tabIndex={0}
@@ -348,14 +378,60 @@ function NetworkView({ papers, schemes, network }: Props) {
                   onFocus={() => setPicked(d.key)}
                   onClick={() => setPicked(d.key)}
                   style={{ cursor: "pointer", outline: "none" }}
-                />
+                >
+                  <title>{byKey.get(d.key)?.title}</title>
+                </circle>
               );
             })}
         </svg>
       </div>
 
+      {/* Directly under the graph, because hovering a node whose only feedback
+          was a highlighted row far below the fold looked like doing nothing.
+          Fixed height so the diagram does not jump as the card fills. */}
+      <div className="mt-2 min-h-24 border-t border-zinc-200 pt-3 dark:border-zinc-800">
+        {active ? (
+          <div>
+            <p className="leading-snug font-medium text-black dark:text-zinc-50">
+              {active.url ? (
+                <a
+                  href={active.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                >
+                  {active.title}
+                </a>
+              ) : (
+                active.title
+              )}
+            </p>
+            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+              {[active.venue, active.year].filter(Boolean).join(" · ")}
+              {" · "}
+              {valuesFor(active, schemeId).join(" · ") || "no value in this scheme"}
+            </p>
+            <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
+              {neighbours.size === 0 ? (
+                <>Shares fewer than two content words with anything else shown.</>
+              ) : (
+                <>
+                  Linked to {neighbours.size} {neighbours.size === 1 ? "paper" : "papers"} by{" "}
+                  <span className="text-black dark:text-zinc-200">{linkWords.join(", ")}</span>
+                </>
+              )}
+            </p>
+          </div>
+        ) : (
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            Hover, tap or tab through a circle to see the paper and what connects it. Bigger
+            circles have more links.
+          </p>
+        )}
+      </div>
+
       {/* How the lines are drawn, stated where the lines are. */}
-      <p className="mt-3 max-w-2xl border-t border-zinc-200 pt-3 text-sm leading-relaxed text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
+      <p className="mt-6 max-w-2xl border-t border-zinc-200 pt-3 text-sm leading-relaxed text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
         <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
         Two papers are connected when their titles share two or more content words. Function
         words and research boilerplate &mdash; <em>of</em>, <em>using</em>, <em>framework</em>{" "}
@@ -367,7 +443,6 @@ function NetworkView({ papers, schemes, network }: Props) {
           {shown.length} {shown.length === 1 ? "paper" : "papers"} · {shownEdges.length}{" "}
           {shownEdges.length === 1 ? "link" : "links"}
           {value !== ALL && <> · {value}</>}
-          {active && <> · showing {active.title.slice(0, 60)}{active.title.length > 60 ? "…" : ""}</>}
         </p>
         <div className="mt-8">
           <PaperList papers={shown} highlight={picked} />
