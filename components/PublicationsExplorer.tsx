@@ -55,7 +55,7 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
       </div>
 
       {view === "list" ? (
-        <div className="mt-12">
+        <div className="mt-12 max-w-3xl">
           <PaperList papers={papers} />
         </div>
       ) : (
@@ -321,11 +321,17 @@ function NetworkView({ papers, schemes, network }: Props) {
             Clarivate&rsquo;s definition ↗
           </a>
         </p>
+      </div>
 
+      {/* Two ways to narrow the same set, side by side: pick a value on the
+          left, or a paper on the right. Stacked below lg, where two columns
+          would leave the graph too narrow to read. */}
+      <div className="mt-6 grid items-start gap-8 lg:grid-cols-2">
+        <div>
         {/* One frame around the whole set. The chips vary in width because the
             names do, but the box gives them a single edge to sit inside so they
             read as one control rather than as loose scattered lozenges. */}
-        <div className="mt-5 rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
+        <div className="rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
           <div className="flex flex-wrap gap-1.5">
             <ValueBox
               label="All papers"
@@ -358,9 +364,10 @@ function NetworkView({ papers, schemes, network }: Props) {
             </p>
           )}
         </div>
-      </div>
+        </div>
 
-      <p className="mt-6 max-w-2xl text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+        <div>
+      <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
         <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
         Two papers are connected when their titles share two or more words, ignoring ordinary
         ones like <em>of</em>, <em>the</em> and <em>with</em>. This rule is ours; the grouping
@@ -485,6 +492,9 @@ function NetworkView({ papers, schemes, network }: Props) {
         )}
       </div>
 
+        </div>
+      </div>
+
       <div className="mt-8 border-t border-zinc-200 pt-6 dark:border-zinc-800">
         <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -513,7 +523,7 @@ function NetworkView({ papers, schemes, network }: Props) {
             </button>
           )}
         </div>
-        <div className="mt-8">
+        <div className="mt-8 max-w-3xl">
           {active ? (
             <ul className="space-y-7">
               <PaperEntry pub={active} highlighted />
