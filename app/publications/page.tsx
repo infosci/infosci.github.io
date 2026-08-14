@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 import PublicationsExplorer from "@/components/PublicationsExplorer";
 import { getFacetData } from "@/lib/publication-facets";
-import { getMapLayouts } from "@/lib/publication-map";
+import { getNetwork } from "@/lib/publication-network";
 
 export const metadata: Metadata = { title: "Publications" };
 
 export default function PublicationsPage() {
   const { papers, schemes } = getFacetData();
-  const layouts = getMapLayouts();
+  const network = getNetwork();
 
   return (
     <div className="max-w-3xl pt-6 sm:pt-10">
@@ -15,11 +15,10 @@ export default function PublicationsPage() {
         Publications
       </h1>
       <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-        Every paper has a shelf life. These are ours, newest first — and three ways to sort
-        them, none of them ours.
+        Every paper has a shelf life. These are ours, newest first.
       </p>
 
-      <PublicationsExplorer papers={papers} schemes={schemes} layouts={layouts} />
+      <PublicationsExplorer papers={papers} schemes={schemes} network={network} />
     </div>
   );
 }

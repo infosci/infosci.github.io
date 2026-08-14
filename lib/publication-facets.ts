@@ -20,6 +20,10 @@ export type FacetPaper = {
   venue: string;
   year: number | null;
   url: string | null;
+  // Carried through so the list view can print a full citation.
+  volume: string | null;
+  issue: string | null;
+  pages: string | null;
   categories: string[];
   areas: string[];
   topic: string | null; // meso, e.g. "6.238 Scientometrics, …"
@@ -56,6 +60,9 @@ function toFacetPaper(pub: Publication): FacetPaper {
     venue: (pub.venue ?? pub.journal ?? "").trim(),
     year: yearOf(pub),
     url: pub.url,
+    volume: pub.volume,
+    issue: pub.issue,
+    pages: pub.pages,
     categories: disciplinesOf(pub),
     areas: researchAreasOf(pub),
     topic: topic?.meso ?? null,

@@ -1,94 +1,38 @@
 "use client";
 
-// Two ways to read the same 72 papers, under three Clarivate schemes.
+// Two ways to read the same 72 papers.
 //
-// The scheme picker is the thing worth getting right. Prospective students are
-// the audience, and they should be able to tell that "Computer Science" from a
-// journal and "Chemistry" from a citation cluster are different kinds of claim.
-// So every scheme states its basis — venue or paper — and links to Clarivate's
-// own page rather than to our paraphrase of it.
+// List is the plain record — every paper, newest first, nothing to configure.
+// Network is where the exploring happens: the co-authorship graph, narrowed by
+// any of three Clarivate schemes.
+//
+// The filter lives only in the Network view on purpose. A reader who came for
+// the list wants all of it; a reader who wants to narrow down is already
+// looking at the graph.
+//
+// Each scheme states its basis — venue or paper — and links to Clarivate's own
+// page rather than to our paraphrase. Prospective students are the audience,
+// and they should be able to tell that "Computer Science" from a journal and
+// "2.123 Protein Stucture" from a citation cluster are different kinds of claim
+// about the same paper.
 
 import { useMemo, useState } from "react";
 import type { FacetPaper, Scheme, SchemeId } from "@/lib/publication-facets";
 import { valuesFor } from "@/lib/publication-facets";
-import type { MapLayout } from "@/lib/publication-map";
-import { DOT } from "@/lib/publication-map";
+import type { Network } from "@/lib/publication-network";
+import { NODE_R } from "@/lib/publication-network";
 
-type Props = {
-  papers: FacetPaper[];
-  schemes: Scheme[];
-  layouts: Record<SchemeId, MapLayout>;
-};
+type Props = { papers: FacetPaper[]; schemes: Scheme[]; network: Network };
 
 const ALL = "__all__";
 
-function citation(p: FacetPaper) {
-  return [p.venue, p.year].filter(Boolean).join(" · ");
-}
-
-/** Greedy wrap to at most two lines, the second truncated. Breaks on spaces so
- *  a Citation Topic code stays attached to the name it belongs to. */
-function wrapLabel(name: string, room: number): string[] {
-  if (name.length <= room) return [name];
-  const words = name.split(" ");
-  const lines: string[] = [];
-  let line = "";
-  for (const w of words) {
-    const next = line ? `${line} ${w}` : w;
-    if (next.length <= room) {
-      line = next;
-    } else {
-      if (line) lines.push(line);
-      line = w;
-      if (lines.length === 1) break;
-    }
-  }
-  if (lines.length === 0) return [`${name.slice(0, room - 1)}…`];
-  const rest = name.slice(lines[0].length + 1);
-  lines.push(rest.length > room ? `${rest.slice(0, room - 1)}…` : rest);
-  return lines;
-}
-
-export default function PublicationsExplorer({ papers, schemes, layouts }: Props) {
-  const [view, setView] = useState<"list" | "map">("list");
-  const [schemeId, setSchemeId] = useState<SchemeId>("areas");
-  const [value, setValue] = useState<string>(ALL);
-  const [hovered, setHovered] = useState<string | null>(null);
-
-  const scheme = schemes.find((s) => s.id === schemeId)!;
-  const layout = layouts[schemeId];
-
-  const byKey = useMemo(() => new Map(papers.map((p) => [p.key, p])), [papers]);
-
-  const shown = useMemo(
-    () => (value === ALL ? papers : papers.filter((p) => valuesFor(p, schemeId).includes(value))),
-    [papers, schemeId, value],
-  );
-
-  // Switching scheme drops a filter that no longer exists in it.
-  function chooseScheme(id: SchemeId) {
-    setSchemeId(id);
-    const next = schemes.find((s) => s.id === id)!;
-    if (value !== ALL && !next.values.some((v) => v.name === value)) setValue(ALL);
-  }
-
-  const byYear = useMemo(() => {
-    const groups = new Map<number | null, FacetPaper[]>();
-    for (const p of shown) {
-      const bucket = groups.get(p.year) ?? [];
-      bucket.push(p);
-      groups.set(p.year, bucket);
-    }
-    return [...groups.entries()].sort((a, b) => (b[0] ?? 0) - (a[0] ?? 0));
-  }, [shown]);
-
-  const active = (hovered ? byKey.get(hovered) : null) ?? null;
+export default function PublicationsExplorer({ papers, schemes, network }: Props) {
+  const [view, setView] = useState<"list" | "network">("list");
 
   return (
     <div className="mt-10">
-      {/* view toggle */}
       <div className="flex items-center gap-1" role="group" aria-label="View">
-        {(["list", "map"] as const).map((v) => (
+        {(["list", "network"] as const).map((v) => (
           <button
             key={v}
             type="button"
@@ -100,12 +44,143 @@ export default function PublicationsExplorer({ papers, schemes, layouts }: Props
                 : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
             }`}
           >
-            {v === "list" ? "List" : "Map"}
+            {v === "list" ? "List" : "Network"}
           </button>
         ))}
       </div>
 
-      {/* scheme picker */}
+      {view === "list" ? (
+        <ListView papers={papers} />
+      ) : (
+        <NetworkView papers={papers} schemes={schemes} network={network} />
+      )}
+    </div>
+  );
+}
+
+// ── List ───────────────────────────────────────────────────────────────────
+
+// "Journal of Informetrics 20(1), 101766" — assembled rather than templated,
+// because online-first papers legitimately have no volume, issue or pages yet
+// and the punctuation has to survive their absence.
+function venueLine(pub: FacetPaper) {
+  const issue = pub.issue ? `(${pub.issue})` : "";
+  const locator = [`${pub.volume ?? ""}${issue}`.trim(), pub.pages].filter(Boolean).join(", ");
+  return [pub.venue, locator].filter(Boolean).join(" ");
+}
+
+function ListView({ papers }: { papers: FacetPaper[] }) {
+  const years = useMemo(() => {
+    const groups = new Map<number | null, FacetPaper[]>();
+    for (const p of papers) {
+      const bucket = groups.get(p.year) ?? [];
+      bucket.push(p);
+      groups.set(p.year, bucket);
+    }
+    return [...groups.entries()].sort((a, b) => (b[0] ?? 0) - (a[0] ?? 0));
+  }, [papers]);
+
+  return (
+    <div className="mt-12 space-y-12">
+      {years.map(([year, items]) => (
+        <section key={year ?? "undated"}>
+          <h2 className="text-sm font-medium tracking-widest text-zinc-500 uppercase dark:text-zinc-400">
+            {year ?? "Undated"}
+          </h2>
+          <ul className="mt-5 space-y-7">
+            {items.map((pub) => (
+              <li key={pub.key}>
+                <h3 className="leading-snug font-medium text-black dark:text-zinc-50">
+                  {pub.url ? (
+                    <a
+                      href={pub.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="hover:underline"
+                    >
+                      {pub.title}
+                    </a>
+                  ) : (
+                    pub.title
+                  )}
+                </h3>
+                <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+                  {pub.authors.join(", ")}
+                </p>
+                <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{venueLine(pub)}</p>
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+    </div>
+  );
+}
+
+// ── Network ────────────────────────────────────────────────────────────────
+
+function NetworkView({ papers, schemes, network }: Props) {
+  const [schemeId, setSchemeId] = useState<SchemeId>("areas");
+  const [value, setValue] = useState<string>(ALL);
+  const [picked, setPicked] = useState<string | null>(null);
+
+  const scheme = schemes.find((s) => s.id === schemeId)!;
+  const byKey = useMemo(() => new Map(papers.map((p) => [p.key, p])), [papers]);
+  const nodeAt = useMemo(() => new Map(network.nodes.map((d) => [d.key, d])), [network.nodes]);
+
+  // Nothing chosen shows every paper; choosing a value shows only those.
+  const visible = useMemo(() => {
+    if (value === ALL) return new Set(papers.map((p) => p.key));
+    return new Set(papers.filter((p) => valuesFor(p, schemeId).includes(value)).map((p) => p.key));
+  }, [papers, schemeId, value]);
+
+  function chooseScheme(id: SchemeId) {
+    setSchemeId(id);
+    const next = schemes.find((s) => s.id === id)!;
+    if (value !== ALL && !next.values.some((v) => v.name === value)) setValue(ALL);
+  }
+
+  // An edge survives only if both its papers do, so a narrowed network never
+  // shows a line running to something that is not on screen.
+  const shownEdges = useMemo(
+    () => network.edges.filter((e) => visible.has(e.a) && visible.has(e.b)),
+    [network.edges, visible],
+  );
+
+  // Frame what is actually on screen. Keeping the whole network's extent when
+  // eleven papers are showing strands them in a field of empty space; a minimum
+  // extent stops a two-paper selection from zooming to absurdity.
+  const viewBox = useMemo(() => {
+    const vis = network.nodes.filter((d) => visible.has(d.key));
+    if (!vis.length) return network.viewBox;
+    const pad = NODE_R * 5;
+    const MIN = 360;
+    let minX = Math.min(...vis.map((d) => d.x)) - pad;
+    let maxX = Math.max(...vis.map((d) => d.x)) + pad;
+    let minY = Math.min(...vis.map((d) => d.y)) - pad;
+    let maxY = Math.max(...vis.map((d) => d.y)) + pad;
+    const grow = (lo: number, hi: number) => {
+      const short = MIN - (hi - lo);
+      return short > 0 ? [lo - short / 2, hi + short / 2] : [lo, hi];
+    };
+    [minX, maxX] = grow(minX, maxX);
+    [minY, maxY] = grow(minY, maxY);
+    return `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
+  }, [network.nodes, network.viewBox, visible]);
+
+  const active = (picked ? byKey.get(picked) : null) ?? null;
+  const neighbours = useMemo(() => {
+    if (!picked) return new Set<string>();
+    const s = new Set<string>();
+    for (const e of shownEdges) {
+      if (e.a === picked) s.add(e.b);
+      if (e.b === picked) s.add(e.a);
+    }
+    return s;
+  }, [picked, shownEdges]);
+
+  return (
+    <>
       <div className="mt-8 border-t border-zinc-200 pt-6 dark:border-zinc-800">
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
           {schemes.map((s) => (
@@ -130,26 +205,26 @@ export default function PublicationsExplorer({ papers, schemes, layouts }: Props
             {scheme.basis === "venue" ? "Assigned to the venue" : "Assigned to the paper"}
           </span>
           {" · "}
-          {scheme.labels === "multi"
-            ? "a paper can carry several"
-            : "one per paper"}
+          {scheme.labels === "multi" ? "a paper can carry several" : "one per paper"}
           {" · "}
-          {scheme.covered} of {papers.length} papers
-          {". "}
-          {scheme.blurb}{" "}
+          {scheme.covered} of {papers.length} papers. {scheme.blurb}{" "}
           <a
             href={scheme.href}
             target="_blank"
             rel="noopener noreferrer"
             className="whitespace-nowrap underline decoration-zinc-300 underline-offset-2 hover:decoration-current dark:decoration-zinc-600"
           >
-            Clarivate's definition ↗
+            Clarivate&rsquo;s definition ↗
           </a>
         </p>
 
-        {/* values */}
         <div className="mt-5 flex flex-wrap gap-1.5">
-          <FilterChip label="All" count={papers.length} on={value === ALL} onClick={() => setValue(ALL)} />
+          <FilterChip
+            label="All papers"
+            count={papers.length}
+            on={value === ALL}
+            onClick={() => setValue(ALL)}
+          />
           {scheme.values.map((v) => (
             <FilterChip
               key={v.name}
@@ -162,21 +237,110 @@ export default function PublicationsExplorer({ papers, schemes, layouts }: Props
         </div>
       </div>
 
-      {view === "list" ? (
-        <ListView groups={byYear} total={shown.length} schemeId={schemeId} />
-      ) : (
-        <MapView
-          layout={layout}
-          byKey={byKey}
-          schemeId={schemeId}
-          value={value}
-          hovered={hovered}
-          setHovered={setHovered}
-          active={active}
-          onPickGroup={(name) => setValue(value === name ? ALL : name)}
-        />
-      )}
-    </div>
+      <p className="mt-8 max-w-2xl text-sm leading-relaxed text-zinc-500 dark:text-zinc-400">
+        {visible.size} {visible.size === 1 ? "paper" : "papers"} · {shownEdges.length}{" "}
+        {shownEdges.length === 1 ? "link" : "links"}. Two papers are joined when they share at
+        least two authors besides Yongjun Zhu, so a line means a team that worked together more
+        than once. A paper with no line had no repeat collaborators.
+      </p>
+
+      <div className="mt-4 overflow-x-auto">
+        <svg
+          viewBox={viewBox}
+          className="h-auto w-full min-w-[32rem] text-black dark:text-zinc-100"
+          role="img"
+          aria-label="Co-authorship network of the lab's publications"
+        >
+          {shownEdges.map((e) => {
+            const a = nodeAt.get(e.a)!;
+            const b = nodeAt.get(e.b)!;
+            const touches = picked === e.a || picked === e.b;
+            return (
+              <line
+                key={`${e.a}|${e.b}`}
+                x1={a.x}
+                y1={a.y}
+                x2={b.x}
+                y2={b.y}
+                strokeWidth={touches ? 1.8 : 1}
+                className={
+                  touches
+                    ? "stroke-zinc-600 dark:stroke-zinc-300"
+                    : "stroke-zinc-500 dark:stroke-zinc-500"
+                }
+              />
+            );
+          })}
+
+          {network.nodes
+            .filter((d) => visible.has(d.key))
+            .map((d) => {
+              const isPicked = picked === d.key;
+              const isNeighbour = neighbours.has(d.key);
+              return (
+                <circle
+                  key={d.key}
+                  cx={d.x}
+                  cy={d.y}
+                  r={isPicked ? NODE_R * 1.4 : NODE_R}
+                  className={
+                    isPicked
+                      ? "fill-current"
+                      : isNeighbour
+                        ? "fill-zinc-700 dark:fill-zinc-300"
+                        : "fill-zinc-500 dark:fill-zinc-500"
+                  }
+                  tabIndex={0}
+                  role="button"
+                  aria-label={byKey.get(d.key)?.title}
+                  onMouseEnter={() => setPicked(d.key)}
+                  onFocus={() => setPicked(d.key)}
+                  onClick={() => setPicked(d.key)}
+                  style={{ cursor: "pointer", outline: "none" }}
+                />
+              );
+            })}
+        </svg>
+      </div>
+
+      {/* Fixed-height slot: the card appearing must not shift the diagram. */}
+      <div className="mt-2 min-h-28 border-t border-zinc-200 pt-4 dark:border-zinc-800">
+        {active ? (
+          <div>
+            <p className="leading-snug font-medium text-black dark:text-zinc-50">
+              {active.url ? (
+                <a
+                  href={active.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:underline"
+                >
+                  {active.title}
+                </a>
+              ) : (
+                active.title
+              )}
+            </p>
+            <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+              {active.authors.join(", ")}
+            </p>
+            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+              {[active.venue, active.year].filter(Boolean).join(" · ")}
+            </p>
+            <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+              {valuesFor(active, schemeId).join(" · ") || "No value in this scheme"}
+              {neighbours.size > 0 &&
+                ` — linked to ${neighbours.size} ${neighbours.size === 1 ? "paper" : "papers"}`}
+            </p>
+          </div>
+        ) : (
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">
+            Tap, hover or tab through a paper to see it. Choose a value above to narrow the
+            network.
+          </p>
+        )}
+      </div>
+    </>
   );
 }
 
@@ -207,207 +371,5 @@ function FilterChip({
         {count}
       </span>
     </button>
-  );
-}
-
-function Classification({ paper, schemeId }: { paper: FacetPaper; schemeId: SchemeId }) {
-  const vals = valuesFor(paper, schemeId);
-  if (!vals.length) {
-    return (
-      <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        No value in this scheme
-      </p>
-    );
-  }
-  return <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{vals.join(" · ")}</p>;
-}
-
-function ListView({
-  groups,
-  total,
-  schemeId,
-}: {
-  groups: [number | null, FacetPaper[]][];
-  total: number;
-  schemeId: SchemeId;
-}) {
-  return (
-    <>
-      <p className="mt-8 text-sm text-zinc-500 dark:text-zinc-400">
-        {total} {total === 1 ? "paper" : "papers"}
-      </p>
-      <div className="mt-6 space-y-12">
-        {groups.map(([year, items]) => (
-          <section key={year ?? "undated"}>
-            <h2 className="text-sm font-medium tracking-widest text-zinc-500 uppercase dark:text-zinc-400">
-              {year ?? "Undated"}
-            </h2>
-            <ul className="mt-5 space-y-7">
-              {items.map((pub) => (
-                <li key={pub.key}>
-                  <h3 className="leading-snug font-medium text-black dark:text-zinc-50">
-                    {pub.url ? (
-                      <a
-                        href={pub.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:underline"
-                      >
-                        {pub.title}
-                      </a>
-                    ) : (
-                      pub.title
-                    )}
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    {pub.authors.join(", ")}
-                  </p>
-                  <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{citation(pub)}</p>
-                  <Classification paper={pub} schemeId={schemeId} />
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
-      </div>
-    </>
-  );
-}
-
-function MapView({
-  layout,
-  byKey,
-  schemeId,
-  value,
-  hovered,
-  setHovered,
-  active,
-  onPickGroup,
-}: {
-  layout: MapLayout;
-  byKey: Map<string, FacetPaper>;
-  schemeId: SchemeId;
-  value: string;
-  hovered: string | null;
-  setHovered: (k: string | null) => void;
-  active: FacetPaper | null;
-  onPickGroup: (name: string) => void;
-}) {
-  const dimmed = (d: { value: string }) => value !== ALL && d.value !== value;
-
-  return (
-    <>
-      <p className="mt-8 text-sm text-zinc-500 dark:text-zinc-400">
-        {layout.dots.length} dots for {byKey.size - layout.missing} papers
-        {layout.missing > 0 && <> · {layout.missing} have no value in this scheme and are not shown</>}
-        {layout.dots.length > byKey.size - layout.missing && (
-          <> · a paper appears in each group it belongs to</>
-        )}
-      </p>
-
-      <div className="mt-4 overflow-x-auto">
-        <svg
-          viewBox={layout.viewBox}
-          className="h-auto w-full min-w-[34rem] text-black dark:text-zinc-100"
-          role="img"
-          aria-label={`Map of publications grouped by ${schemeId}`}
-        >
-          {layout.groups.map((g) => {
-            // A label may use its disc plus the gutter either side of it. Past
-            // that it wraps once and then truncates — Citation Topic names run
-            // to sixty characters, and a singleton disc is 54 units wide.
-            const room = Math.max(12, Math.floor((g.r * 2 + DOT * 6) / 5.4));
-            const lines = wrapLabel(g.name, room);
-            return (
-              <g
-                key={g.name}
-                onClick={() => onPickGroup(g.name)}
-                style={{ cursor: "pointer" }}
-                className={value !== ALL && g.name !== value ? "opacity-40" : undefined}
-              >
-                <title>{`${g.name} — ${g.count}`}</title>
-                <circle
-                  cx={g.cx}
-                  cy={g.cy}
-                  r={g.r}
-                  className="fill-transparent stroke-zinc-200 dark:stroke-zinc-800"
-                  strokeWidth={1}
-                />
-                <text
-                  x={g.cx}
-                  y={g.labelY}
-                  textAnchor="middle"
-                  className="fill-zinc-600 dark:fill-zinc-400"
-                  style={{ fontSize: 10.5 }}
-                >
-                  {lines.map((line, i) => (
-                    <tspan key={i} x={g.cx} dy={i === 0 ? 0 : 12}>
-                      {line}
-                      {i === lines.length - 1 && (
-                        <tspan dx={4} className="fill-zinc-500 dark:fill-zinc-400">
-                          {g.count}
-                        </tspan>
-                      )}
-                    </tspan>
-                  ))}
-                </text>
-              </g>
-            );
-          })}
-
-          {layout.dots.map((d, i) => {
-            const isHover = hovered === d.key;
-            return (
-              <circle
-                key={`${d.key}-${d.value}-${i}`}
-                cx={d.x}
-                cy={d.y}
-                r={isHover ? DOT * 1.35 : DOT}
-                className={
-                  isHover
-                    ? "fill-current"
-                    : dimmed(d)
-                      ? "fill-zinc-300 dark:fill-zinc-700"
-                      : "fill-zinc-500 dark:fill-zinc-500"
-                }
-                onMouseEnter={() => setHovered(d.key)}
-                onMouseLeave={() => setHovered(null)}
-                // Touch has no hover, so a tap has to select the dot outright.
-                onClick={() => setHovered(d.key)}
-                onFocus={() => setHovered(d.key)}
-                onBlur={() => setHovered(null)}
-                tabIndex={0}
-                role="button"
-                aria-label={byKey.get(d.key)?.title}
-                style={{ cursor: "pointer", outline: "none" }}
-              />
-            );
-          })}
-        </svg>
-      </div>
-
-      {/* Fixed-height slot: the card appearing must not shift the diagram. */}
-      <div className="mt-2 min-h-24 border-t border-zinc-200 pt-4 dark:border-zinc-800">
-        {active ? (
-          <div>
-            <p className="leading-snug font-medium text-black dark:text-zinc-50">
-              {active.url ? (
-                <a href={active.url} target="_blank" rel="noopener noreferrer" className="hover:underline">
-                  {active.title}
-                </a>
-              ) : (
-                active.title
-              )}
-            </p>
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{citation(active)}</p>
-            <Classification paper={active} schemeId={schemeId} />
-          </div>
-        ) : (
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Tap, hover or tab through a dot to see the paper. Choose a group name to filter.
-          </p>
-        )}
-      </div>
-    </>
   );
 }
