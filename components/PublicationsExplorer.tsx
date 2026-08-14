@@ -330,7 +330,12 @@ function ExploreView({ papers, schemes, network }: Props) {
               type="button"
               onClick={() => chooseScheme(s.id)}
               aria-pressed={s.id === schemeId}
-              className={`-mb-px border-b-2 pb-2 text-sm transition-colors ${
+              // 12px, the size every control on the site uses. These pick a
+              // scheme rather than filter within one, so they were set at the
+              // nav's 14px — but two type sizes among the controls on one page
+              // read as an accident rather than as a distinction. The underline
+              // is what separates them from the chips beneath.
+              className={`-mb-px border-b-2 pb-2 text-xs transition-colors ${
                 s.id === schemeId
                   ? "border-black font-medium text-black dark:border-zinc-100 dark:text-zinc-50"
                   : "border-transparent text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-zinc-100"
