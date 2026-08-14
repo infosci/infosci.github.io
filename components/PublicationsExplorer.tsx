@@ -3,8 +3,13 @@
 // Two ways to read the same 72 papers.
 //
 // List is the plain record — every paper, newest first, nothing to configure.
-// Network is where the exploring happens: pick a Web of Science value and see
-// both the graph of those papers and the papers themselves, one under the other.
+// Explore is where the narrowing happens: pick a Web of Science value or a
+// paper in the graph, and the list beneath answers either.
+//
+// The tab says Explore rather than Network because the view outgrew the graph.
+// The graph is one of three controls in it, and probably the least used —
+// someone looking for the lab's medical informatics work would never think to
+// click a tab called Network to find a subject filter.
 //
 // The values in this view are Clarivate's, read from Web of Science, and each
 // scheme is named exactly as the field is labelled on a Web of Science record
@@ -32,12 +37,12 @@ type Props = { papers: FacetPaper[]; schemes: Scheme[]; network: Network };
 const ALL = "__all__";
 
 export default function PublicationsExplorer({ papers, schemes, network }: Props) {
-  const [view, setView] = useState<"list" | "network">("list");
+  const [view, setView] = useState<"list" | "explore">("list");
 
   return (
     <div className="mt-10">
       <div className="flex items-center gap-1" role="group" aria-label="View">
-        {(["list", "network"] as const).map((v) => (
+        {(["list", "explore"] as const).map((v) => (
           <button
             key={v}
             type="button"
@@ -49,7 +54,7 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
                 : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
             }`}
           >
-            {v === "list" ? "List" : "Network"}
+            {v === "list" ? "List" : "Explore"}
           </button>
         ))}
       </div>
@@ -59,7 +64,7 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
           <PaperList papers={papers} />
         </div>
       ) : (
-        <NetworkView papers={papers} schemes={schemes} network={network} />
+        <ExploreView papers={papers} schemes={schemes} network={network} />
       )}
     </div>
   );
@@ -162,9 +167,9 @@ function PaperList({ papers, highlight }: { papers: FacetPaper[]; highlight?: st
   );
 }
 
-// ── Network ────────────────────────────────────────────────────────────────
+// ── Explore ────────────────────────────────────────────────────────────────
 
-function NetworkView({ papers, schemes, network }: Props) {
+function ExploreView({ papers, schemes, network }: Props) {
   const [schemeId, setSchemeId] = useState<SchemeId>("areas");
   const [value, setValue] = useState<string>(ALL);
   const [picked, setPicked] = useState<string | null>(null);
