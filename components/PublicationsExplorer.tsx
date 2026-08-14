@@ -189,6 +189,16 @@ function NetworkView({ papers, schemes, network }: Props) {
     return `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
   }, [network.nodes, network.viewBox, visible]);
 
+  // "4.48" is an address, not a decimal: topic 48 inside broad topic 4. Without
+  // the broad topics spelled out the prefix is unreadable, so list the ones
+  // these papers actually fall into.
+  const macros = useMemo(() => {
+    if (schemeId !== "topics") return [];
+    return [...new Set(papers.map((p) => p.macro).filter(Boolean))].sort(
+      (a, b) => Number(a!.split(" ")[0]) - Number(b!.split(" ")[0]),
+    ) as string[];
+  }, [papers, schemeId]);
+
   const active = (picked && visible.has(picked) ? byKey.get(picked) : null) ?? null;
   const neighbours = useMemo(() => {
     const s = new Set<string>();
@@ -265,6 +275,13 @@ function NetworkView({ papers, schemes, network }: Props) {
               />
             ))}
           </div>
+          {macros.length > 0 && (
+            <p className="mt-3 border-t border-zinc-200 pt-3 text-xs leading-relaxed text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+              The number is an address, not a decimal: the digit before the dot is the broad
+              topic &mdash; {macros.join(", ")} &mdash; and a third level of finer topics sits
+              below these.
+            </p>
+          )}
           {scheme.values.some((v) => v.name === NOT_INDEXED) && (
             <p className="mt-3 border-t border-zinc-200 pt-3 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
               Every value here is Clarivate&rsquo;s except{" "}
