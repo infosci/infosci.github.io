@@ -161,7 +161,7 @@
   },
   {
     "slug": "donghunkim",
-    "name": "Dr. Donghun Kim",
+    "name": "Donghun Kim",
     "role": "doctoral students",
     "status": "former",
     "now": "Assistant Professor at Nanjing University",
@@ -191,20 +191,20 @@
   },
   {
     "slug": "yizhao",
-    "name": "Dr. Yi Zhao",
+    "name": "Yi Zhao",
     "role": "visiting scholars",
     "status": "former",
-    "now": null,
+    "now": "Assistant Professor at Anhui University",
     "photo": "/people/yizhao.webp",
     "link": "https://yi-zhao060.github.io/homepage/",
     "order": 61
   },
   {
     "slug": "ruiliu",
-    "name": "Dr. Rui Liu",
+    "name": "Rui Liu",
     "role": "visiting scholars",
     "status": "former",
-    "now": null,
+    "now": "Assistant Professor at Zhengzhou University",
     "photo": "/people/ruiliu.webp",
     "link": "https://www5.zzu.edu.cn/xxgl/info/1152/5421.htm",
     "order": 62
@@ -214,7 +214,7 @@
     "name": "Dong Xia",
     "role": "visiting scholars",
     "status": "former",
-    "now": null,
+    "now": "Doctoral student at Chinese Academy of Sciences",
     "photo": "/people/dongxia.webp",
     "link": "http://www.linkedin.com/in/dong-xia-b313882a8",
     "order": 63
@@ -224,7 +224,7 @@
     "name": "Qiming Chen",
     "role": "visiting scholars",
     "status": "former",
-    "now": null,
+    "now": "Doctoral student at Zhejiang University",
     "photo": "/people/qimingchen.webp",
     "link": "https://www.linkedin.com/in/qiming-chen-845049327",
     "order": 64
