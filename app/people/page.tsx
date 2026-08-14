@@ -44,7 +44,8 @@ export default function PeoplePage() {
         People
       </h1>
       <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-        Different backgrounds, unique perspectives, and one lab.
+        Different backgrounds, unique perspectives. Who&rsquo;s here now, and where the
+        others went.
       </p>
 
       <PeopleExplorer people={people} />
