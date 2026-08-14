@@ -3,6 +3,10 @@
     "Clarivate's own names for the schemes this site filters by, each with a link",
     "to Clarivate's own definition. A reader who wants to know what a facet means",
     "should get the answer from the people who made it, not from us paraphrasing.",
+    "Names are the field labels as they appear in the Categories/Classification",
+    "block of a Web of Science record, not our shortenings of them. All three",
+    "schemes are Clarivate's and all three were read from Web of Science.",
+    "",
     "",
     "basis is the thing worth teaching. A venue-based scheme classifies the",
     "journal or proceedings volume, and every paper in it inherits the same",
@@ -20,14 +24,15 @@
     "end to end. It resolves normally in a browser."
   ],
   "wos-subject-categories": {
-    "name": "Web of Science Subject Categories",
+    "name": "Web of Science Categories",
     "field": "WC",
     "basis": "venue",
     "labels": "multi",
     "size": "about 250",
     "summary": "Clarivate assigns these to the journal or proceedings volume. Every paper published there inherits them.",
     "url": "https://webofscience.zendesk.com/hc/en-us/articles/27505726032017-Web-of-Science-Subject-Categories",
-    "verified": "2026-08-14"
+    "verified": "2026-08-14",
+    "note": "Clarivate's help article titles this \"Web of Science Subject Categories\"; the field label on a record reads \"Web of Science Categories\". We show the record label, since that is what a reader matching against Web of Science will see."
   },
   "research-areas": {
     "name": "Research Areas",

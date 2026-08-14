@@ -1,0 +1,44 @@
+{
+  "_comment": [
+    "Words ignored when deciding whether two titles share a term.",
+    "",
+    "This is the one list on the site that is ours rather than Clarivate's, and it",
+    "is kept here in the open so it can be argued with. Everything else that",
+    "groups or filters a paper comes from Web of Science; this only decides which",
+    "lines get drawn between papers that are already placed.",
+    "",
+    "Two kinds of word are listed. The first is ordinary English function words —",
+    "the, of, with. The second is research boilerplate that appears in titles",
+    "across every field and would link unrelated papers: understanding, comparing,",
+    "framework, empirical. Both say nothing about subject matter.",
+    "",
+    "Words that look generic but are NOT listed, because in this lab they are",
+    "subject matter: data, learning, information, network, science, knowledge,",
+    "social, graph, impact. A link on 'data' plus 'science' is a real one here.",
+    "",
+    "Matching is on lightly stemmed words, so network/networks and study/studies",
+    "collapse together and only one form needs listing."
+  ],
+  "function": [
+    "a", "an", "and", "are", "as", "at", "be", "by", "for", "from", "how", "in",
+    "into", "of", "on", "or", "the", "to", "with", "their", "its", "it", "this",
+    "that", "these", "those", "we", "our", "is", "was", "were", "been", "being",
+    "have", "has", "had", "not", "no", "all", "any", "some", "such", "other",
+    "others", "each", "per", "than", "between", "among", "can", "could", "do",
+    "does", "when", "where", "why", "what", "which", "who", "more", "most",
+    "first", "second", "third", "two", "three", "via", "toward", "towards",
+    "through", "against", "during", "after", "before", "under", "over", "both"
+  ],
+  "boilerplate": [
+    "study", "analysis", "approach", "based", "new", "novel", "case", "cases",
+    "empirical", "examining", "examine", "investigating", "investigate",
+    "understanding", "understand", "comparing", "compare", "comparative",
+    "exploring", "explore", "identifying", "identify", "predicting", "predict",
+    "analyzing", "analyze", "evidence", "framework", "method", "methods",
+    "model", "models", "application", "applications", "research", "paper",
+    "article", "finding", "findings", "result", "results", "using", "use",
+    "used", "review", "towards", "perspective", "perspectives", "insight",
+    "insights", "assessment", "evaluation", "examination", "investigation",
+    "exploration", "characteristics", "implications", "overview"
+  ]
+}
