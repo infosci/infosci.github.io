@@ -1,4 +1,5 @@
 import {
+  ComputationalSocialScienceIcon,
   DigitalHumanitiesIcon,
   MentalHealthIcon,
   ScienceOfScienceIcon,
@@ -56,6 +57,19 @@ const AREAS = [
     },
   },
   {
+    // Lazer et al. is to this field what Fortunato is to the science of science
+    // card: the Science piece that named it and set its terms. Two labels on
+    // this page now read "et al., Science", which is not a duplication to tidy
+    // away — it is what the citations are.
+    id: "computational-social-science",
+    title: "Computational Social Science",
+    Icon: ComputationalSocialScienceIcon,
+    source: {
+      href: "https://www.science.org/doi/10.1126/science.1167742",
+      label: "Lazer et al., Science (2009)",
+    },
+  },
+  {
     id: "digital-humanities",
     title: "Digital Humanities",
     Icon: DigitalHumanitiesIcon,
@@ -68,8 +82,8 @@ const AREAS = [
 
 
 /** The arrow that says "this leaves the site". Deliberately not in
- * AreaIcons.tsx — that file holds the three research marks, drawn in ddun.ai's
- * 32x42 idiom; this is interface furniture at a different scale. */
+ * AreaIcons.tsx — that file holds the research marks, drawn in ddun.ai's 32x42
+ * idiom; this is interface furniture at a different scale. */
 function ExternalMark() {
   return (
     <svg
@@ -88,28 +102,23 @@ function ExternalMark() {
   );
 }
 
-function AreaCard({
-  area,
-  className,
-}: {
-  area: (typeof AREAS)[number];
-  className?: string;
-}) {
+function AreaCard({ area }: { area: (typeof AREAS)[number] }) {
   return (
     <section
       // aspect-square from sm up, where the grid has three columns to divide.
       // Below that the cards stack full width and a square would be a 327px tall
       // box holding three short lines.
-      className={`flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-black/[.08] px-4 py-6 text-center sm:aspect-square dark:border-white/[.145] ${className ?? ""}`}
+      className="flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-black/[.08] px-3 py-6 text-center sm:aspect-square dark:border-white/[.145]"
     >
       {/* h-10 rather than h-8: the atom and the microchip carry more internal
           detail than the marks they replaced, and at 32px their strokes nearly
           touched. */}
       <area.Icon className="h-10 w-8 text-black dark:text-zinc-50" />
-      {/* Titles hold one line. At 14px the longest measures 214px and the card
-          gives it 246px, so nowrap is safe — but it is only safe at this card
-          width, and a narrower grid or a longer area name would clip. min-h-12
-          is gone with the wrapping it used to reserve room for.
+      {/* Titles hold one line. At 13px the longest — Science and Technology
+          Studies, with its arrow — measures 206px against the 217px the card
+          gives it. Eleven pixels, measured rather than assumed, and only safe
+          at this card width: a narrower grid or a longer area name would clip,
+          so measure again when adding a card.
 
           The underline sits on the text span, not the anchor, so the arrow
           beside it is not underlined too. */}
@@ -117,7 +126,7 @@ function AreaCard({
         href={area.source.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-flex items-center gap-1.5 text-sm font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
+        className="group inline-flex items-center gap-1.5 text-[13px] font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
       >
         <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
           {area.title}
@@ -138,11 +147,13 @@ export default function Home() {
     <div className="pt-6 sm:pt-10">
       {/* Title and statement on the left, the triad on the right of them.
           
-          The figure is sized under the height of the text beside it, not to its
-          own natural size. The header's height is whichever of the two is
-          taller, and the rule below has to land at 252px like the other three
-          pages — at h-24 the figure was 96px against an 88px text block and
-          pushed the rule to 260. h-20 keeps the text in charge. */}
+          The rule below has to land at 252px like the other three pages, so
+          the header's height has to stay the text block's 88px — and the
+          header takes the height of whichever child is taller. The figure is
+          drawn at 128px and given -my-6, which leaves its margin box 80px:
+          it overflows 24px above and below without occupying the space. That
+          is the whole trick, and h-32 is the ceiling for it — the 32px gap
+          between the header and the rule is what the overflow spends. */}
       <div className="flex max-w-3xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl dark:text-zinc-50">
@@ -155,31 +166,29 @@ export default function Home() {
             three meet.
           </p>
         </div>
-        <TriadFigure className="h-20 w-auto shrink-0 self-center text-black dark:text-zinc-50" />
+        <TriadFigure className="-my-6 h-32 w-auto shrink-0 self-center text-black dark:text-zinc-50" />
       </div>
 
       <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
 
-      {/* Four cards, then the triad under them.
+      {/* Three across, two beneath.
           
-          The figure used to sit in the middle with the cards arranged around
-          it, which read as a mapping — as though each card belonged to a vertex
-          or an edge. It does not: every area draws on all three of people, data
-          and technology. Underneath, the triad reads as the assumption the four
-          areas rest on rather than a key to them. */}
-      {/* The block spans the rule; the cards do not stretch to fill it.
+          The triad is not among them. It used to sit in the middle with the
+          cards arranged around it, which read as a mapping — as though each
+          card belonged to a vertex or an edge. It does not: every area draws on
+          all three of people, data and technology, so the figure sits by the
+          title instead.
           
-          Letting two columns divide 768px made each card 374px square, which is
-          too big for four icons and four short lines. They stay at 278px — the
-          floor for "Science and Technology Studies" on one line — and the
-          leftover width becomes space between them, with the outer edges pinned
-          to the rule. Four across would need 1124px to keep those titles
-          unbroken, so a single row is not available at this measure. */}
-      <div className="mt-10 grid w-full max-w-3xl gap-5 sm:grid-cols-2">
-        <AreaCard area={AREAS[0]} className="w-full sm:max-w-[278px] sm:justify-self-start" />
-        <AreaCard area={AREAS[1]} className="w-full sm:max-w-[278px] sm:justify-self-end" />
-        <AreaCard area={AREAS[2]} className="w-full sm:max-w-[278px] sm:justify-self-start" />
-        <AreaCard area={AREAS[3]} className="w-full sm:max-w-[278px] sm:justify-self-end" />
+          Three columns rather than two because two left a 212px hole down the
+          middle of the block. It costs title size: 243px cards give 217px of
+          room, under the 266px the longest title needs at 14px, which is why
+          the titles are 13px and the padding px-3. */}
+      <div className="mt-10 grid w-full max-w-3xl gap-5 sm:grid-cols-3">
+        <AreaCard area={AREAS[0]} />
+        <AreaCard area={AREAS[1]} />
+        <AreaCard area={AREAS[2]} />
+        <AreaCard area={AREAS[3]} />
+        <AreaCard area={AREAS[4]} />
       </div>
     </div>
   );

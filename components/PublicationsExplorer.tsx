@@ -43,8 +43,11 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
       {/* A segmented toggle, not two chips: one frame holding two halves, so it
           reads as a switch between views rather than as two filters that happen
           to be mutually exclusive. Chips below narrow what is in a view; this
-          changes which view you are in. Same 12px as the chips — the size is
-          shared, the shape is not. */}
+          changes which view you are in.
+          
+          It measures 26px tall and its labels 12px, which is a chip exactly:
+          the outer border and 2px of inset take the place of the chip's own
+          py-1. The two controls differ in shape and in nothing else. */}
       <div
         className="inline-flex rounded-full border border-zinc-300 p-0.5 dark:border-zinc-700"
         role="group"
@@ -56,7 +59,7 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
             type="button"
             onClick={() => setView(v)}
             aria-pressed={view === v}
-            className={`rounded-full px-3 py-1 text-xs transition-colors ${
+            className={`rounded-full px-2.5 py-0.5 text-xs transition-colors ${
               view === v
                 ? "bg-black text-white dark:bg-zinc-100 dark:text-black"
                 : "text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-zinc-100"
@@ -595,7 +598,7 @@ function ValueBox({
       type="button"
       onClick={onClick}
       aria-pressed={on}
-      className={`rounded-full border px-3 py-1 text-xs transition-colors ${
+      className={`rounded-full border px-2.5 py-1 text-xs transition-colors ${
         on
           ? "border-black bg-black text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-black"
           : "border-zinc-300 text-zinc-600 hover:border-zinc-500 hover:text-black dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-500 dark:hover:text-zinc-100"

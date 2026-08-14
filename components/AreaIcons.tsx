@@ -1,4 +1,4 @@
-// Marks for the three research areas, drawn in ddun.ai's icon language: a
+// Marks for the research areas, drawn in ddun.ai's icon language: a
 // 32x42 viewBox, 2.5 stroke, round caps and joins, no fill. Like the doors on
 // ddun.ai/knowthyself these are abstract signs rather than illustrations — the
 // point is one legible idea per area at 40px, not a picture of the field.
@@ -69,6 +69,26 @@ export function TechnologyStudiesIcon({ className }: IconProps) {
       <path d="M9 23 H5" />
       <path d="M23 17 H27" />
       <path d="M23 23 H27" />
+    </svg>
+  );
+}
+
+/** A person tied to two others: head and shoulders at the top, two plain nodes
+ * below, three links closing the triangle. A bare node-and-edge graph was
+ * rejected for the science of science card as too generic — here the shoulders
+ * are what fix it, since they make the graph one of people rather than of
+ * anything at all. Only the focal figure gets them; giving all three shoulders
+ * left nowhere for the links to start. */
+export function ComputationalSocialScienceIcon({ className }: IconProps) {
+  return (
+    <svg {...SHARED} className={className ?? "h-10 w-8"}>
+      <circle cx="16" cy="13" r="3" />
+      <path d="M11 21.5 a5 5 0 0 1 10 0" />
+      <circle cx="6" cy="31" r="2.6" />
+      <circle cx="26" cy="31" r="2.6" />
+      <path d="M11 21.8 L7.4 28.6" />
+      <path d="M21 21.8 L24.6 28.6" />
+      <path d="M8.6 31 H23.4" />
     </svg>
   );
 }

@@ -201,17 +201,17 @@ function Person({ person }: { person: Member }) {
       ) : (
         <div className="aspect-square w-full rounded-lg bg-zinc-200 dark:bg-zinc-800" />
       )}
-      <span className="mt-2.5 block text-center text-sm leading-snug font-normal text-black dark:text-zinc-50">
+      <span className="mt-2.5 block text-center leading-snug font-medium text-black dark:text-zinc-50">
         {person.name}
       </span>
       {person.role && (
-        <span className="mt-0.5 block text-center text-xs leading-snug text-zinc-500 dark:text-zinc-400">
+        <span className="mt-0.5 block text-center text-sm leading-snug text-zinc-500 dark:text-zinc-400">
           {CARD_LABEL[person.role] ?? person.role}
           {person.status === "former" && ", former"}
         </span>
       )}
       {person.now && (
-        <span className="mt-0.5 block text-center text-xs leading-snug text-zinc-500 dark:text-zinc-400">
+        <span className="mt-0.5 block text-center text-sm leading-snug text-zinc-500 dark:text-zinc-400">
           Now {person.now}
         </span>
       )}
