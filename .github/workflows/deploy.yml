@@ -46,6 +46,11 @@ jobs:
       # missing topic is not a build failure.
       - run: npm run check
 
+      # next build does not run ESLint, so without this step nothing outside a
+      # local terminal ever reads it. Both gates sit before the build for the
+      # same reason: they are the two failures the site cannot show you itself.
+      - run: npm run lint
+
       # No BASE_PATH here: this is the live site, served at the root of
       # datalab.yonsei.ac.kr. (The datalab-next preview repo sets it, because
       # it is served from a subpath.) public/CNAME carries the custom domain
