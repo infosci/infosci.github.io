@@ -136,7 +136,7 @@ function AreaCard({ area }: { area: (typeof AREAS)[number] }) {
       {/* zinc-500/400, not zinc-400/600. The original pair failed WCAG AA in
           both themes at this size — 2.51:1 on the light background and 2.72:1
           on the dark one, against 4.5:1 for text under 18px. Size keeps it
-          secondary; colour no longer has to. */}
+          secondary; color no longer has to. */}
       <p className="text-xs text-zinc-500 dark:text-zinc-400">{area.source.label}</p>
     </section>
   );

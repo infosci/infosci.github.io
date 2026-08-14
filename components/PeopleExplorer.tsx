@@ -104,8 +104,8 @@ export default function PeopleExplorer({ people }: { people: Member[] }) {
 
   const ordered = order ? order.map((slug) => bySlug.get(slug)!) : people;
 
-  // Colour by default. Mono is the better-looking grid — the photos were taken
-  // over years in different countries on different phones, and colour is what
+  // Color by default. Mono is the better-looking grid — the photos were taken
+  // over years in different countries on different phones, and color is what
   // advertises that — but it is a reading of the people, not a fact about them,
   // so it is offered rather than imposed. Not remembered between visits: the
   // page should open the same way for everyone.
@@ -174,7 +174,7 @@ export default function PeopleExplorer({ people }: { people: Member[] }) {
                   : "text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-zinc-100"
               }`}
             >
-              {v ? "Mono" : "Colour"}
+              {v ? "Mono" : "Color"}
             </button>
           ))}
         </div>
@@ -232,11 +232,11 @@ function Person({ person, mono }: { person: Member; mono: boolean }) {
           width={240}
           height={240}
           // A CSS filter rather than a second set of files: reversible, and it
-          // leaves the colour originals in place for a poster or a talk page.
+          // leaves the color originals in place for a poster or a talk page.
           // The slight contrast lift is there because desaturating a photo
           // flattens it — grayscale alone came out muddy on the darker ones.
           //
-          // The colour state names its filters at their identity values rather
+          // The color state names its filters at their identity values rather
           // than dropping them. filter: none does not interpolate, so without
           // this the fade runs going to mono and snaps coming back.
           className={`aspect-square w-full rounded-lg object-cover transition duration-300 ${
