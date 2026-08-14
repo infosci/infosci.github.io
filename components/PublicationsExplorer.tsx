@@ -20,7 +20,7 @@
 // in a title, and that rule is written out under the network rather than left
 // for the reader to infer from the lines.
 
-import { useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { FacetPaper, Scheme, SchemeId } from "@/lib/publication-facets";
 import { valuesFor } from "@/lib/publication-facets";
 import { NOT_INDEXED } from "@/lib/disciplines";
@@ -168,6 +168,12 @@ function NetworkView({ papers, schemes, network }: Props) {
   const [schemeId, setSchemeId] = useState<SchemeId>("areas");
   const [value, setValue] = useState<string>(ALL);
   const [picked, setPicked] = useState<string | null>(null);
+  const [moved, setMoved] = useState<Record<string, { x: number; y: number }>>({});
+  const svgRef = useRef<SVGSVGElement>(null);
+  const chipsRef = useRef<HTMLDivElement>(null);
+  const [expanded, setExpanded] = useState(false);
+  const [overflows, setOverflows] = useState(false);
+  const dragging = useRef<string | null>(null);
 
   const scheme = schemes.find((s) => s.id === schemeId)!;
   const byKey = useMemo(() => new Map(papers.map((p) => [p.key, p])), [papers]);
@@ -180,8 +186,26 @@ function NetworkView({ papers, schemes, network }: Props) {
   );
   const visible = useMemo(() => new Set(shown.map((p) => p.key)), [shown]);
 
+  // Collapsed by default so the box is the same size whichever scheme is on:
+  // the three carry 14, 20 and 25 chips, which swung the box between 459 and
+  // 749 pixels and shoved everything below it around.
+  const CHIPS_COLLAPSED = 240;
+
+  useEffect(() => {
+    const el = chipsRef.current;
+    if (!el) return;
+    // Against the collapsed limit, not the current height, so the control does
+    // not vanish the moment it expands.
+    const check = () => setOverflows(el.scrollHeight > CHIPS_COLLAPSED + 1);
+    check();
+    const ro = new ResizeObserver(check);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [schemeId, expanded]);
+
   function chooseScheme(id: SchemeId) {
     setSchemeId(id);
+    setExpanded(false);
     const next = schemes.find((s) => s.id === id)!;
     if (value !== ALL && !next.values.some((v) => v.name === value)) setValue(ALL);
   }
@@ -239,6 +263,24 @@ function NetworkView({ papers, schemes, network }: Props) {
     return m;
   }, [shownEdges]);
   const maxDegree = Math.max(1, ...degreeOf.values());
+
+  // Where a node is drawn: wherever it was dragged to, else where the build-time
+  // layout put it.
+  const pos = useCallback(
+    (key: string) => moved[key] ?? nodeAt.get(key)!,
+    [moved, nodeAt],
+  );
+
+  // Screen pixels to viewBox units. getScreenCTM accounts for the current scale
+  // and for preserveAspectRatio's letterboxing, which a width ratio would not.
+  const toDiagram = useCallback((clientX: number, clientY: number) => {
+    const svg = svgRef.current;
+    if (!svg) return null;
+    const ctm = svg.getScreenCTM();
+    if (!ctm) return null;
+    const pt = new DOMPoint(clientX, clientY).matrixTransform(ctm.inverse());
+    return { x: pt.x, y: pt.y };
+  }, []);
 
   const active = (picked && visible.has(picked) ? byKey.get(picked) : null) ?? null;
 
@@ -308,7 +350,7 @@ function NetworkView({ papers, schemes, network }: Props) {
       {/* Two ways to narrow the same set, side by side: pick a value on the
           left, or a paper on the right. Stacked below lg, where two columns
           would leave the graph too narrow to read. */}
-      <div className="mt-6 grid items-start gap-8 lg:grid-cols-2">
+      <div className="mt-6 grid items-start gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <div>
         <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
           <span className="font-medium text-black dark:text-zinc-200">
@@ -333,7 +375,11 @@ function NetworkView({ papers, schemes, network }: Props) {
             names do, but the box gives them a single edge to sit inside so they
             read as one control rather than as loose scattered lozenges. */}
         <div className="mt-5 rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
-          <div className="flex flex-wrap gap-1.5">
+          <div
+            ref={chipsRef}
+            className="flex flex-wrap gap-1.5 overflow-hidden"
+            style={{ maxHeight: expanded ? undefined : CHIPS_COLLAPSED }}
+          >
             <ValueBox
               label="All papers"
               count={papers.length}
@@ -350,6 +396,15 @@ function NetworkView({ papers, schemes, network }: Props) {
               />
             ))}
           </div>
+          {overflows && (
+            <button
+              type="button"
+              onClick={() => setExpanded((v) => !v)}
+              className="mt-2 text-xs text-zinc-600 underline decoration-zinc-300 underline-offset-2 hover:text-black dark:text-zinc-400 dark:decoration-zinc-600 dark:hover:text-zinc-100"
+            >
+              {expanded ? "Show fewer" : `Show all ${scheme.values.length}`}
+            </button>
+          )}
           {macros.length > 0 && (
             <p className="mt-3 border-t border-zinc-200 pt-3 text-xs leading-relaxed text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
               The number is an address, not a decimal: the digit before the dot is the broad
@@ -368,14 +423,27 @@ function NetworkView({ papers, schemes, network }: Props) {
         </div>
 
         <div>
-      <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-        <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
-        Two papers are connected when their titles share two or more words, ignoring ordinary
-        ones like <em>of</em>, <em>the</em> and <em>with</em>.
-      </p>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+          <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
+          Two papers are connected when their titles share two or more words, ignoring ordinary
+          ones like <em>of</em>, <em>the</em> and <em>with</em>. Drag a circle to pull it clear of
+          the others.
+        </p>
+        {Object.keys(moved).length > 0 && (
+          <button
+            type="button"
+            onClick={() => setMoved({})}
+            className="text-sm whitespace-nowrap text-zinc-600 underline decoration-zinc-300 underline-offset-2 hover:text-black dark:text-zinc-400 dark:decoration-zinc-600 dark:hover:text-zinc-100"
+          >
+            Reset layout
+          </button>
+        )}
+      </div>
 
       <div className="mt-4 overflow-x-auto">
         <svg
+          ref={svgRef}
           viewBox={viewBox}
           preserveAspectRatio="xMidYMid meet"
           className="w-full min-w-[20rem] text-black dark:text-zinc-100"
@@ -384,8 +452,8 @@ function NetworkView({ papers, schemes, network }: Props) {
           aria-label={`Network of ${shown.length} papers linked by shared title words`}
         >
           {shownEdges.map((e) => {
-            const a = nodeAt.get(e.a)!;
-            const b = nodeAt.get(e.b)!;
+            const a = pos(e.a);
+            const b = pos(e.b);
             const touches = picked === e.a || picked === e.b;
             return (
               <line
@@ -413,8 +481,8 @@ function NetworkView({ papers, schemes, network }: Props) {
               return (
                 <circle
                   key={d.key}
-                  cx={d.x}
-                  cy={d.y}
+                  cx={pos(d.key).x}
+                  cy={pos(d.key).y}
                   // Well-connected papers read larger. Unlinked papers stay
                   // visible rather than shrinking to nothing.
                   r={
@@ -432,10 +500,27 @@ function NetworkView({ papers, schemes, network }: Props) {
                   tabIndex={0}
                   role="button"
                   aria-label={byKey.get(d.key)?.title}
-                  onMouseEnter={() => setPicked(d.key)}
+                  onMouseEnter={() => !dragging.current && setPicked(d.key)}
                   onFocus={() => setPicked(d.key)}
-                  onClick={() => setPicked(d.key)}
-                  style={{ cursor: "pointer", outline: "none" }}
+                  onPointerDown={(e) => {
+                    e.currentTarget.setPointerCapture(e.pointerId);
+                    dragging.current = d.key;
+                    setPicked(d.key);
+                  }}
+                  onPointerMove={(e) => {
+                    if (dragging.current !== d.key) return;
+                    const pt = toDiagram(e.clientX, e.clientY);
+                    if (pt) setMoved((m) => ({ ...m, [d.key]: pt }));
+                  }}
+                  onPointerUp={(e) => {
+                    e.currentTarget.releasePointerCapture(e.pointerId);
+                    dragging.current = null;
+                  }}
+                  onPointerCancel={() => {
+                    dragging.current = null;
+                  }}
+                  // touch-none stops a drag from scrolling the page instead.
+                  style={{ cursor: "grab", outline: "none", touchAction: "none" }}
                 >
                   <title>{byKey.get(d.key)?.title}</title>
                 </circle>
