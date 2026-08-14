@@ -22,6 +22,7 @@
 
 import wosCategories from "@/data/wos-categories.json";
 import byPaper from "@/data/wos-categories-by-paper.json";
+import citationTopics from "@/data/citation-topics.json";
 import { getPublications, type Publication } from "./publications";
 
 type VenueEntry = {
@@ -64,6 +65,20 @@ export function disciplinesOf(pub: Publication): string[] {
 
   if (entry.categories.length) return entry.categories;
   return entry.fallback ? [entry.fallback] : [];
+}
+
+// ── Citation Topics ────────────────────────────────────────────────────────
+// The other scheme, and the opposite kind: paper-based and single-label, built
+// by clustering citations rather than by classifying journals. Ten papers have
+// none — nine are outside the Core Collection and one is too new to have been
+// clustered — so this cannot carry a filter on its own.
+
+type TopicEntry = { meso: string; macro: string };
+
+const TOPICS = citationTopics as unknown as Record<string, TopicEntry>;
+
+export function citationTopicOf(pub: Publication): TopicEntry | null {
+  return TOPICS[paperKey(pub)] ?? null;
 }
 
 export type DisciplineFacet = { name: string; count: number };

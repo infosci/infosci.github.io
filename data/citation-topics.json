@@ -1,0 +1,276 @@
+{
+  "_comment": [
+    "Citation Topics per paper, read from Web of Science Core Collection through",
+    "Yonsei's subscription on 2026-08-14. Clarivate's classification, built with",
+    "CWTS Leiden by clustering the citation network — see data/wos-glossary.json",
+    "for the official definition and link.",
+    "",
+    "Paper-based and single-label, which is the opposite of the subject categories",
+    "in data/wos-categories.json. Each paper has exactly one micro topic, which",
+    "rolls up to one meso and one macro; only the meso is stored, since the macro",
+    "is its numeric prefix.",
+    "",
+    "The two schemes disagree, and that is the point rather than a fault. The IJCAI",
+    "paper is Computer Science by venue and 2.123 Protein Structure by citation.",
+    "A Protein Embedding Model for Drug Molecular Screening is 4.183 Transportation",
+    "— citation clustering put a drug-screening paper among transport research.",
+    "Single-label means a reader who does not open the right topic never sees the",
+    "paper, so this is the weaker scheme to filter on and the better one to read.",
+    "",
+    "Keyed by DOI, lowercased, or exact title where there is no DOI.",
+    "",
+    "Ten papers have no entry: nine are absent from the Core Collection, and",
+    "\"Does the Matthew effect exist in open peer review?\" is indexed but not yet",
+    "assigned a topic — it was published in 2026 and clustering lags.",
+    "",
+    "Spelling is Clarivate's, including \"Protein Stucture\"."
+  ],
+  "10.1016/j.joi.2026.101802": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1016/j.joi.2025.101766": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1016/j.ipm.2024.103757": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1016/j.joi.2023.101486": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1007/s11192-023-04803-5": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1002/asi.24711": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1162/qss_a_00098": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1162/qss_a_00088": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1007/s11192-019-03311-9": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1007/s11192-018-2846-z": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1002/asi.23670": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1016/j.joi.2017.04.007": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1007/s11192-016-2033-z": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1016/j.joi.2015.04.003": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1007/s11192-015-1594-6": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "Word semantic change: The law of differentiation vs. the law of parallel change": {
+    "meso": "6.238 Scientometrics, Research Integrity & Academic Careers",
+    "macro": "6 Social Sciences"
+  },
+  "10.1177/21522715261417552": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1016/j.ins.2023.03.022": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1002/asi.24727": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1016/j.knosys.2022.110049": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1016/j.knosys.2022.109972": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1108/lht-08-2019-0164": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1016/j.ijmedinf.2017.11.006": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1016/j.datak.2017.06.006": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1186/s12911-017-0498-1": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1002/asi.23677": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1016/j.joi.2016.09.005": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1007/s11192-015-1830-0": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1007/978-3-319-25264-3_2": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1016/j.dss.2014.01.010": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "An investigation of the intellectual structure of opinion mining research": {
+    "meso": "4.48 Information Retrieval & Knowledge Systems",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1016/j.eswa.2023.121855": {
+    "meso": "1.54 Molecular & Cell Biology - Genetics",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1093/jamia/ocaa107": {
+    "meso": "1.54 Molecular & Cell Biology - Genetics",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1177/1460458220937101": {
+    "meso": "1.54 Molecular & Cell Biology - Genetics",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1108/lht-08-2019-0170": {
+    "meso": "1.54 Molecular & Cell Biology - Genetics",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1093/bib/bby117": {
+    "meso": "1.54 Molecular & Cell Biology - Genetics",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1093/bib/bbx169": {
+    "meso": "1.54 Molecular & Cell Biology - Genetics",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1109/ichi.2018.00059": {
+    "meso": "1.54 Molecular & Cell Biology - Genetics",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1371/journal.pone.0156091": {
+    "meso": "1.54 Molecular & Cell Biology - Genetics",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1080/07481187.2025.2487778": {
+    "meso": "1.21 Psychiatry",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1177/20552076241255660": {
+    "meso": "1.21 Psychiatry",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1111/sltb.12959": {
+    "meso": "1.21 Psychiatry",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.3389/fpubh.2022.1022790": {
+    "meso": "1.21 Psychiatry",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1177/20552076221086339": {
+    "meso": "1.21 Psychiatry",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1080/13811118.2021.1955783": {
+    "meso": "1.21 Psychiatry",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1016/j.socscimed.2025.118828": {
+    "meso": "6.24 Psychiatry & Psychology",
+    "macro": "6 Social Sciences"
+  },
+  "10.1089/cyber.2024.0521": {
+    "meso": "6.24 Psychiatry & Psychology",
+    "macro": "6 Social Sciences"
+  },
+  "10.1080/15564886.2024.2398588": {
+    "meso": "6.24 Psychiatry & Psychology",
+    "macro": "6 Social Sciences"
+  },
+  "10.1089/cyber.2023.0397": {
+    "meso": "6.24 Psychiatry & Psychology",
+    "macro": "6 Social Sciences"
+  },
+  "10.1016/j.inffus.2025.103390": {
+    "meso": "4.17 Computer Vision & Graphics",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1016/j.engappai.2023.106306": {
+    "meso": "4.17 Computer Vision & Graphics",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.2196/28114": {
+    "meso": "4.17 Computer Vision & Graphics",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1002/asi.24487": {
+    "meso": "1.14 Nursing",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1016/j.jbi.2018.09.016": {
+    "meso": "1.14 Nursing",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.1515/jdis-2017-0011": {
+    "meso": "6.3 Management",
+    "macro": "6 Social Sciences"
+  },
+  "10.1111/exsy.12130": {
+    "meso": "6.3 Management",
+    "macro": "6 Social Sciences"
+  },
+  "10.1093/jamiaopen/ooy001": {
+    "meso": "1.26 Diabetes",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.2196/43521": {
+    "meso": "1.273 Health Literacy & Telemedicine",
+    "macro": "1 Clinical & Life Sciences"
+  },
+  "10.24963/ijcai.2024/882": {
+    "meso": "2.123 Protein Stucture, Folding & Modelling",
+    "macro": "2 Chemistry"
+  },
+  "10.1016/j.knosys.2026.115460": {
+    "meso": "2.123 Protein Stucture, Folding & Modelling",
+    "macro": "2 Chemistry"
+  },
+  "10.1109/bigcomp48618.2020.00-66": {
+    "meso": "4.183 Transportation",
+    "macro": "4 Electrical Engineering, Electronics & Computer Science"
+  },
+  "10.1108/ajim-08-2022-0370": {
+    "meso": "6.69 Language & Linguistics",
+    "macro": "6 Social Sciences"
+  }
+}

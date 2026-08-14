@@ -24,6 +24,7 @@ const read = async (f) => JSON.parse(await readFile(new URL(f, root), "utf8"));
 
 const venues = await read("data/wos-categories.json");
 const byPaper = await read("data/wos-categories-by-paper.json");
+const topics = await read("data/citation-topics.json");
 const pubs = [...(await read("data/publications.json")), ...(await read("data/manual-publications.json"))];
 
 const NOT_INDEXED = "Not WoS-indexed";
@@ -90,6 +91,22 @@ if (mode === "--tsv") {
   const avg = (perPaper.reduce((a, b) => a + b, 0) / pubs.length).toFixed(1);
   console.log(`\n${labelled.size}/${pubs.length} papers placed, ${avg} disciplines each on average`);
   console.log("· marks the value standing in where the Core Collection has no record");
+
+  // Citation Topics: the other scheme. Paper-based and single-label, so these
+  // counts sum to the number of papers rather than exceeding it.
+  const topical = pubs.filter((p) => topics[paperKey(p)]);
+  const meso = {};
+  const macro = {};
+  for (const p of topical) {
+    const t = topics[paperKey(p)];
+    meso[t.meso] = (meso[t.meso] ?? 0) + 1;
+    macro[t.macro] = (macro[t.macro] ?? 0) + 1;
+  }
+  console.log(`\nCITATION TOPICS — ${topical.length}/${pubs.length} papers, one topic each`);
+  for (const [k, v] of Object.entries(macro).sort((a, b) => b[1] - a[1])) {
+    console.log(`${String(v).padStart(3)}  ${k}`);
+  }
+  console.log(`     ${Object.keys(meso).length} meso topics beneath those`);
 }
 
 if (unmapped.length) {
