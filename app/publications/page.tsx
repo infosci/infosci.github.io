@@ -1,22 +1,13 @@
 import type { Metadata } from "next";
-import { getPublicationsByYear, type Publication } from "@/lib/publications";
+import PublicationsExplorer from "@/components/PublicationsExplorer";
+import { getFacetData } from "@/lib/publication-facets";
+import { getMapLayouts } from "@/lib/publication-map";
 
 export const metadata: Metadata = { title: "Publications" };
 
-// "Journal of Informetrics 20(1), 101766" — assembled rather than templated,
-// because online-first papers legitimately have no volume, issue, or pages yet
-// and the punctuation has to survive their absence.
-//
-// pub.venue, when set, replaces the container name only — the locator still
-// follows, so page ranges survive the shortening.
-function venue(pub: Publication) {
-  const issue = pub.issue ? `(${pub.issue})` : "";
-  const locator = [`${pub.volume ?? ""}${issue}`.trim(), pub.pages].filter(Boolean).join(", ");
-  return [pub.venue ?? pub.journal, locator].filter(Boolean).join(" ");
-}
-
 export default function PublicationsPage() {
-  const years = getPublicationsByYear();
+  const { papers, schemes } = getFacetData();
+  const layouts = getMapLayouts();
 
   return (
     <div className="max-w-3xl pt-6 sm:pt-10">
@@ -24,42 +15,11 @@ export default function PublicationsPage() {
         Publications
       </h1>
       <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-        Every paper has a shelf life. These are ours, newest first.
+        Every paper has a shelf life. These are ours, newest first — and three ways to sort
+        them, none of them ours.
       </p>
 
-      <div className="mt-14 space-y-12">
-        {years.map(({ year, items }) => (
-          <section key={year ?? "undated"}>
-            <h2 className="text-sm font-medium tracking-widest text-zinc-500 uppercase dark:text-zinc-400">
-              {year ?? "Undated"}
-            </h2>
-            <ul className="mt-5 space-y-7">
-              {items.map((pub) => (
-                <li key={pub.doi ?? pub.title}>
-                  <h3 className="leading-snug font-medium text-black dark:text-zinc-50">
-                    {pub.url ? (
-                      <a
-                        href={pub.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="hover:underline"
-                      >
-                        {pub.title}
-                      </a>
-                    ) : (
-                      pub.title
-                    )}
-                  </h3>
-                  <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-                    {pub.authors.join(", ")}
-                  </p>
-                  <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{venue(pub)}</p>
-                </li>
-              ))}
-            </ul>
-          </section>
-        ))}
-      </div>
+      <PublicationsExplorer papers={papers} schemes={schemes} layouts={layouts} />
     </div>
   );
 }
