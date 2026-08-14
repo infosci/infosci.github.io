@@ -226,15 +226,28 @@ function ExploreView({ papers, schemes, network }: Props) {
     return `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
   }, [network.nodes, network.viewBox, visible]);
 
-  // "4.48" is an address, not a decimal: topic 48 inside broad topic 4. Without
-  // the broad topics spelled out the prefix is unreadable, so list the ones
-  // these papers actually fall into.
-  const macros = useMemo(() => {
-    if (schemeId !== "topics") return [];
-    return [...new Set(papers.map((p) => p.macro).filter(Boolean))].sort(
-      (a, b) => Number(a!.split(" ")[0]) - Number(b!.split(" ")[0]),
-    ) as string[];
-  }, [papers, schemeId]);
+  // Citation Topic chips grouped under their macro topic. "4.48" is an address,
+  // not a decimal — topic 48 inside broad topic 4 — and a heading carries that
+  // better than the sentence that used to sit under the box explaining it.
+  //
+  // The grouping also shows how the work divides at the coarse level, which is
+  // worth seeing and far too blunt to filter on: four values, three of them
+  // holding sixty of the seventy-two papers.
+  const grouped = useMemo(() => {
+    if (schemeId !== "topics") return null;
+    const macroOf = new Map<string, string>();
+    for (const p of papers) if (p.topic && p.macro) macroOf.set(p.topic, p.macro);
+    const byMacro = new Map<string, { name: string; count: number }[]>();
+    for (const v of scheme.values) {
+      const m = macroOf.get(v.name) ?? "";
+      if (!byMacro.has(m)) byMacro.set(m, []);
+      byMacro.get(m)!.push(v);
+    }
+    // Numeric order, so the headings read 1, 2, 4, 6 rather than by size.
+    return [...byMacro.entries()]
+      .sort((a, b) => Number(a[0].split(" ")[0]) - Number(b[0].split(" ")[0]))
+      .map(([macro, values]) => ({ macro, values }));
+  }, [schemeId, papers, scheme.values]);
 
   // Degree of what is actually on screen, so a node's size reflects the current
   // selection rather than its standing in the full network.
@@ -326,7 +339,7 @@ function ExploreView({ papers, schemes, network }: Props) {
           graph instead of the tallest column setting the height. Without it the
           chips content inflates the row and the alignment is lost. Only from lg,
           where the two sit side by side. */}
-      <div className="mt-6 grid items-stretch gap-8 lg:h-[25rem] lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
+      <div className="mt-6 grid items-stretch gap-8 lg:h-[32rem] lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <div className="flex min-h-0 flex-col">
         <p className="min-h-[4.25rem] text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
           <span className="font-medium text-black dark:text-zinc-200">
@@ -354,32 +367,47 @@ function ExploreView({ papers, schemes, network }: Props) {
           {/* Takes whatever height the column has and scrolls past that, so the
               box ends level with the graph whichever scheme is showing and
               however many values it has. */}
-          <div className="flex min-h-0 flex-1 flex-wrap gap-1.5 overflow-y-auto">
-            <ValueBox
-              label="All papers"
-              count={papers.length}
-              on={value === ALL}
-              onClick={() => setValue(ALL)}
-            />
-            {scheme.values.map((v) => (
+          <div className="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto">
+            <div className="flex flex-wrap gap-1.5">
               <ValueBox
-                key={v.name}
-                label={v.name}
-                count={v.count}
-                on={value === v.name}
-                onClick={() => setValue(value === v.name ? ALL : v.name)}
+                label="All papers"
+                count={papers.length}
+                on={value === ALL}
+                onClick={() => setValue(ALL)}
               />
+              {!grouped &&
+                scheme.values.map((v) => (
+                  <ValueBox
+                    key={v.name}
+                    label={v.name}
+                    count={v.count}
+                    on={value === v.name}
+                    onClick={() => setValue(value === v.name ? ALL : v.name)}
+                  />
+                ))}
+            </div>
+            {grouped?.map(({ macro, values }) => (
+              <div key={macro}>
+                <p className="mb-1.5 text-xs tracking-widest text-zinc-500 uppercase dark:text-zinc-400">
+                  {macro}
+                </p>
+                <div className="flex flex-wrap gap-1.5">
+                  {values.map((v) => (
+                    <ValueBox
+                      key={v.name}
+                      label={v.name}
+                      count={v.count}
+                      on={value === v.name}
+                      onClick={() => setValue(value === v.name ? ALL : v.name)}
+                    />
+                  ))}
+                </div>
+              </div>
             ))}
           </div>
           {/* One footnote slot, tall enough for the longest of them, so the box
               is the same height whichever scheme is showing. */}
-          <div className="mt-3 min-h-[4.5rem] border-t border-zinc-200 pt-3 text-xs leading-relaxed text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
-            {macros.length > 0 && (
-              <p>
-                The digit before the dot is the broad topic: {macros.join(", ")}. A finer level
-                sits below.
-              </p>
-            )}
+          <div className="mt-3 min-h-[3.5rem] border-t border-zinc-200 pt-3 text-xs leading-relaxed text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
             {scheme.values.some((v) => v.name === NOT_INDEXED) && (
               <p>
                 Every value here is Clarivate&rsquo;s except{" "}
