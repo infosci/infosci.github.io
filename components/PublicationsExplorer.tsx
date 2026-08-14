@@ -231,7 +231,8 @@ function NetworkView({ papers, schemes, network }: Props) {
           {" · "}
           {scheme.labels === "multi" ? "a paper can carry several" : "one per paper"}
           {" · "}
-          {scheme.covered} of {papers.length} papers. {scheme.blurb}{" "}
+          {scheme.covered} of {papers.length} papers. {scheme.blurb} Clarivate has{" "}
+          {scheme.scale}; {scheme.values.length} of them appear in these papers.{" "}
           <a
             href={scheme.href}
             target="_blank"

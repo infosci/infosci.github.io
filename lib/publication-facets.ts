@@ -41,6 +41,10 @@ export type Scheme = {
   labels: "multi" | "single";
   /** One line a prospective student can act on, not a definition. */
   blurb: string;
+  /** How big Clarivate's scheme is. Each scheme states its own size, because
+   *  "250 categories instead of 150 areas" means nothing to a reader who was
+   *  never told how many areas there are. */
+  scale: string;
   href: string;
   values: { name: string; count: number }[];
   /** Papers carrying at least one value; the rest are unclassified in this scheme. */
@@ -100,7 +104,8 @@ export function getFacetData(): { papers: FacetPaper[]; schemes: Scheme[] } {
       basis: "venue",
       labels: "multi",
       blurb:
-        "Clarivate's broad scheme, assigned to the journal or proceedings. Every paper published there inherits it.",
+        "Clarivate's broader scheme, assigned to the journal or proceedings volume. Every paper published there inherits it.",
+      scale: "about 150 research areas in all",
       href: G["research-areas"].url,
     },
     {
@@ -109,7 +114,9 @@ export function getFacetData(): { papers: FacetPaper[]; schemes: Scheme[] } {
       shortName: G["wos-subject-categories"].shortName,
       basis: "venue",
       labels: "multi",
-      blurb: "The finer version of the same idea — around 250 categories instead of 150 areas.",
+      blurb:
+        "The finer version of the same idea, assigned the same way. Several categories roll up into each research area.",
+      scale: "about 250 subject categories in all",
       href: G["wos-subject-categories"].url,
     },
     {
@@ -119,7 +126,8 @@ export function getFacetData(): { papers: FacetPaper[]; schemes: Scheme[] } {
       basis: "paper",
       labels: "single",
       blurb:
-        "Built by clustering citations, not by classifying journals, so a paper sits with the literature it actually cites. One topic each.",
+        "Built by clustering citations rather than classifying journals, so a paper sits with the literature it actually cites.",
+      scale: "326 topics at this level, inside 10 broad ones and above 2,444 finer ones",
       href: G["citation-topics"].url,
     },
   ];
