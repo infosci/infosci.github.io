@@ -405,20 +405,23 @@ function NetworkView({ papers, schemes, network }: Props) {
               {expanded ? "Show fewer" : `Show all ${scheme.values.length}`}
             </button>
           )}
-          {macros.length > 0 && (
-            <p className="mt-3 border-t border-zinc-200 pt-3 text-xs leading-relaxed text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
-              The number is an address, not a decimal: the digit before the dot is the broad
-              topic &mdash; {macros.join(", ")} &mdash; and a third level of finer topics sits
-              below these.
-            </p>
-          )}
-          {scheme.values.some((v) => v.name === NOT_INDEXED) && (
-            <p className="mt-3 border-t border-zinc-200 pt-3 text-xs text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
-              Every value here is Clarivate&rsquo;s except{" "}
-              <span className="text-black dark:text-zinc-200">{NOT_INDEXED}</span>, which is ours
-              and marks papers Web of Science has no record of.
-            </p>
-          )}
+          {/* One footnote slot, tall enough for the longest of them, so the box
+              is the same height whichever scheme is showing. */}
+          <div className="mt-3 min-h-[4.5rem] border-t border-zinc-200 pt-3 text-xs leading-relaxed text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
+            {macros.length > 0 && (
+              <p>
+                The digit before the dot is the broad topic: {macros.join(", ")}. A finer level
+                sits below.
+              </p>
+            )}
+            {scheme.values.some((v) => v.name === NOT_INDEXED) && (
+              <p>
+                Every value here is Clarivate&rsquo;s except{" "}
+                <span className="text-black dark:text-zinc-200">{NOT_INDEXED}</span>, which is
+                ours and marks papers Web of Science has no record of.
+              </p>
+            )}
+          </div>
         </div>
         </div>
 
