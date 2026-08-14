@@ -50,7 +50,13 @@ export default function PeoplePage() {
 
       <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
 
-      <PeopleExplorer people={people} />
+      {/* Held to the rule's width. The grid used to run the full column, 256px
+          wider than the line above it, which made the page look like it had two
+          different edges. Four columns in 768px also brings the photos down
+          from 241px to 177px, which is plenty for a face. */}
+      <div className="max-w-3xl">
+        <PeopleExplorer people={people} />
+      </div>
     </div>
   );
 }
