@@ -52,25 +52,45 @@ console.log(`  ${merged.journal} ${merged.year ?? "?"}  ${merged.doi}`);
 if (gaps.length) console.log(`  (no ${gaps.join(", ")} yet — normal before an issue is assigned)`);
 console.log(`\n${records.length} publications in data/publications.json`);
 
-// A venue is classified once and then covers every future paper in it. Roughly
-// four new venues appear a year, so this fires rarely — but silently skipping
-// it would drop the paper out of any view faceted by discipline.
+// Adding a paper is three jobs, not one: the record, the venue's Web of Science
+// classification, and the paper's own Citation Topic. Crossref supplies only the
+// first. The rest is printed here rather than remembered, because a paper that
+// skips them still appears in the List view and silently goes missing from every
+// filter in Explore — the failure is invisible unless you look for it.
 const venue = (merged.venue ?? merged.journal ?? "").trim();
 const entry = wosCategories[venue];
+const doi = merged.doi.toLowerCase();
+
+console.log("\nTO FINISH — Explore needs two more things for this paper.");
+console.log("Both are read from Web of Science, not guessed:\n");
 
 if (entry?.perPaper) {
-  console.log(`\nCONFERENCE PAPER: "${venue}" is classified per record, not per venue.`);
-  console.log(`   Search the title in Web of Science and add "${merged.doi.toLowerCase()}"`);
-  console.log("   to data/wos-categories-by-paper.json — empty categories if there is no");
-  console.log("   hit yet, which is normal for a conference held in the last year or so.");
-  console.log("\n   Then: node scripts/check-disciplines.mjs");
+  console.log(`1. SUBJECT CATEGORIES. "${venue}" is a conference or book series, so it is`);
+  console.log("   classified per record rather than per venue — ISSI 2017 carries two");
+  console.log("   categories while ISSI 2023 is not indexed at all.");
+  console.log("   Search the title in Web of Science Core Collection and add");
+  console.log(`   "${doi}" to data/wos-categories-by-paper.json.`);
+  console.log("   Empty categories if there is no hit, which is normal for a conference");
+  console.log("   held in the last year or so.");
 } else if (venue && !entry) {
-  console.log(`\nNEW VENUE: "${venue}"`);
-  console.log("   Not in data/wos-categories.json, so this paper has no discipline yet");
-  console.log("   and no filter will reach it.");
-  console.log("\n   Look the journal up in Journal Citation Reports and copy its subject");
-  console.log("   categories in verbatim. If JCR has no record of it, give the entry an");
-  console.log('   empty categories list and a "fallback" of either "Conference');
-  console.log('   proceedings" or "Not WoS-indexed" — see the note at the top of the file.');
-  console.log("\n   Then: node scripts/check-disciplines.mjs");
+  console.log(`1. SUBJECT CATEGORIES. "${venue}" is a new venue, so nothing classifies it`);
+  console.log("   yet and no filter will reach this paper.");
+  console.log("   Look it up in Journal Citation Reports and copy its categories in");
+  console.log("   verbatim, with the SCIE/SSCI edition. If JCR has no record, check the");
+  console.log("   Core Collection anyway — absent from JCR does not mean unclassified,");
+  console.log("   since JCR covers journals only. Add it to data/wos-categories.json,");
+  console.log('   with an empty categories list and a "fallback" of "Not WoS-indexed"');
+  console.log("   only if the Core Collection has no record either.");
+} else {
+  console.log(`1. SUBJECT CATEGORIES. Already covered — "${venue}" is in`);
+  console.log("   data/wos-categories.json and this paper inherits it. Nothing to do.");
 }
+
+console.log("\n2. CITATION TOPIC. Open the paper's record in Web of Science and read the");
+console.log("   Citation Topics meso value from the Categories/Classification block, then");
+console.log(`   add "${doi}" to data/citation-topics.json with its meso and macro.`);
+console.log("   A paper published in the last few months usually has none yet — leave it");
+console.log("   out rather than inventing one, and the Explore view will say so.");
+
+console.log("\nThen: node scripts/check-disciplines.mjs   (must exit 0)");
+console.log("      npm run build");
