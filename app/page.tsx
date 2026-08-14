@@ -97,17 +97,19 @@ function AreaCard({
 }) {
   return (
     <section
-      className={`flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-black/[.08] px-5 py-6 text-center dark:border-white/[.145] ${className ?? ""}`}
+      // aspect-square from sm up, where the grid has three columns to divide.
+      // Below that the cards stack full width and a square would be a 327px tall
+      // box holding three short lines.
+      className={`flex h-full flex-col items-center justify-center gap-2 rounded-2xl border border-black/[.08] px-4 py-6 text-center sm:aspect-square dark:border-white/[.145] ${className ?? ""}`}
     >
       {/* h-10 rather than h-8: the atom and the microchip carry more internal
           detail than the marks they replaced, and at 32px their strokes nearly
           touched. */}
       <area.Icon className="h-10 w-8 text-black dark:text-zinc-50" />
-      {/* Titles wrap. They were pinned to one line while "Mental Health
-          Informatics" was the longest; "Science and Technology Studies" does
-          not fit a quarter-width card at any size worth reading, so nowrap
-          gave way to text-balance, which splits the two-line titles evenly
-          rather than leaving one word stranded.
+      {/* Titles hold one line. At 14px the longest measures 214px and the card
+          gives it 246px, so nowrap is safe — but it is only safe at this card
+          width, and a narrower grid or a longer area name would clip. min-h-12
+          is gone with the wrapping it used to reserve room for.
 
           The underline sits on the text span, not the anchor, so the arrow
           beside it is not underlined too. */}
@@ -115,7 +117,7 @@ function AreaCard({
         href={area.source.href}
         target="_blank"
         rel="noopener noreferrer"
-        className="group inline-flex min-h-12 items-center gap-1.5 text-base font-semibold tracking-tight text-balance text-black dark:text-zinc-50"
+        className="group inline-flex items-center gap-1.5 text-sm font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
       >
         <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
           {area.title}
@@ -134,38 +136,43 @@ function AreaCard({
 export default function Home() {
   return (
     <div className="pt-6 sm:pt-10">
-      <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl dark:text-zinc-50">
-        Yonsei DataLab
-      </h1>
-
-      {/* Set exactly as the other three pages set their standfirst — same size,
-          same gap under the title — so the rule below lands at the same height
-          on all four. It used to run larger here, which pushed the rule down
-          and made the home page sit differently from the rest of the site. */}
-      <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-        We study people, data, and technology — and what happens where the three
-        meet.
-      </p>
+      {/* Title and statement on the left, the triad on the right of them.
+          
+          The figure is sized under the height of the text beside it, not to its
+          own natural size. The header's height is whichever of the two is
+          taller, and the rule below has to land at 252px like the other three
+          pages — at h-24 the figure was 96px against an 88px text block and
+          pushed the rule to 260. h-20 keeps the text in charge. */}
+      <div className="flex max-w-3xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+        <div>
+          <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl dark:text-zinc-50">
+            Yonsei DataLab
+          </h1>
+          {/* Set exactly as the other three pages set their standfirst — same
+              size, same gap under the title. */}
+          <p className="mt-4 text-zinc-600 dark:text-zinc-400">
+            We study people, data, and technology — and what happens where the
+            three meet.
+          </p>
+        </div>
+        <TriadFigure className="h-20 w-auto shrink-0 self-center text-black dark:text-zinc-50" />
+      </div>
 
       <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
 
-      {/* The triad sits in the middle with the cards around it: one card either
-          side and one beneath, so the figure is enclosed rather than captioned.
-          On a phone the grid collapses to a single column and the order becomes
-          card, figure, card, card — the figure still sits among them. */}
-      <div className="mt-10 grid w-full gap-5 sm:grid-cols-3">
+      {/* Four cards, then the triad under them.
+          
+          The figure used to sit in the middle with the cards arranged around
+          it, which read as a mapping — as though each card belonged to a vertex
+          or an edge. It does not: every area draws on all three of people, data
+          and technology. Underneath, the triad reads as the assumption the four
+          areas rest on rather than a key to them. */}
+      {/* max-w-xl, not max-w-3xl: 278px squares rather than 374px. The floor is
+          set by the longest title on one line — "Science and Technology Studies"
+          measures 214px at 14px, plus the arrow and the padding, so a card
+          narrower than about 266px would wrap it. */}
+      <div className="mt-10 grid w-full max-w-xl gap-5 sm:grid-cols-2">
         <AreaCard area={AREAS[0]} />
-
-        {/* Spans both rows so the triad sits level with the four cards rather
-            than above them; auto-placement flows the remaining cards around it.
-
-            order-first on mobile, where the grid collapses to one column: in
-            DOM order the figure sits second, which stacked it between the
-            first card and the other three and broke the run. Leading with it
-            also reads better — the triad is the assumption, the cards are what
-            is built on it. */}
-        <TriadFigure className="mx-auto h-auto w-full max-w-[17rem] self-center text-black max-sm:order-first sm:row-span-2 dark:text-zinc-50" />
-
         <AreaCard area={AREAS[1]} />
         <AreaCard area={AREAS[2]} />
         <AreaCard area={AREAS[3]} />

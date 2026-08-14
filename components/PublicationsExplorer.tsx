@@ -40,17 +40,21 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
 
   return (
     <div className="mt-10">
-      <div className="flex items-center gap-1" role="group" aria-label="View">
+      {/* Set exactly as the value chips below and as the role chips on People:
+          same border, same 12px, same height. Bordering it at 14px made it read
+          as the same component rendered at two sizes, which is worse than
+          either being distinct or being identical. */}
+      <div className="flex items-center gap-1.5" role="group" aria-label="View">
         {(["list", "explore"] as const).map((v) => (
           <button
             key={v}
             type="button"
             onClick={() => setView(v)}
             aria-pressed={view === v}
-            className={`rounded-full px-3.5 py-1.5 text-sm transition-colors ${
+            className={`rounded-full border px-3 py-1 text-xs transition-colors ${
               view === v
-                ? "bg-black text-white dark:bg-zinc-100 dark:text-black"
-                : "text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+                ? "border-black bg-black text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-black"
+                : "border-zinc-300 text-zinc-600 hover:border-zinc-500 hover:text-black dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
             }`}
           >
             {v === "list" ? "List" : "Explore"}

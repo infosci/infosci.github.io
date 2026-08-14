@@ -123,9 +123,13 @@ export default function PeopleExplorer({ people }: { people: Member[] }) {
 
   return (
     <>
+      {/* One row at 768px. The six chips needed 800px, so "Everyone" became
+          "All" and the padding came in a notch — "All" alone left a single
+          pixel of margin, which is not a margin. Still wraps below sm, where
+          one row was never going to happen. */}
       <div className="mt-10 flex flex-wrap gap-1.5">
         <Chip
-          label="Everyone"
+          label="All"
           count={people.length}
           on={role === ALL}
           onClick={() => pick(ALL)}
@@ -168,7 +172,7 @@ function Chip({
       type="button"
       onClick={onClick}
       aria-pressed={on}
-      className={`rounded-full border px-3 py-1 text-xs transition-colors ${
+      className={`rounded-full border px-2.5 py-1 text-xs whitespace-nowrap transition-colors ${
         on
           ? "border-black bg-black text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-black"
           : "border-zinc-300 text-zinc-600 hover:border-zinc-500 hover:text-black dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
