@@ -12,6 +12,8 @@ name: Yongjun Zhu
 alsoKnownAs: 朱永俊 · 주영준
 role: Associate Professor
 affiliation: Department of Library and Information Science, Yonsei University
+alsoRole: Founding Director
+alsoAffiliation: Center of Science and Technology Studies, Yonsei University
 ---
 
 ## Education

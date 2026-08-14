@@ -37,9 +37,22 @@ export default function YongjunZhuPage() {
       </h1>
       {/* Role and affiliation on separate lines, not joined by a separator —
           the affiliation is long enough to wrap, and wrapping mid-phrase after
-          a "·" read as one run-on line. */}
+          a "·" read as one run-on line.
+          
+          A second appointment sits in its own block below the first, on the
+          same pattern and named after alsoKnownAs above it. Both name Yonsei,
+          which is repetition on purpose: a reader who meets the second line
+          first should not have to infer where the centre is. A third
+          appointment is the moment to make these a list rather than a pair of
+          optional keys — not before. */}
       <p className="mt-4 max-w-xl text-zinc-600 dark:text-zinc-400">{meta.role}</p>
       <p className="max-w-xl text-zinc-600 dark:text-zinc-400">{meta.affiliation}</p>
+      {meta.alsoRole && (
+        <>
+          <p className="mt-3 max-w-xl text-zinc-600 dark:text-zinc-400">{meta.alsoRole}</p>
+          <p className="max-w-xl text-zinc-600 dark:text-zinc-400">{meta.alsoAffiliation}</p>
+        </>
+      )}
 
       {/* Markdown drives everything below, so updating this page means editing
           content/yongjunzhu.md and nothing else. Headings and paragraphs are
