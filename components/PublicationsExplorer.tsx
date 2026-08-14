@@ -352,15 +352,15 @@ function NetworkView({ papers, schemes, network }: Props) {
           would leave the graph too narrow to read. */}
       <div className="mt-6 grid items-start gap-8 lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]">
         <div>
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+        <p className="min-h-[4.25rem] text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
           <span className="font-medium text-black dark:text-zinc-200">
             {scheme.basis === "venue" ? "Assigned to the venue" : "Assigned to the paper"}
           </span>
           {" · "}
           {scheme.labels === "multi" ? "a paper can carry several" : "one per paper"}
           {" · "}
-          {scheme.covered} of {papers.length} papers. {scheme.blurb} Clarivate has{" "}
-          {scheme.scale}; {scheme.values.length} of them appear in these papers.{" "}
+          {scheme.covered} of {papers.length} papers. {scheme.blurb}; {scheme.scale},{" "}
+          {scheme.values.length} appear here.{" "}
           <a
             href={scheme.href}
             target="_blank"

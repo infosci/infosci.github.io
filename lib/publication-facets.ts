@@ -103,9 +103,10 @@ export function getFacetData(): { papers: FacetPaper[]; schemes: Scheme[] } {
       shortName: G["research-areas"].shortName,
       basis: "venue",
       labels: "multi",
-      blurb:
-        "Clarivate's broader scheme, assigned to the journal or proceedings volume. Every paper published there inherits it.",
-      scale: "about 150 research areas in all",
+      // The bold prefix already says "assigned to the venue"; the blurb should
+      // not say it again.
+      blurb: "Clarivate's broader scheme",
+      scale: "about 150 exist",
       href: G["research-areas"].url,
     },
     {
@@ -114,9 +115,8 @@ export function getFacetData(): { papers: FacetPaper[]; schemes: Scheme[] } {
       shortName: G["wos-subject-categories"].shortName,
       basis: "venue",
       labels: "multi",
-      blurb:
-        "The finer version of the same idea, assigned the same way. Several categories roll up into each research area.",
-      scale: "about 250 subject categories in all",
+      blurb: "The finer version of the same scheme",
+      scale: "about 250 exist",
       href: G["wos-subject-categories"].url,
     },
     {
@@ -125,9 +125,8 @@ export function getFacetData(): { papers: FacetPaper[]; schemes: Scheme[] } {
       shortName: G["citation-topics"].shortName,
       basis: "paper",
       labels: "single",
-      blurb:
-        "Built by clustering citations rather than classifying journals, so a paper sits with the literature it actually cites.",
-      scale: "326 topics at this level, inside 10 broad ones and above 2,444 finer ones",
+      blurb: "Built by clustering citations rather than classifying journals",
+      scale: "326 exist at this level",
       href: G["citation-topics"].url,
     },
   ];
