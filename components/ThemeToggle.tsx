@@ -1,23 +1,40 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+// The theme is not this component's state. It lives on <html>, put there by
+// the no-flash script in layout.tsx before React runs and changed by anything
+// that toggles the class — so the switch subscribes to the DOM rather than
+// keeping a copy it would have to hold in step.
+const subscribe = (onChange: () => void) => {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["class"],
+  });
+  return () => observer.disconnect();
+};
+
+const readTheme = () => document.documentElement.classList.contains("dark");
+
+// null means "not known yet". The server has no <html> to read, and React
+// uses this same value for the first client render, so the switch draws
+// nothing until hydration is done — which is what keeps the markup matching.
+const unknownOnServer = () => null;
 
 // Ported from ddun.ai so the two sites share one switch: an iOS-style pill that
 // flips the `dark` class on <html> and remembers the choice in localStorage.
 export function ThemeToggle() {
-  // Rendered only after mount: the real theme lives on <html> (set by the
-  // no-flash script in layout.tsx), so the server cannot know which state to
-  // draw without risking a hydration mismatch.
-  const [mounted, setMounted] = useState(false);
-  const [dark, setDark] = useState(true);
+  const dark = useSyncExternalStore<boolean | null>(
+    subscribe,
+    readTheme,
+    unknownOnServer,
+  );
 
-  useEffect(() => {
-    setMounted(true);
-    setDark(document.documentElement.classList.contains("dark"));
-  }, []);
+  if (dark === null) return null;
 
-  if (!mounted) return null;
-
+  // No setState here: flipping the class is the whole update, and the observer
+  // above turns it back into a render.
   const toggle = () => {
     const next = !document.documentElement.classList.contains("dark");
     document.documentElement.classList.toggle("dark", next);
@@ -27,7 +44,6 @@ export function ThemeToggle() {
       // Private mode or storage disabled — the toggle still works for this
       // session, it just will not be remembered.
     }
-    setDark(next);
   };
 
   return (
