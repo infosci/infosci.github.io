@@ -150,11 +150,26 @@ export default function Home() {
           The rule below has to land at 252px like the other three pages, so
           the header's height has to stay the text block's 88px — and the
           header takes the height of whichever child is taller. The figure is
-          drawn at 128px and given -my-6, which leaves its margin box 80px:
-          it overflows 24px above and below without occupying the space. That
-          is the whole trick, and h-32 is the ceiling for it — the 32px gap
-          between the header and the rule is what the overflow spends. */}
-      <div className="flex max-w-3xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+          drawn at 144px and given -my-8, which leaves its margin box 80px:
+          it overflows 32px above and below without occupying the space. The
+          negative margin is scoped to sm because below it the figure sits
+          under the text rather than beside it, where 32px of overflow would
+          take a bite out of the standfirst and land on the rule.
+          
+          h-36 is the ceiling, and both walls are close. The figure is centred
+          at y=176 and the rule sits at 252, so 152px of height would reach it;
+          this leaves 4px.
+          
+          Sideways it is tighter still, which is why the row's gap drops to
+          16px here. Width tracks height, and at 148px the figure and the
+          598px text block want 2px more than the 768px row holds at gap-6 —
+          the standfirst then wraps, the header grows to 112px, and the rule
+          drops to 276 on this page alone. The smaller gap costs nothing to
+          look at, since justify-between hands the free space straight back:
+          the visible space between text and figure stays 22px either way. It
+          is only cushion against a machine whose fonts measure differently.
+          Shortening the standfirst is what would buy real room. */}
+      <div className="flex max-w-3xl flex-col gap-6 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <div>
           <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl dark:text-zinc-50">
             Yonsei DataLab
@@ -166,7 +181,7 @@ export default function Home() {
             three meet.
           </p>
         </div>
-        <TriadFigure className="-my-6 h-32 w-auto shrink-0 self-center text-black dark:text-zinc-50" />
+        <TriadFigure className="h-36 w-auto shrink-0 self-center text-black sm:-my-8 dark:text-zinc-50" />
       </div>
 
       <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
