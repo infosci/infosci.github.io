@@ -16,13 +16,18 @@ import { asset } from "@/lib/assets";
 export type Member = {
   slug: string;
   name: string;
+  /** What they are, or were. Independent of whether they are still here. */
   role: string | null;
+  status: "current" | "former";
+  /** Where a former member is now, when we know. */
+  now: string | null;
   photo: string | null;
   link: string | null;
   order: number;
 };
 
 const ALL = "__all__";
+const FORMER = "__former__";
 
 // Singular for a card, since it labels one person. "Alumni" stays plural on
 // purpose: the singular forms are gendered and there is no neutral one.
@@ -31,8 +36,6 @@ const CARD_LABEL: Record<string, string> = {
   "doctoral students": "Doctoral student",
   "master's students": "Master's student",
   "visiting scholars": "Visiting scholar",
-  alumni: "Alumni",
-  "past visiting scholars": "Past visiting scholar",
 };
 
 const CHIP_LABEL: Record<string, string> = {
@@ -40,19 +43,22 @@ const CHIP_LABEL: Record<string, string> = {
   "doctoral students": "Doctoral students",
   "master's students": "Master's students",
   "visiting scholars": "Visiting scholars",
-  alumni: "Alumni",
-  "past visiting scholars": "Past visiting scholars",
+  [FORMER]: "Former members",
 };
 
 // Chips in a fixed order, unlike the grid. A filter that reshuffles itself is
 // unusable, and this order is the one people expect to scan.
+//
+// Role chips mean current people, and everyone who has left sits under one
+// "Former members" chip. That keeps the chips mutually exclusive, which a
+// single-select filter needs — "Doctoral students" and "Former members" would
+// otherwise both contain the same person. Nothing is lost: each card states the
+// role and the status, so a former doctoral student still says so.
 const ROLE_ORDER = [
   "principal investigator",
   "doctoral students",
   "master's students",
   "visiting scholars",
-  "alumni",
-  "past visiting scholars",
 ];
 
 /** Fisher-Yates over the slugs. Module level so the effect below can depend on
@@ -100,11 +106,20 @@ export default function PeopleExplorer({ people }: { people: Member[] }) {
 
   const counts = useMemo(() => {
     const c = new Map<string, number>();
-    for (const p of people) if (p.role) c.set(p.role, (c.get(p.role) ?? 0) + 1);
-    return ROLE_ORDER.filter((r) => c.has(r)).map((r) => ({ role: r, count: c.get(r)! }));
+    for (const p of people) {
+      if (p.status === "current" && p.role) c.set(p.role, (c.get(p.role) ?? 0) + 1);
+    }
+    const rows = ROLE_ORDER.filter((r) => c.has(r)).map((r) => ({ role: r, count: c.get(r)! }));
+    const former = people.filter((p) => p.status === "former").length;
+    return former ? [...rows, { role: FORMER, count: former }] : rows;
   }, [people]);
 
-  const shown = role === ALL ? ordered : ordered.filter((p) => p.role === role);
+  const shown =
+    role === ALL
+      ? ordered
+      : role === FORMER
+        ? ordered.filter((p) => p.status === "former")
+        : ordered.filter((p) => p.status === "current" && p.role === role);
 
   return (
     <>
@@ -188,6 +203,12 @@ function Person({ person }: { person: Member }) {
       {person.role && (
         <span className="mt-0.5 block text-center text-xs leading-snug text-zinc-500 dark:text-zinc-400">
           {CARD_LABEL[person.role] ?? person.role}
+          {person.status === "former" && ", former"}
+        </span>
+      )}
+      {person.now && (
+        <span className="mt-0.5 block text-center text-xs leading-snug text-zinc-500 dark:text-zinc-400">
+          Now {person.now}
         </span>
       )}
     </>

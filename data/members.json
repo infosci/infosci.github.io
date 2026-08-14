@@ -3,6 +3,8 @@
     "slug": "yongjunzhu",
     "name": "Yongjun Zhu",
     "role": "principal investigator",
+    "status": "current",
+    "now": null,
     "photo": "/people/yongjunzhu2.webp",
     "link": "/yongjunzhu/",
     "order": 1
@@ -11,6 +13,8 @@
     "slug": "tingjiang",
     "name": "Ting Jiang",
     "role": "doctoral students",
+    "status": "current",
+    "now": null,
     "photo": "/people/tingjiang.webp",
     "link": "https://www.linkedin.com/in/ting-jiang-26535b2a2/",
     "order": 21
@@ -19,6 +23,8 @@
     "slug": "nareumkim",
     "name": "Nareum Kim",
     "role": "doctoral students",
+    "status": "current",
+    "now": null,
     "photo": "/people/nareumkim.webp",
     "link": "http://linkedin.com/in/nareum-kim-99614b13",
     "order": 22
@@ -27,6 +33,8 @@
     "slug": "seojinnam",
     "name": "Seojin Nam",
     "role": "doctoral students",
+    "status": "current",
+    "now": null,
     "photo": "/people/seojinnam.webp",
     "link": "https://orcid.org/0000-0002-4780-1556",
     "order": 23
@@ -35,6 +43,8 @@
     "slug": "jinyoungoh",
     "name": "Jinyoung Oh",
     "role": "doctoral students",
+    "status": "current",
+    "now": null,
     "photo": "/people/jinyoungoh.webp",
     "link": "https://www.linkedin.com/in/jinyoung-oh-8569449b",
     "order": 24
@@ -43,6 +53,8 @@
     "slug": "manwheehan",
     "name": "Manwhee Han",
     "role": "doctoral students",
+    "status": "current",
+    "now": null,
     "photo": "/people/manwheehan.webp",
     "link": "https://www.linkedin.com/in/manwhee-han-b3107833a",
     "order": 25
@@ -51,6 +63,8 @@
     "slug": "juchanson",
     "name": "Juchan Son",
     "role": "doctoral students",
+    "status": "current",
+    "now": null,
     "photo": "/people/juchanson.webp",
     "link": "https://www.linkedin.com/in/juchan-son-5066043b6/",
     "order": 26
@@ -59,6 +73,8 @@
     "slug": "daeunjeong",
     "name": "Daeun Jeong",
     "role": "master's students",
+    "status": "current",
+    "now": null,
     "photo": "/people/daeunjeong.webp",
     "link": "https://www.linkedin.com/in/daeun-jeong-b3207033a/",
     "order": 31
@@ -67,6 +83,8 @@
     "slug": "jeongyeonchoi",
     "name": "Jeongyeon Choi",
     "role": "master's students",
+    "status": "current",
+    "now": null,
     "photo": "/people/jeongyeonchoi.webp",
     "link": "http://www.linkedin.com/in/jeongyeonchoi0314",
     "order": 32
@@ -75,6 +93,8 @@
     "slug": "kyeongeunmin",
     "name": "Kyeongeun Min",
     "role": "master's students",
+    "status": "current",
+    "now": null,
     "photo": "/people/kyeongeunmin.webp",
     "link": "https://minkyeongeun.github.io/",
     "order": 33
@@ -83,6 +103,8 @@
     "slug": "chiyoungsong",
     "name": "Chiyoung Song",
     "role": "master's students",
+    "status": "current",
+    "now": null,
     "photo": "/people/chiyoungsong.webp",
     "link": "https://shadow-colossus-f73.notion.site/personalhomepage-chichi",
     "order": 34
@@ -91,6 +113,8 @@
     "slug": "janghyunlee",
     "name": "Janghyun Lee",
     "role": "master's students",
+    "status": "current",
+    "now": null,
     "photo": "/people/janghyunlee.webp",
     "link": "https://www.linkedin.com/in/janghyun-lee-7076013b5",
     "order": 35
@@ -99,6 +123,8 @@
     "slug": "yuchenlin",
     "name": "Yuchen Lin",
     "role": "master's students",
+    "status": "current",
+    "now": null,
     "photo": "/people/yuchenlin.webp",
     "link": "https://www.linkedin.com/in/yujin220819",
     "order": 36
@@ -107,6 +133,8 @@
     "slug": "inkyungjung",
     "name": "Inkyung Jung",
     "role": "master's students",
+    "status": "current",
+    "now": null,
     "photo": "/people/inkyungjung.webp",
     "link": "https://www.linkedin.com/in/junginkyung",
     "order": 37
@@ -115,6 +143,8 @@
     "slug": "hyeongminpark",
     "name": "Hyeongmin Park",
     "role": "master's students",
+    "status": "current",
+    "now": null,
     "photo": "/people/hyeongminpark.webp",
     "link": "https://www.linkedin.com/in/hyeongmin-park-2895ba3b6/",
     "order": 38
@@ -123,6 +153,8 @@
     "slug": "peiliangzhang",
     "name": "Peiliang Zhang",
     "role": "visiting scholars",
+    "status": "current",
+    "now": null,
     "photo": "/people/peiliangzhang.webp",
     "link": "https://papercode-for-cheung.github.io",
     "order": 41
@@ -130,7 +162,9 @@
   {
     "slug": "donghunkim",
     "name": "Dr. Donghun Kim",
-    "role": "alumni",
+    "role": "doctoral students",
+    "status": "former",
+    "now": "Assistant Professor at Nanjing University",
     "photo": "/people/donghunkim.webp",
     "link": "https://scholar.google.com/citations?user=EL1RsJ8AAAAJ&hl=ko",
     "order": 51
@@ -138,7 +172,9 @@
   {
     "slug": "hayeonjang",
     "name": "Hayeon Jang",
-    "role": "alumni",
+    "role": "master's students",
+    "status": "former",
+    "now": "Researcher at KHIS",
     "photo": "/people/hayeonjang.webp",
     "link": "https://www.linkedin.com/in/hayeon-jang-jhy7927",
     "order": 52
@@ -146,7 +182,9 @@
   {
     "slug": "xuanrongcui",
     "name": "Xuanrong Cui",
-    "role": "alumni",
+    "role": "master's students",
+    "status": "former",
+    "now": null,
     "photo": "/people/xuanrongcui.webp",
     "link": "https://www.linkedin.com/in/xuanrong-cui-cxr0802",
     "order": 53
@@ -154,7 +192,9 @@
   {
     "slug": "yizhao",
     "name": "Dr. Yi Zhao",
-    "role": "past visiting scholars",
+    "role": "visiting scholars",
+    "status": "former",
+    "now": null,
     "photo": "/people/yizhao.webp",
     "link": "https://yi-zhao060.github.io/homepage/",
     "order": 61
@@ -162,7 +202,9 @@
   {
     "slug": "ruiliu",
     "name": "Dr. Rui Liu",
-    "role": "past visiting scholars",
+    "role": "visiting scholars",
+    "status": "former",
+    "now": null,
     "photo": "/people/ruiliu.webp",
     "link": "https://www5.zzu.edu.cn/xxgl/info/1152/5421.htm",
     "order": 62
@@ -170,7 +212,9 @@
   {
     "slug": "dongxia",
     "name": "Dong Xia",
-    "role": "past visiting scholars",
+    "role": "visiting scholars",
+    "status": "former",
+    "now": null,
     "photo": "/people/dongxia.webp",
     "link": "http://www.linkedin.com/in/dong-xia-b313882a8",
     "order": 63
@@ -178,7 +222,9 @@
   {
     "slug": "qimingchen",
     "name": "Qiming Chen",
-    "role": "past visiting scholars",
+    "role": "visiting scholars",
+    "status": "former",
+    "now": null,
     "photo": "/people/qimingchen.webp",
     "link": "https://www.linkedin.com/in/qiming-chen-845049327",
     "order": 64
