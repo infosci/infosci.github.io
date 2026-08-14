@@ -10,6 +10,10 @@
 // here as a boolean. It is not recomputed in the browser: a visitor whose clock
 // is wrong, or who leaves the tab open across New Year, should see the same page
 // the build produced rather than a quietly different one.
+//
+// It drives the chips only. Rows no longer carry an Active mark — with a filter
+// above them, labelling each row as well said the same thing twice, and the
+// dates already say when a grant ran.
 
 import { useState } from "react";
 
@@ -60,15 +64,6 @@ export default function GrantsList({ grants }: { grants: Grant[] }) {
             </h2>
             <p className="mt-1.5 text-sm text-zinc-500 dark:text-zinc-400">
               {[grant.duration, grant.funder].filter(Boolean).join(" · ")}
-              {/* Kept even though a chip now filters on it: in the All view this
-                  is the only thing distinguishing a running grant from a
-                  finished one. */}
-              {grant.active && (
-                <>
-                  {" · "}
-                  <span className="text-black dark:text-zinc-200">Active</span>
-                </>
-              )}
             </p>
           </li>
         ))}

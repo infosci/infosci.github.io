@@ -167,15 +167,19 @@ export default function Home() {
           or an edge. It does not: every area draws on all three of people, data
           and technology. Underneath, the triad reads as the assumption the four
           areas rest on rather than a key to them. */}
-      {/* max-w-xl, not max-w-3xl: 278px squares rather than 374px. The floor is
-          set by the longest title on one line — "Science and Technology Studies"
-          measures 214px at 14px, plus the arrow and the padding, so a card
-          narrower than about 266px would wrap it. */}
-      <div className="mt-10 grid w-full max-w-xl gap-5 sm:grid-cols-2">
-        <AreaCard area={AREAS[0]} />
-        <AreaCard area={AREAS[1]} />
-        <AreaCard area={AREAS[2]} />
-        <AreaCard area={AREAS[3]} />
+      {/* The block spans the rule; the cards do not stretch to fill it.
+          
+          Letting two columns divide 768px made each card 374px square, which is
+          too big for four icons and four short lines. They stay at 278px — the
+          floor for "Science and Technology Studies" on one line — and the
+          leftover width becomes space between them, with the outer edges pinned
+          to the rule. Four across would need 1124px to keep those titles
+          unbroken, so a single row is not available at this measure. */}
+      <div className="mt-10 grid w-full max-w-3xl gap-5 sm:grid-cols-2">
+        <AreaCard area={AREAS[0]} className="w-full sm:max-w-[278px] sm:justify-self-start" />
+        <AreaCard area={AREAS[1]} className="w-full sm:max-w-[278px] sm:justify-self-end" />
+        <AreaCard area={AREAS[2]} className="w-full sm:max-w-[278px] sm:justify-self-start" />
+        <AreaCard area={AREAS[3]} className="w-full sm:max-w-[278px] sm:justify-self-end" />
       </div>
     </div>
   );
