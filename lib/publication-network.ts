@@ -32,17 +32,20 @@ const STOP = new Set([...stopwords.function, ...stopwords.boilerplate]);
  *  studies/study without pulling in a stemmer. */
 const stem = (w: string) => w.replace(/ies$/, "y").replace(/sses$/, "ss").replace(/([^s])s$/, "$1");
 
-export function contentWords(title: string): Set<string> {
-  return new Set(
-    title
-      .toLowerCase()
-      .replace(/[^a-z0-9\s-]/g, " ")
-      .split(/\s+/)
-      .map((w) => w.replace(/^-+|-+$/g, ""))
-      .filter((w) => w.length > 2 && !STOP.has(w))
-      .map(stem)
-      .filter((w) => !STOP.has(w)),
-  );
+/** Stem to the word as it was written. Matching is done on the stem so that
+ *  networks and network are one word, but anything shown to a reader uses the
+ *  real word — the stemmer turns "caries" into "cary", which is fine to match
+ *  on and nonsense to display. */
+export function contentWords(title: string): Map<string, string> {
+  const out = new Map<string, string>();
+  for (const raw of title.toLowerCase().replace(/[^a-z0-9\s-]/g, " ").split(/\s+/)) {
+    const w = raw.replace(/^-+|-+$/g, "");
+    if (w.length <= 2 || STOP.has(w)) continue;
+    const key = stem(w);
+    if (STOP.has(key)) continue;
+    if (!out.has(key)) out.set(key, w);
+  }
+  return out;
 }
 
 /** Lower to 1 to join papers on any shared word (478 edges, one hairball);
@@ -63,8 +66,10 @@ export function getNetwork(): Network {
   const edges: { i: number; j: number; words: string[] }[] = [];
   for (let i = 0; i < n; i++) {
     for (let j = i + 1; j < n; j++) {
-      const shared = [...words[i]].filter((w) => words[j].has(w));
-      if (shared.length >= MIN_SHARED) edges.push({ i, j, words: shared.sort() });
+      const shared = [...words[i].keys()].filter((w) => words[j].has(w));
+      if (shared.length >= MIN_SHARED) {
+        edges.push({ i, j, words: shared.map((w) => words[i].get(w)!).sort() });
+      }
     }
   }
 
