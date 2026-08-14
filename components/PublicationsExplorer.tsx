@@ -45,11 +45,15 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
           to be mutually exclusive. Chips below narrow what is in a view; this
           changes which view you are in.
           
-          It measures 26px tall and its labels 12px, which is a chip exactly:
-          the outer border and 2px of inset take the place of the chip's own
-          py-1. The two controls differ in shape and in nothing else. */}
+          Sized off its pill rather than off its ring. Matching the ring to a
+          chip's 26px left the black pill inside at 20px, and the pill is what
+          the eye takes for the control — it read as the smaller thing on a
+          page of chips. So the pill is now a chip exactly, 26px with the same
+          px-2.5 and 12px label, down to the border — transparent here, but a
+          chip's 26px counts its own, and without it the pill came out 24. The
+          ring sits directly on the pill: 28px, the two borders. */}
       <div
-        className="inline-flex rounded-full border border-zinc-300 p-0.5 dark:border-zinc-700"
+        className="inline-flex rounded-full border border-zinc-300 dark:border-zinc-700"
         role="group"
         aria-label="View"
       >
@@ -59,7 +63,7 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
             type="button"
             onClick={() => setView(v)}
             aria-pressed={view === v}
-            className={`rounded-full px-2.5 py-0.5 text-xs transition-colors ${
+            className={`rounded-full border border-transparent px-2.5 py-1 text-xs transition-colors ${
               view === v
                 ? "bg-black text-white dark:bg-zinc-100 dark:text-black"
                 : "text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-zinc-100"
