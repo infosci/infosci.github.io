@@ -8,7 +8,7 @@
 // card now carries its own role. Without that the mix would just lose the
 // information the sections were carrying.
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { asset } from "@/lib/assets";
@@ -55,6 +55,17 @@ const ROLE_ORDER = [
   "past visiting scholars",
 ];
 
+/** Fisher-Yates over the slugs. Module level so the effect below can depend on
+ *  it without being redefined every render. */
+function shuffleSlugs(people: Member[]) {
+  const slugs = people.map((p) => p.slug);
+  for (let i = slugs.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [slugs[i], slugs[j]] = [slugs[j], slugs[i]];
+  }
+  return slugs;
+}
+
 export default function PeopleExplorer({ people }: { people: Member[] }) {
   const [role, setRole] = useState<string>(ALL);
   // Slugs in display order. null means "as the server sent them", which the
@@ -65,20 +76,24 @@ export default function PeopleExplorer({ people }: { people: Member[] }) {
 
   const bySlug = useMemo(() => new Map(people.map((p) => [p.slug, p])), [people]);
 
-  // A new arrangement on every chip, so the grid never settles into an order
-  // that could be read as a ranking.
-  const reshuffle = () => {
-    const slugs = people.map((p) => p.slug);
-    for (let i = slugs.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [slugs[i], slugs[j]] = [slugs[j], slugs[i]];
-    }
-    setOrder(slugs);
-  };
+  // A fresh order on arrival. It cannot happen during render — the markup is
+  // prerendered once at build, so a draw there would not match and React would
+  // replace the grid on load. After mount it is free, and the seeded build-time
+  // order is what a reader without JavaScript keeps.
+  useEffect(() => {
+    // The rule below guards against cascading renders, and cannot express this
+    // case: the order must differ per visit and must not exist during
+    // hydration, so it can only be set once, after mount. It runs a single time
+    // and settles.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setOrder(shuffleSlugs(people));
+  }, [people]);
 
+  // And a new one on every chip, so the grid never settles into an order that
+  // could be read as a ranking.
   const pick = (next: string) => {
     setRole(next);
-    reshuffle();
+    setOrder(shuffleSlugs(people));
   };
 
   const ordered = order ? order.map((slug) => bySlug.get(slug)!) : people;
