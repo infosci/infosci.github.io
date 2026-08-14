@@ -40,21 +40,26 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
 
   return (
     <div className="mt-10">
-      {/* Set exactly as the value chips below and as the role chips on People:
-          same border, same 12px, same height. Bordering it at 14px made it read
-          as the same component rendered at two sizes, which is worse than
-          either being distinct or being identical. */}
-      <div className="flex items-center gap-1.5" role="group" aria-label="View">
+      {/* A segmented toggle, not two chips: one frame holding two halves, so it
+          reads as a switch between views rather than as two filters that happen
+          to be mutually exclusive. Chips below narrow what is in a view; this
+          changes which view you are in. Same 12px as the chips — the size is
+          shared, the shape is not. */}
+      <div
+        className="inline-flex rounded-full border border-zinc-300 p-0.5 dark:border-zinc-700"
+        role="group"
+        aria-label="View"
+      >
         {(["list", "explore"] as const).map((v) => (
           <button
             key={v}
             type="button"
             onClick={() => setView(v)}
             aria-pressed={view === v}
-            className={`rounded-full border px-3 py-1 text-xs transition-colors ${
+            className={`rounded-full px-3 py-1 text-xs transition-colors ${
               view === v
-                ? "border-black bg-black text-white dark:border-zinc-100 dark:bg-zinc-100 dark:text-black"
-                : "border-zinc-300 text-zinc-600 hover:border-zinc-500 hover:text-black dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-500 dark:hover:text-zinc-100"
+                ? "bg-black text-white dark:bg-zinc-100 dark:text-black"
+                : "text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-zinc-100"
             }`}
           >
             {v === "list" ? "List" : "Explore"}
