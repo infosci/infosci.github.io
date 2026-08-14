@@ -330,23 +330,13 @@ function NetworkView({ papers, schemes, network }: Props) {
       </div>
 
       {/* How the lines are drawn, stated where the lines are. */}
-      <div className="mt-3 border-t border-zinc-200 pt-3 text-sm leading-relaxed text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
-        <p className="max-w-2xl">
-          <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
-          Two papers are joined when their titles share at least two meaningful words. Ordinary
-          words and research boilerplate — <em>of</em>, <em>using</em>, <em>understanding</em>,{" "}
-          <em>framework</em> — are ignored, and plurals count as the same word, so{" "}
-          <em>networks</em> matches <em>network</em>. One shared word joined almost every paper
-          to every other, which showed nothing; two means a real overlap of subject. A paper with
-          no line shares fewer than two words with anything else here.
-        </p>
-        <p className="mt-2 max-w-2xl text-zinc-500 dark:text-zinc-400">
-          This is the only rule on the page that decides anything about a paper&rsquo;s
-          subject without Clarivate. Every value above is theirs, read from Web of Science
-          &mdash; except &ldquo;Not WoS-indexed&rdquo;, which is ours, and marks the papers
-          Web of Science has no record of.
-        </p>
-      </div>
+      <p className="mt-3 max-w-2xl border-t border-zinc-200 pt-3 text-sm leading-relaxed text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
+        <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
+        Two papers are connected when their titles share two or more content words. Function
+        words and research boilerplate &mdash; <em>of</em>, <em>using</em>, <em>framework</em>{" "}
+        &mdash; do not count. This and the &ldquo;Not WoS-indexed&rdquo; label are the only
+        things on this page that are not Clarivate&rsquo;s.
+      </p>
 
       <div className="mt-8 border-t border-zinc-200 pt-6 dark:border-zinc-800">
         <p className="text-sm text-zinc-500 dark:text-zinc-400">
