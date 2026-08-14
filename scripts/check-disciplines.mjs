@@ -25,6 +25,8 @@ const read = async (f) => JSON.parse(await readFile(new URL(f, root), "utf8"));
 const venues = await read("data/wos-categories.json");
 const byPaper = await read("data/wos-categories-by-paper.json");
 const topics = await read("data/citation-topics.json");
+const areaData = await read("data/wos-research-areas.json");
+const AREA_OF = areaData.map;
 const pubs = [...(await read("data/publications.json")), ...(await read("data/manual-publications.json"))];
 
 const NOT_INDEXED = "Not WoS-indexed";
@@ -41,6 +43,12 @@ const disciplinesOf = (p) => {
   }
   if (e.categories.length) return e.categories;
   return e.fallback ? [e.fallback] : [];
+};
+
+const researchAreasOf = (p) => {
+  const e = venues[venueOf(p)];
+  if (e && e.researchAreas && e.researchAreas.length) return e.researchAreas;
+  return [...new Set(disciplinesOf(p).map((c) => AREA_OF[c] ?? c))];
 };
 
 const mode = process.argv[2];
@@ -102,6 +110,14 @@ if (mode === "--tsv") {
     meso[t.meso] = (meso[t.meso] ?? 0) + 1;
     macro[t.macro] = (macro[t.macro] ?? 0) + 1;
   }
+  const ra = {};
+  for (const p of pubs) for (const a of researchAreasOf(p)) ra[a] = (ra[a] ?? 0) + 1;
+  const raRows = Object.entries(ra).sort(
+    (a, b) => (a[0] === NOT_INDEXED) - (b[0] === NOT_INDEXED) || b[1] - a[1] || a[0].localeCompare(b[0]),
+  );
+  console.log(`\nRESEARCH AREAS — ${raRows.length} values, venue-based, multi-label`);
+  for (const [k, v] of raRows) console.log(`${String(v).padStart(3)}${k === NOT_INDEXED ? " ·" : "  "} ${k}`);
+
   console.log(`\nCITATION TOPICS — ${topical.length}/${pubs.length} papers, one topic each`);
   for (const [k, v] of Object.entries(macro).sort((a, b) => b[1] - a[1])) {
     console.log(`${String(v).padStart(3)}  ${k}`);

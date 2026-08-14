@@ -23,6 +23,7 @@
 import wosCategories from "@/data/wos-categories.json";
 import byPaper from "@/data/wos-categories-by-paper.json";
 import citationTopics from "@/data/citation-topics.json";
+import researchAreaData from "@/data/wos-research-areas.json";
 import { getPublications, type Publication } from "./publications";
 
 type VenueEntry = {
@@ -32,6 +33,7 @@ type VenueEntry = {
   note?: string;
   fallback?: string;
   perPaper?: boolean;
+  researchAreas?: string[];
 };
 
 type PaperEntry = { categories: string[]; wosId: string | null };
@@ -65,6 +67,25 @@ export function disciplinesOf(pub: Publication): string[] {
 
   if (entry.categories.length) return entry.categories;
   return entry.fallback ? [entry.fallback] : [];
+}
+
+// ── Research Areas ─────────────────────────────────────────────────────────
+// The broader venue-based scheme: Clarivate's own roll-up of the categories,
+// about 150 against roughly 250. Two reasons to prefer it for the filter — it
+// collapses four Computer Science categories into one, and unlike the
+// categories it exists outside the Core Collection, which is how the Journal of
+// Asian Sociology paper has one at all.
+
+const AREA_OF = researchAreaData.map as Record<string, string>;
+
+export function researchAreasOf(pub: Publication): string[] {
+  const entry = VENUES[venueOf(pub)];
+  // A record classified only outside the Core Collection: a Research Area but
+  // no category to roll up from.
+  if (entry?.researchAreas?.length) return entry.researchAreas;
+
+  const areas = disciplinesOf(pub).map((c) => AREA_OF[c] ?? c);
+  return [...new Set(areas)];
 }
 
 // ── Citation Topics ────────────────────────────────────────────────────────
