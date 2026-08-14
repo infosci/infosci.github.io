@@ -32,7 +32,11 @@ export type FacetPaper = {
 
 export type Scheme = {
   id: SchemeId;
+  /** Clarivate's full official name, e.g. "Web of Science Subject Categories". */
   name: string;
+  /** What the page shows. The "Web of Science" prefix is dropped because the
+   *  heading above the schemes already says where all of this comes from. */
+  shortName: string;
   basis: "venue" | "paper";
   labels: "multi" | "single";
   /** One line a prospective student can act on, not a definition. */
@@ -43,7 +47,7 @@ export type Scheme = {
   covered: number;
 };
 
-const G = glossary as unknown as Record<string, { name: string; url: string }>;
+const G = glossary as unknown as Record<string, { name: string; shortName: string; url: string }>;
 
 export const valuesFor = (paper: FacetPaper, scheme: SchemeId): string[] => {
   if (scheme === "categories") return paper.categories;
@@ -92,6 +96,7 @@ export function getFacetData(): { papers: FacetPaper[]; schemes: Scheme[] } {
     {
       id: "areas",
       name: G["research-areas"].name,
+      shortName: G["research-areas"].shortName,
       basis: "venue",
       labels: "multi",
       blurb:
@@ -101,6 +106,7 @@ export function getFacetData(): { papers: FacetPaper[]; schemes: Scheme[] } {
     {
       id: "categories",
       name: G["wos-subject-categories"].name,
+      shortName: G["wos-subject-categories"].shortName,
       basis: "venue",
       labels: "multi",
       blurb: "The finer version of the same idea — around 250 categories instead of 150 areas.",
@@ -109,6 +115,7 @@ export function getFacetData(): { papers: FacetPaper[]; schemes: Scheme[] } {
     {
       id: "topics",
       name: G["citation-topics"].name,
+      shortName: G["citation-topics"].shortName,
       basis: "paper",
       labels: "single",
       blurb:

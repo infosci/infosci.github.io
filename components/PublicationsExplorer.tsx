@@ -6,9 +6,12 @@
 // Network is where the exploring happens: pick a Web of Science value and see
 // both the graph of those papers and the papers themselves, one under the other.
 //
-// Every value in this view is Clarivate's, read from Web of Science, and each
+// The values in this view are Clarivate's, read from Web of Science, and each
 // scheme is named exactly as the field is labelled on a Web of Science record
-// rather than shortened by us. Each states its basis — venue or paper — because
+// rather than shortened by us. The page says "classified using" rather than
+// "classified by": Web of Science classified journals and records, not this
+// list of papers. We applied its schemes to ours, and where it has no record at
+// all the stand-in value is ours. Each states its basis — venue or paper — because
 // a student should be able to tell that "Computer Science" from a journal and
 // "2.123 Protein Stucture" from a citation cluster are different kinds of claim
 // about the same paper.
@@ -200,7 +203,7 @@ function NetworkView({ papers, schemes, network }: Props) {
     <>
       <div className="mt-8 border-t border-zinc-200 pt-6 dark:border-zinc-800">
         <p className="text-xs tracking-widest text-zinc-500 uppercase dark:text-zinc-400">
-          Classified by Web of Science
+          Classified using Web of Science schemes
         </p>
 
         <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2">
@@ -216,7 +219,7 @@ function NetworkView({ papers, schemes, network }: Props) {
                   : "border-transparent text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-zinc-100"
               }`}
             >
-              {s.name}
+              {s.shortName}
             </button>
           ))}
         </div>
@@ -337,8 +340,10 @@ function NetworkView({ papers, schemes, network }: Props) {
           no line shares fewer than two words with anything else here.
         </p>
         <p className="mt-2 max-w-2xl text-zinc-500 dark:text-zinc-400">
-          This is the only rule on the page that is ours rather than Clarivate&rsquo;s. The
-          grouping and the values above all come from Web of Science.
+          This is the only rule on the page that decides anything about a paper&rsquo;s
+          subject without Clarivate. Every value above is theirs, read from Web of Science
+          &mdash; except &ldquo;Not WoS-indexed&rdquo;, which is ours, and marks the papers
+          Web of Science has no record of.
         </p>
       </div>
 

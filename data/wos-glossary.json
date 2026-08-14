@@ -3,6 +3,10 @@
     "Clarivate's own names for the schemes this site filters by, each with a link",
     "to Clarivate's own definition. A reader who wants to know what a facet means",
     "should get the answer from the people who made it, not from us paraphrasing.",
+    "name is the full official name. shortName is what the page shows, with the",
+    "\"Web of Science\" prefix dropped because the heading above the schemes already",
+    "says where all of this comes from.",
+    "",
     "Names are the field labels as they appear in the Categories/Classification",
     "block of a Web of Science record, not our shortenings of them. All three",
     "schemes are Clarivate's and all three were read from Web of Science.",
@@ -24,7 +28,7 @@
     "end to end. It resolves normally in a browser."
   ],
   "wos-subject-categories": {
-    "name": "Web of Science Categories",
+    "name": "Web of Science Subject Categories",
     "field": "WC",
     "basis": "venue",
     "labels": "multi",
@@ -32,17 +36,19 @@
     "summary": "Clarivate assigns these to the journal or proceedings volume. Every paper published there inherits them.",
     "url": "https://webofscience.zendesk.com/hc/en-us/articles/27505726032017-Web-of-Science-Subject-Categories",
     "verified": "2026-08-14",
-    "note": "Clarivate's help article titles this \"Web of Science Subject Categories\"; the field label on a record reads \"Web of Science Categories\". We show the record label, since that is what a reader matching against Web of Science will see."
+    "note": "Clarivate's documentation and the Master Journal List call this \"Web of Science Subject Categories\". The field label on a record abbreviates it to \"Web of Science Categories\"; the documented name is the official one and is what we show.",
+    "shortName": "Subject Categories"
   },
   "research-areas": {
-    "name": "Research Areas",
+    "name": "Web of Science Research Areas",
     "field": "SC",
     "basis": "venue",
     "labels": "multi",
     "size": "about 150",
     "summary": "A fixed roll-up of the subject categories, shared across every Web of Science database so records from different databases can be compared.",
     "url": "https://webofscience.zendesk.com/hc/en-us/articles/38543541713169-Research-Areas",
-    "verified": "2026-08-14"
+    "verified": "2026-08-14",
+    "shortName": "Research Areas"
   },
   "citation-topics": {
     "name": "Citation Topics",
@@ -52,7 +58,8 @@
     "summary": "Built by clustering the citation network rather than by classifying journals, so a paper lands with the literature it actually cites and is cited by. Developed by Clarivate with CWTS Leiden. Each paper gets exactly one micro topic, which rolls up to one meso and one macro.",
     "url": "https://incites.zendesk.com/hc/en-gb/articles/22514077746961-Citation-Topics",
     "verified": null,
-    "note": "Official Clarivate documentation; automated verification was blocked by a bot check, not by a broken link."
+    "note": "Official Clarivate documentation; automated verification was blocked by a bot check, not by a broken link.",
+    "shortName": "Citation Topics"
   },
   "document-types": {
     "name": "Document Types",
@@ -61,7 +68,8 @@
     "labels": "single",
     "summary": "What kind of record it is — Article, Review, Proceedings Paper, Book Chapter.",
     "url": "https://webofscience.zendesk.com/hc/en-us/articles/26916283577745-Document-Types",
-    "verified": "2026-08-14"
+    "verified": "2026-08-14",
+    "shortName": "Document Types"
   },
   "core-collection": {
     "name": "Web of Science Core Collection",
