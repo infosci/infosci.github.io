@@ -45,16 +45,17 @@ export default function PeoplePage() {
       </h1>
       {/* The line and the color toggle are one idea. The photographs are
           everyone at their brightest — graduation, a trip, good light — and the
-          work that earned those moments happened somewhere nobody had a camera.
-          Turning the page to mono is what that looks like.
+          work that earned those moments happened in hours nobody photographed.
+          The line names the photographs directly, which is what ties it to the
+          switch: turning the page to mono is what those hours looked like.
           
           Deliberately not explained anywhere near the switch. A reader who has
           read this line and then flips it gets it at once, and a caption saying
           "mono represents unseen effort" would take a small thing and make it
           heavy. */}
       <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-        Everyone here shines. Most of what made that possible happened where no
-        one was looking.
+        What you see is the bright part. It was made in hours nobody
+        photographed.
       </p>
 
       <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
