@@ -43,9 +43,18 @@ export default function PeoplePage() {
       <h1 className="text-4xl font-semibold tracking-tight text-black sm:text-5xl dark:text-zinc-50">
         People
       </h1>
+      {/* The line and the color toggle are one idea. The photographs are
+          everyone at their brightest — graduation, a trip, good light — and the
+          work that earned those moments happened somewhere nobody had a camera.
+          Turning the page to mono is what that looks like.
+          
+          Deliberately not explained anywhere near the switch. A reader who has
+          read this line and then flips it gets it at once, and a caption saying
+          "mono represents unseen effort" would take a small thing and make it
+          heavy. */}
       <p className="mt-4 text-zinc-600 dark:text-zinc-400">
-        Different backgrounds, unique perspectives. Who&rsquo;s here now, and where the
-        others went.
+        Everyone here shines. Most of what made that possible happened where no
+        one was looking.
       </p>
 
       <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
