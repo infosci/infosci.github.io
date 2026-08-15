@@ -25,15 +25,19 @@
 // in a title, and that rule is written out under the network rather than left
 // for the reader to infer from the lines.
 
-import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import type { FacetPaper, Scheme, SchemeId } from "@/lib/publication-facets";
 import { valuesFor } from "@/lib/publication-facets";
 import type { Network } from "@/lib/publication-network";
 import { NODE_R } from "@/lib/publication-network";
 
 type Props = { papers: FacetPaper[]; schemes: Scheme[]; network: Network };
-
-const ALL = "__all__";
 
 // A value named in the URL: /publications/?scheme=topics&value=1.21%20Psychiatry.
 // The homepage cards link here, so a reader lands on the lab's papers in that
@@ -52,8 +56,15 @@ const NO_SUBSCRIPTION = () => () => {};
 const NULL_ON_SERVER = () => null;
 
 function useUrlParam(name: string) {
-  const read = useCallback(() => new URLSearchParams(window.location.search).get(name), [name]);
-  return useSyncExternalStore<string | null>(NO_SUBSCRIPTION, read, NULL_ON_SERVER);
+  const read = useCallback(
+    () => new URLSearchParams(window.location.search).get(name),
+    [name],
+  );
+  return useSyncExternalStore<string | null>(
+    NO_SUBSCRIPTION,
+    read,
+    NULL_ON_SERVER,
+  );
 }
 
 /** The scheme and value asked for, or null. ?topic= is kept as a shorthand for
@@ -68,7 +79,11 @@ function useDeepLink(): { scheme: string; value: string } | null {
   return null;
 }
 
-export default function PublicationsExplorer({ papers, schemes, network }: Props) {
+export default function PublicationsExplorer({
+  papers,
+  schemes,
+  network,
+}: Props) {
   const asked = useDeepLink();
 
   // Validated here rather than downstream, so an unusable link behaves exactly
@@ -130,7 +145,12 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
       {view === "list" ? (
         <SearchableList papers={papers} />
       ) : (
-        <ExploreView papers={papers} schemes={schemes} network={network} link={link} />
+        <ExploreView
+          papers={papers}
+          schemes={schemes}
+          network={network}
+          link={link}
+        />
       )}
     </div>
   );
@@ -143,7 +163,9 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
 // and the punctuation has to survive their absence.
 function venueLine(pub: FacetPaper) {
   const issue = pub.issue ? `(${pub.issue})` : "";
-  const locator = [`${pub.volume ?? ""}${issue}`.trim(), pub.pages].filter(Boolean).join(", ");
+  const locator = [`${pub.volume ?? ""}${issue}`.trim(), pub.pages]
+    .filter(Boolean)
+    .join(", ");
   return [pub.venue, locator].filter(Boolean).join(" ");
 }
 
@@ -170,12 +192,19 @@ function PaperEntry({
   return (
     <li
       className={
-        highlighted ? "-ml-4 border-l-2 border-black pl-3.5 dark:border-zinc-100" : undefined
+        highlighted
+          ? "-ml-4 border-l-2 border-black pl-3.5 dark:border-zinc-100"
+          : undefined
       }
     >
       <h3 className="leading-snug font-medium text-black dark:text-zinc-50">
         {pub.url ? (
-          <a href={pub.url} target="_blank" rel="noopener noreferrer" className="hover:underline">
+          <a
+            href={pub.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:underline"
+          >
             {pub.title}
           </a>
         ) : (
@@ -185,15 +214,23 @@ function PaperEntry({
       <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
         {pub.authors.join(", ")}
       </p>
-      <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{venueLine(pub)}</p>
+      <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+        {venueLine(pub)}
+      </p>
       {shared && shared.length > 0 && (
         <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
           Shares{" "}
-          <span className="text-black dark:text-zinc-200">{shared.join(", ")}</span>
+          <span className="text-black dark:text-zinc-200">
+            {shared.join(", ")}
+          </span>
           {onSelect && (
             <>
               {" · "}
-              <button type="button" onClick={onSelect} className="underline underline-offset-2">
+              <button
+                type="button"
+                onClick={onSelect}
+                className="underline underline-offset-2"
+              >
                 centre on this
               </button>
             </>
@@ -279,7 +316,13 @@ function SearchableList({ papers }: { papers: FacetPaper[] }) {
   );
 }
 
-function PaperList({ papers, highlight }: { papers: FacetPaper[]; highlight?: string | null }) {
+function PaperList({
+  papers,
+  highlight,
+}: {
+  papers: FacetPaper[];
+  highlight?: string | null;
+}) {
   const years = useMemo(() => {
     const groups = new Map<number | null, FacetPaper[]>();
     for (const p of papers) {
@@ -299,7 +342,11 @@ function PaperList({ papers, highlight }: { papers: FacetPaper[]; highlight?: st
           </h2>
           <ul className="mt-5 space-y-7">
             {items.map((pub) => (
-              <PaperEntry key={pub.key} pub={pub} highlighted={highlight === pub.key} />
+              <PaperEntry
+                key={pub.key}
+                pub={pub}
+                highlighted={highlight === pub.key}
+              />
             ))}
           </ul>
         </section>
@@ -320,29 +367,75 @@ function ExploreView({
   // on the first render, so it cannot seed useState.
   const [chosenScheme, setChosenScheme] = useState<SchemeId | null>(null);
   const schemeId = chosenScheme ?? link?.scheme ?? "areas";
-  const [chosenValue, setChosenValue] = useState<string | null>(null);
-  const value = chosenValue ?? link?.value ?? ALL;
-  const setValue = setChosenValue;
+  // A set, not a single value. One chip at a time made the page assert
+  // something false: that a Web of Science value is the whole of the lab's work
+  // on a subject. It is not. Categories are assigned by venue and topics by
+  // citations, so work on one subject lands in several — the major depressive
+  // disorder paper sits under Diabetes, and the suicide papers spread across
+  // three subject categories. A reader who can hold two values at once can see
+  // that for themselves instead of taking one chip's word for it.
+  //
+  // Selecting several unions them rather than intersecting: these are places a
+  // paper can sit, and asking for two means "show me both shelves". An
+  // intersection would answer a question nobody arrives with, and on Citation
+  // Topics — one topic per paper — it would always return nothing.
+  const [chosenValues, setChosenValues] = useState<Set<string> | null>(null);
+  const selected = useMemo(
+    () => chosenValues ?? new Set(link ? [link.value] : []),
+    [chosenValues, link],
+  );
+
+  const toggleValue = useCallback(
+    (name: string) => {
+      setChosenValues((current) => {
+        const next = new Set(current ?? (link ? [link.value] : []));
+        if (next.has(name)) next.delete(name);
+        else next.add(name);
+        return next;
+      });
+    },
+    [link],
+  );
+
+  const clearValues = useCallback(() => setChosenValues(new Set<string>()), []);
   const [picked, setPicked] = useState<string | null>(null);
-  const [moved, setMoved] = useState<Record<string, { x: number; y: number }>>({});
+  const [moved, setMoved] = useState<Record<string, { x: number; y: number }>>(
+    {},
+  );
   const svgRef = useRef<SVGSVGElement>(null);
   const dragging = useRef<string | null>(null);
 
   const scheme = schemes.find((s) => s.id === schemeId)!;
   const byKey = useMemo(() => new Map(papers.map((p) => [p.key, p])), [papers]);
-  const nodeAt = useMemo(() => new Map(network.nodes.map((d) => [d.key, d])), [network.nodes]);
+  const nodeAt = useMemo(
+    () => new Map(network.nodes.map((d) => [d.key, d])),
+    [network.nodes],
+  );
 
-  // Nothing chosen shows every paper; choosing a value shows only those.
+  // Nothing chosen shows every paper; choosing values shows any paper carrying
+  // one of them.
   const shown = useMemo(
-    () => (value === ALL ? papers : papers.filter((p) => valuesFor(p, schemeId).includes(value))),
-    [papers, schemeId, value],
+    () =>
+      selected.size === 0
+        ? papers
+        : papers.filter((p) =>
+            valuesFor(p, schemeId).some((v) => selected.has(v)),
+          ),
+    [papers, schemeId, selected],
   );
   const visible = useMemo(() => new Set(shown.map((p) => p.key)), [shown]);
 
   function chooseScheme(id: SchemeId) {
     setChosenScheme(id);
+    // Values are scheme-specific, so anything the new scheme does not have is
+    // dropped. Names shared between schemes survive the switch, which is the
+    // behaviour a reader expects of "Psychiatry" appearing in two of them.
     const next = schemes.find((s) => s.id === id)!;
-    if (value !== ALL && !next.values.some((v) => v.name === value)) setValue(ALL);
+    setChosenValues(
+      new Set(
+        [...selected].filter((v) => next.values.some((x) => x.name === v)),
+      ),
+    );
   }
 
   // An edge survives only if both its papers do, so a narrowed network never
@@ -387,7 +480,8 @@ function ExploreView({
   const grouped = useMemo(() => {
     if (schemeId !== "topics") return null;
     const macroOf = new Map<string, string>();
-    for (const p of papers) if (p.topic && p.macro) macroOf.set(p.topic, p.macro);
+    for (const p of papers)
+      if (p.topic && p.macro) macroOf.set(p.topic, p.macro);
     const byMacro = new Map<string, { name: string; count: number }[]>();
     for (const v of scheme.values) {
       const m = macroOf.get(v.name) ?? "";
@@ -430,15 +524,21 @@ function ExploreView({
     return { x: pt.x, y: pt.y };
   }, []);
 
-  const active = (picked && visible.has(picked) ? byKey.get(picked) : null) ?? null;
+  const active =
+    (picked && visible.has(picked) ? byKey.get(picked) : null) ?? null;
 
   // The papers on the other end of each line, most words in common first.
   const linked = useMemo(() => {
     if (!picked) return [] as { paper: FacetPaper; words: string[] }[];
     return shownEdges
       .filter((e) => e.a === picked || e.b === picked)
-      .map((e) => ({ paper: byKey.get(e.a === picked ? e.b : e.a), words: e.words }))
-      .filter((x): x is { paper: FacetPaper; words: string[] } => Boolean(x.paper))
+      .map((e) => ({
+        paper: byKey.get(e.a === picked ? e.b : e.a),
+        words: e.words,
+      }))
+      .filter((x): x is { paper: FacetPaper; words: string[] } =>
+        Boolean(x.paper),
+      )
       .sort(
         (a, b) =>
           b.words.length - a.words.length ||
@@ -485,7 +585,6 @@ function ExploreView({
             </button>
           ))}
         </div>
-
       </div>
 
       {/* Two ways to narrow the same set, side by side: pick a value on the
@@ -505,183 +604,216 @@ function ExploreView({
           spill out of the box. */}
       <div className="mt-6 grid items-stretch gap-8 lg:h-[32rem] lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
         <div className="flex min-h-0 flex-col">
-        <p className="min-h-[4.25rem] text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-          <span className="font-medium text-black dark:text-zinc-200">
-            {scheme.basis === "venue" ? "Assigned to the venue" : "Assigned to the paper"}
-          </span>
-          {" · "}
-          {scheme.labels === "multi" ? "a paper can carry several" : "one per paper"}
-          {" · "}
-          {scheme.covered} of {papers.length} papers. {scheme.blurb}; {scheme.scale},{" "}
-          {scheme.values.length} appear here.{" "}
-          <a
-            href={scheme.href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="whitespace-nowrap underline decoration-zinc-300 underline-offset-2 hover:decoration-current dark:decoration-zinc-600"
-          >
-            Clarivate&rsquo;s definition ↗
-          </a>
-        </p>
+          <p className="min-h-[4.25rem] text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+            <span className="font-medium text-black dark:text-zinc-200">
+              {scheme.basis === "venue"
+                ? "Assigned to the venue"
+                : "Assigned to the paper"}
+            </span>
+            {" · "}
+            {scheme.labels === "multi"
+              ? "a paper can carry several"
+              : "one per paper"}
+            {" · "}
+            {scheme.covered} of {papers.length} papers. {scheme.blurb};{" "}
+            {scheme.scale}, {scheme.values.length} appear here.{" "}
+            <a
+              href={scheme.href}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="whitespace-nowrap underline decoration-zinc-300 underline-offset-2 hover:decoration-current dark:decoration-zinc-600"
+            >
+              Clarivate&rsquo;s definition ↗
+            </a>
+          </p>
 
-        {/* One frame around the whole set. The chips vary in width because the
+          {/* Two jobs in one line, and both matter more than they look.
+        
+            It tells a reader the chips combine, which nothing else does — a
+            control that only rewards a second click is a control most people
+            never find.
+        
+            And it says the thing this page could otherwise quietly imply: that
+            one value is the whole of the lab's work on a subject. It is not.
+            Categories follow the journal and topics follow the citations, so
+            work on one subject scatters — the major depressive disorder paper
+            sits under Diabetes, and the suicide papers spread across three
+            subject categories. Someone arriving from a homepage card lands on a
+            single value, and this is what tells them there is more than one
+            shelf. */}
+          <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
+            Chips add up — choose several to read across them. Work on one
+            subject often sits under more than one value.
+          </p>
+
+          {/* One frame around the whole set. The chips vary in width because the
             names do, but the box gives them a single edge to sit inside so they
             read as one control rather than as loose scattered lozenges. */}
-        <div className="mt-5 flex min-h-0 flex-1 flex-col rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
-          {/* Takes whatever height the column has and scrolls past that, so the
+          <div className="mt-5 flex min-h-0 flex-1 flex-col rounded-md border border-zinc-200 p-3 dark:border-zinc-800">
+            {/* Takes whatever height the column has and scrolls past that, so the
               box ends level with the graph whichever scheme is showing and
               however many values it has. */}
-          <div className="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto">
-            <div className="flex flex-wrap gap-1.5">
-              <ValueBox
-                label="All papers"
-                count={papers.length}
-                on={value === ALL}
-                onClick={() => setValue(ALL)}
-              />
-              {!grouped &&
-                scheme.values.map((v) => (
-                  <ValueBox
-                    key={v.name}
-                    label={v.name}
-                    count={v.count}
-                    on={value === v.name}
-                    onClick={() => setValue(value === v.name ? ALL : v.name)}
-                  />
-                ))}
-            </div>
-            {grouped?.map(({ macro, values }) => (
-              <div key={macro}>
-                <p className="mb-1.5 text-xs tracking-widest text-zinc-500 uppercase dark:text-zinc-400">
-                  {macro}
-                </p>
-                <div className="flex flex-wrap gap-1.5">
-                  {values.map((v) => (
+            <div className="flex min-h-0 flex-1 flex-col gap-2.5 overflow-y-auto">
+              <div className="flex flex-wrap gap-1.5">
+                <ValueBox
+                  label="All papers"
+                  count={papers.length}
+                  on={selected.size === 0}
+                  onClick={clearValues}
+                />
+                {!grouped &&
+                  scheme.values.map((v) => (
                     <ValueBox
                       key={v.name}
                       label={v.name}
                       count={v.count}
-                      on={value === v.name}
-                      onClick={() => setValue(value === v.name ? ALL : v.name)}
+                      on={selected.has(v.name)}
+                      onClick={() => toggleValue(v.name)}
                     />
                   ))}
-                </div>
               </div>
-            ))}
+              {grouped?.map(({ macro, values }) => (
+                <div key={macro}>
+                  <p className="mb-1.5 text-xs tracking-widest text-zinc-500 uppercase dark:text-zinc-400">
+                    {macro}
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    {values.map((v) => (
+                      <ValueBox
+                        key={v.name}
+                        label={v.name}
+                        count={v.count}
+                        on={selected.has(v.name)}
+                        onClick={() => toggleValue(v.name)}
+                      />
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-        </div>
         </div>
 
         <div className="flex min-h-0 flex-col">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
-        <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
-          <span className="font-medium text-black dark:text-zinc-200">How the lines work.</span>{" "}
-          Two papers are connected when their titles share two or more words, ignoring ordinary
-          ones like <em>of</em>, <em>the</em> and <em>with</em>. Drag a circle to pull it clear of
-          the others.
-        </p>
-        {Object.keys(moved).length > 0 && (
-          <button
-            type="button"
-            onClick={() => setMoved({})}
-            className="text-sm whitespace-nowrap text-zinc-600 underline decoration-zinc-300 underline-offset-2 hover:text-black dark:text-zinc-400 dark:decoration-zinc-600 dark:hover:text-zinc-100"
-          >
-            Reset layout
-          </button>
-        )}
-      </div>
-
-      <div className="mt-4 min-h-0 flex-1 overflow-x-auto">
-        <svg
-          ref={svgRef}
-          viewBox={viewBox}
-          preserveAspectRatio="xMidYMid meet"
-          className="h-full min-h-[16rem] w-full min-w-[20rem] text-black dark:text-zinc-100"
-          role="img"
-          aria-label={`Network of ${shown.length} papers linked by shared title words`}
-        >
-          {shownEdges.map((e) => {
-            const a = pos(e.a);
-            const b = pos(e.b);
-            const touches = picked === e.a || picked === e.b;
-            return (
-              <line
-                key={`${e.a}|${e.b}`}
-                x1={a.x}
-                y1={a.y}
-                x2={b.x}
-                y2={b.y}
-                strokeWidth={touches ? 1.8 : 1}
-                className={
-                  touches
-                    ? "stroke-zinc-600 dark:stroke-zinc-300"
-                    : "stroke-zinc-500 dark:stroke-zinc-500"
-                }
+          <div className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1">
+            <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+              <span className="font-medium text-black dark:text-zinc-200">
+                How the lines work.
+              </span>{" "}
+              Two papers are connected when their titles share two or more
+              words, ignoring ordinary ones like <em>of</em>, <em>the</em> and{" "}
+              <em>with</em>. Drag a circle to pull it clear of the others.
+            </p>
+            {Object.keys(moved).length > 0 && (
+              <button
+                type="button"
+                onClick={() => setMoved({})}
+                className="text-sm whitespace-nowrap text-zinc-600 underline decoration-zinc-300 underline-offset-2 hover:text-black dark:text-zinc-400 dark:decoration-zinc-600 dark:hover:text-zinc-100"
               >
-                <title>{e.words.join(", ")}</title>
-              </line>
-            );
-          })}
+                Reset layout
+              </button>
+            )}
+          </div>
 
-          {network.nodes
-            .filter((d) => visible.has(d.key))
-            .map((d) => {
-              const isPicked = picked === d.key;
-              return (
-                <circle
-                  key={d.key}
-                  cx={pos(d.key).x}
-                  cy={pos(d.key).y}
-                  // Well-connected papers read larger. Unlinked papers stay
-                  // visible rather than shrinking to nothing.
-                  r={
-                    isPicked
-                      ? NODE_R * 1.6
-                      : NODE_R * (0.8 + 0.55 * Math.sqrt((degreeOf.get(d.key) ?? 0) / maxDegree))
-                  }
-                  className={
-                    isPicked
-                      ? "fill-current"
-                      : neighbours.has(d.key)
-                        ? "fill-zinc-800 dark:fill-zinc-200"
-                        : "fill-zinc-500 dark:fill-zinc-500"
-                  }
-                  tabIndex={0}
-                  role="button"
-                  aria-label={byKey.get(d.key)?.title}
-                  onMouseEnter={() => !dragging.current && setPicked(d.key)}
-                  onFocus={() => setPicked(d.key)}
-                  onPointerDown={(e) => {
-                    e.currentTarget.setPointerCapture(e.pointerId);
-                    dragging.current = d.key;
-                    setPicked(d.key);
-                  }}
-                  onPointerMove={(e) => {
-                    if (dragging.current !== d.key) return;
-                    const pt = toDiagram(e.clientX, e.clientY);
-                    if (pt) setMoved((m) => ({ ...m, [d.key]: pt }));
-                  }}
-                  onPointerUp={(e) => {
-                    e.currentTarget.releasePointerCapture(e.pointerId);
-                    dragging.current = null;
-                  }}
-                  onPointerCancel={() => {
-                    dragging.current = null;
-                  }}
-                  // Redundant beside onPointerDown for a real pointer, but
-                  // assistive tech can synthesise a bare click with no pointer
-                  // events at all, and that should still select the paper.
-                  onClick={() => setPicked(d.key)}
-                  // touch-none stops a drag from scrolling the page instead.
-                  style={{ cursor: "grab", outline: "none", touchAction: "none" }}
-                >
-                  <title>{byKey.get(d.key)?.title}</title>
-                </circle>
-              );
-            })}
-        </svg>
-      </div>
+          <div className="mt-4 min-h-0 flex-1 overflow-x-auto">
+            <svg
+              ref={svgRef}
+              viewBox={viewBox}
+              preserveAspectRatio="xMidYMid meet"
+              className="h-full min-h-[16rem] w-full min-w-[20rem] text-black dark:text-zinc-100"
+              role="img"
+              aria-label={`Network of ${shown.length} papers linked by shared title words`}
+            >
+              {shownEdges.map((e) => {
+                const a = pos(e.a);
+                const b = pos(e.b);
+                const touches = picked === e.a || picked === e.b;
+                return (
+                  <line
+                    key={`${e.a}|${e.b}`}
+                    x1={a.x}
+                    y1={a.y}
+                    x2={b.x}
+                    y2={b.y}
+                    strokeWidth={touches ? 1.8 : 1}
+                    className={
+                      touches
+                        ? "stroke-zinc-600 dark:stroke-zinc-300"
+                        : "stroke-zinc-500 dark:stroke-zinc-500"
+                    }
+                  >
+                    <title>{e.words.join(", ")}</title>
+                  </line>
+                );
+              })}
 
+              {network.nodes
+                .filter((d) => visible.has(d.key))
+                .map((d) => {
+                  const isPicked = picked === d.key;
+                  return (
+                    <circle
+                      key={d.key}
+                      cx={pos(d.key).x}
+                      cy={pos(d.key).y}
+                      // Well-connected papers read larger. Unlinked papers stay
+                      // visible rather than shrinking to nothing.
+                      r={
+                        isPicked
+                          ? NODE_R * 1.6
+                          : NODE_R *
+                            (0.8 +
+                              0.55 *
+                                Math.sqrt(
+                                  (degreeOf.get(d.key) ?? 0) / maxDegree,
+                                ))
+                      }
+                      className={
+                        isPicked
+                          ? "fill-current"
+                          : neighbours.has(d.key)
+                            ? "fill-zinc-800 dark:fill-zinc-200"
+                            : "fill-zinc-500 dark:fill-zinc-500"
+                      }
+                      tabIndex={0}
+                      role="button"
+                      aria-label={byKey.get(d.key)?.title}
+                      onMouseEnter={() => !dragging.current && setPicked(d.key)}
+                      onFocus={() => setPicked(d.key)}
+                      onPointerDown={(e) => {
+                        e.currentTarget.setPointerCapture(e.pointerId);
+                        dragging.current = d.key;
+                        setPicked(d.key);
+                      }}
+                      onPointerMove={(e) => {
+                        if (dragging.current !== d.key) return;
+                        const pt = toDiagram(e.clientX, e.clientY);
+                        if (pt) setMoved((m) => ({ ...m, [d.key]: pt }));
+                      }}
+                      onPointerUp={(e) => {
+                        e.currentTarget.releasePointerCapture(e.pointerId);
+                        dragging.current = null;
+                      }}
+                      onPointerCancel={() => {
+                        dragging.current = null;
+                      }}
+                      // Redundant beside onPointerDown for a real pointer, but
+                      // assistive tech can synthesise a bare click with no pointer
+                      // events at all, and that should still select the paper.
+                      onClick={() => setPicked(d.key)}
+                      // touch-none stops a drag from scrolling the page instead.
+                      style={{
+                        cursor: "grab",
+                        outline: "none",
+                        touchAction: "none",
+                      }}
+                    >
+                      <title>{byKey.get(d.key)?.title}</title>
+                    </circle>
+                  );
+                })}
+            </svg>
+          </div>
         </div>
       </div>
 
@@ -693,13 +825,15 @@ function ExploreView({
                 {linked.length === 0
                   ? "This paper on its own — nothing shares two words with it"
                   : `This paper and the ${linked.length} it links to`}
-                {value !== ALL && <> · within {value}</>}
+                {selected.size > 0 && (
+                  <> · within {[...selected].join(" or ")}</>
+                )}
               </>
             ) : (
               <>
-                {shown.length} {shown.length === 1 ? "paper" : "papers"} · {shownEdges.length}{" "}
-                {shownEdges.length === 1 ? "link" : "links"}
-                {value !== ALL && <> · {value}</>}
+                {shown.length} {shown.length === 1 ? "paper" : "papers"} ·{" "}
+                {shownEdges.length} {shownEdges.length === 1 ? "link" : "links"}
+                {selected.size > 0 && <> · {[...selected].join(" or ")}</>}
               </>
             )}
           </p>
@@ -758,7 +892,11 @@ function ValueBox({
       }`}
     >
       {label}
-      <span className={on ? "ml-1.5 opacity-70" : "ml-1.5 text-zinc-500 dark:text-zinc-400"}>
+      <span
+        className={
+          on ? "ml-1.5 opacity-70" : "ml-1.5 text-zinc-500 dark:text-zinc-400"
+        }
+      >
         {count}
       </span>
     </button>
