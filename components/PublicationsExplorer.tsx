@@ -400,21 +400,42 @@ function SearchableList({ papers }: { papers: FacetPaper[] }) {
 
   return (
     <div className="mt-10 max-w-3xl">
+      {/* The box takes the row. It used to be 256px, which was ample for a word
+          typed by hand and hopeless for what the homepage cards send: their
+          longest query is 186 characters of keywords joined by or, and a reader
+          who lands here should be able to read what they were given and edit
+          it. min-w-0 is what lets it shrink below its content inside a flex
+          row, without which it pushes the count off the end. */}
       <div className="flex flex-wrap items-center gap-3">
         {/* A chip's shape and border, since it sits in the same family of
             controls — but 16px on a phone, because iOS zooms the page when it
             focuses an input under that size, and the 12px it takes from sm up
             is only for matching the chips on a pointer device. */}
-        <input
-          type="search"
+        {/* A textarea, not an input, so a long query wraps instead of scrolling
+            out of sight. The homepage cards send up to 241 characters and even
+            a full-width single line showed barely half of it; a reader who
+            lands here should see the whole thing they were handed.
+
+            field-sizing:content grows it to fit and is a recent CSS feature —
+            where it is missing the box simply stays one line and scrolls, which
+            is exactly the old behaviour, so nothing breaks.
+
+            rows=1 and resize-none keep it a search box rather than a form
+            field, and Enter is swallowed: the list filters as you type, so a
+            newline in a search query is never what anyone meant. */}
+        <textarea
+          rows={1}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter") e.preventDefault();
+          }}
           placeholder="Search — try depression or suicide"
           aria-label="Search publications"
-          className="w-64 rounded-full border border-zinc-300 px-2.5 py-1 text-base text-black placeholder:text-zinc-500 focus:border-zinc-500 focus:outline-none sm:text-xs dark:border-zinc-700 dark:text-zinc-100 dark:placeholder:text-zinc-400"
+          className="field-sizing-content w-full min-w-0 flex-1 resize-none overflow-hidden rounded-2xl border border-zinc-300 px-3 py-1 text-base leading-relaxed text-black placeholder:text-zinc-500 focus:border-zinc-500 focus:outline-none sm:text-xs dark:border-zinc-700 dark:text-zinc-100 dark:placeholder:text-zinc-400"
         />
         {groups.length > 0 && (
-          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          <p className="shrink-0 text-xs text-zinc-500 dark:text-zinc-400">
             {shown.length} of {papers.length}
           </p>
         )}
