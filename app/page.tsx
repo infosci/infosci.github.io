@@ -9,6 +9,8 @@ import {
 } from "@/components/AreaIcons";
 import Link from "next/link";
 import { TriadFigure } from "@/components/TriadFigure";
+import publications from "@/data/publications.json";
+import manual from "@/data/manual-publications.json";
 
 // Every card names a field, never a method. The lab is about fields, using
 // diverse methods — that is the sentence to test a new card against, and it is
@@ -334,6 +336,35 @@ function AreaCard({ area }: { area: (typeof AREAS)[number] }) {
   );
 }
 
+/** How many papers a card's search reaches. The same matching the search box
+ *  does: words inside a group must all appear, groups separated by "or" are
+ *  alternatives. */
+function reach(q: string) {
+  const groups = q.toLowerCase().split(/\s+or\s+/);
+  return [...publications, ...manual].filter((p) => {
+    const hay = [p.title, (p.authors ?? []).join(" "), p.venue ?? p.journal ?? "", p.year ?? ""]
+      .join(" ")
+      .toLowerCase();
+    return groups.some((g) => g.split(/\s+/).every((w) => hay.includes(w)));
+  }).length;
+}
+
+// Biggest first, counted at build rather than decided. The order used to be
+// accretion history — the first four in the order they were written, then each
+// new card slotted in by a one-off judgement — which left no answer for where
+// the next one goes, and no answer is how an order drifts.
+//
+// Size is the only rule here that stays true without anyone maintaining it, and
+// it says something a reader can use: this lab is mostly science of science and
+// health informatics. It moves as the collection grows, which is the point.
+//
+// Ties break on the order written above, so the two cards at 23 keep a stable
+// relative position rather than swapping on an unrelated edit.
+const ORDERED = [...AREAS]
+  .map((area, i) => ({ area, i, n: reach(area.q) }))
+  .sort((a, b) => b.n - a.n || a.i - b.i)
+  .map((x) => x.area);
+
 export default function Home() {
   return (
     <div className="pt-6 sm:pt-10">
@@ -393,7 +424,7 @@ export default function Home() {
           room, under the 266px the longest title needs at 14px, which is why
           the titles are 13px and the padding px-3. */}
       <div className="mt-10 grid w-full max-w-3xl gap-5 sm:grid-cols-3">
-        {AREAS.map((area) => (
+        {ORDERED.map((area) => (
           <AreaCard key={area.id} area={area} />
         ))}
       </div>

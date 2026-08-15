@@ -53,9 +53,13 @@ if (!titles.length || titles.length !== queries.length) {
 const cards = titles.map((title, i) => ({ title, q: queries[i] }));
 
 // The same matching the search box does: words inside a group must all appear,
-// groups separated by "or" are alternatives.
+// groups separated by "or" are alternatives, over the same text — venue ??
+// journal, exactly as lib/publication-facets resolves it. The raw records carry
+// "journal" and sometimes "venue", and the site searches whichever is set — a
+// checker reading only one of them scores a query differently from the page it
+// is checking.
 const haystack = (p) =>
-  [p.title, (p.authors ?? []).join(" "), p.venue ?? "", p.year ?? ""]
+  [p.title, (p.authors ?? []).join(" "), p.venue ?? p.journal ?? "", p.year ?? ""]
     .join(" ")
     .toLowerCase();
 
