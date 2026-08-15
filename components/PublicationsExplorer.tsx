@@ -67,15 +67,42 @@ function useUrlParam(name: string) {
   );
 }
 
-/** The scheme and value asked for, or null. ?topic= is kept as a shorthand for
- *  the Citation Topics scheme: it was the first form of this link and may be
- *  in someone's history or notes by now. */
-function useDeepLink(): { scheme: string; value: string } | null {
+// A separator that cannot occur inside a Web of Science value. Named rather
+// than written inline: as a literal it is an invisible byte in the source, which
+// is not something to leave for the next reader to discover.
+const SEP = "\u0000";
+
+// getAll returns a fresh array on every call, which useSyncExternalStore
+// compares by identity and would read as a change on every render — a render
+// loop. Joining to a string keeps the snapshot comparable and the caller splits
+// it back, on a separator no value can contain.
+const EMPTY_ON_SERVER = () => "";
+
+function useUrlParamAll(name: string) {
+  const read = useCallback(
+    () => new URLSearchParams(window.location.search).getAll(name).join(SEP),
+    [name],
+  );
+  const joined = useSyncExternalStore<string>(
+    NO_SUBSCRIPTION,
+    read,
+    EMPTY_ON_SERVER,
+  );
+  return useMemo(() => (joined ? joined.split(SEP) : []), [joined]);
+}
+
+/** The scheme and values asked for, or null. Several value= are allowed, since
+ *  the chips combine and a reader should be able to send someone the view they
+ *  are looking at.
+ *
+ *  ?topic= is kept as a shorthand for the Citation Topics scheme: it was the
+ *  first form of this link and may be in someone's history or notes by now. */
+function useDeepLink(): { scheme: string; values: string[] } | null {
   const scheme = useUrlParam("scheme");
-  const value = useUrlParam("value");
+  const values = useUrlParamAll("value");
   const topic = useUrlParam("topic");
-  if (topic) return { scheme: "topics", value: topic };
-  if (scheme && value) return { scheme, value };
+  if (topic) return { scheme: "topics", values: [topic] };
+  if (scheme && values.length) return { scheme, values };
   return null;
 }
 
@@ -94,8 +121,14 @@ export default function PublicationsExplorer({
   const link = useMemo(() => {
     if (!asked) return null;
     const s = schemes.find((x) => x.id === asked.scheme);
-    if (!s || !s.values.some((v) => v.name === asked.value)) return null;
-    return { scheme: s.id, value: asked.value };
+    if (!s) return null;
+    // Unknown values are dropped rather than failing the whole link: a URL
+    // naming three values of which one has since been reclassified should still
+    // show the other two.
+    const values = asked.values.filter((v) =>
+      s.values.some((x) => x.name === v),
+    );
+    return values.length ? { scheme: s.id, values } : null;
   }, [asked, schemes]);
 
   // Derived, not stored. Storing the initial view would freeze it at the value
@@ -362,7 +395,7 @@ function ExploreView({
   schemes,
   network,
   link,
-}: Props & { link: { scheme: SchemeId; value: string } | null }) {
+}: Props & { link: { scheme: SchemeId; values: string[] } | null }) {
   // Both derived for the same reason as the view above: the URL is not readable
   // on the first render, so it cannot seed useState.
   const [chosenScheme, setChosenScheme] = useState<SchemeId | null>(null);
@@ -381,23 +414,43 @@ function ExploreView({
   // Topics — one topic per paper — it would always return nothing.
   const [chosenValues, setChosenValues] = useState<Set<string> | null>(null);
   const selected = useMemo(
-    () => chosenValues ?? new Set(link ? [link.value] : []),
+    () => chosenValues ?? new Set(link?.values ?? []),
     [chosenValues, link],
   );
 
-  const toggleValue = useCallback(
-    (name: string) => {
-      setChosenValues((current) => {
-        const next = new Set(current ?? (link ? [link.value] : []));
-        if (next.has(name)) next.delete(name);
-        else next.add(name);
-        return next;
-      });
-    },
-    [link],
-  );
+  // The URL follows the chips, so what a reader is looking at is what they can
+  // send. Written here in the handlers rather than in an effect: the selection
+  // changing is an event, not a state to synchronise afterwards.
+  //
+  // replaceState, not pushState. A chip is a filter, not a page, and pushing
+  // would bury the way back under one entry per click. The cost is that Back
+  // does not undo a chip — the chips themselves do that.
+  const syncUrl = useCallback((scheme: SchemeId, values: Set<string>) => {
+    const url = new URL(window.location.href);
+    url.searchParams.delete("topic");
+    url.searchParams.delete("scheme");
+    url.searchParams.delete("value");
+    if (values.size) {
+      url.searchParams.set("scheme", scheme);
+      for (const v of values) url.searchParams.append("value", v);
+    }
+    window.history.replaceState(null, "", url.pathname + url.search);
+  }, []);
 
-  const clearValues = useCallback(() => setChosenValues(new Set<string>()), []);
+  // Computed outside the updater on purpose. React may call a state updater
+  // twice in development, and a URL write inside one would run twice with it.
+  const toggleValue = (name: string) => {
+    const next = new Set(selected);
+    if (next.has(name)) next.delete(name);
+    else next.add(name);
+    setChosenValues(next);
+    syncUrl(schemeId, next);
+  };
+
+  const clearValues = () => {
+    setChosenValues(new Set<string>());
+    syncUrl(schemeId, new Set());
+  };
   const [picked, setPicked] = useState<string | null>(null);
   const [moved, setMoved] = useState<Record<string, { x: number; y: number }>>(
     {},
@@ -431,11 +484,14 @@ function ExploreView({
     // dropped. Names shared between schemes survive the switch, which is the
     // behaviour a reader expects of "Psychiatry" appearing in two of them.
     const next = schemes.find((s) => s.id === id)!;
-    setChosenValues(
-      new Set(
-        [...selected].filter((v) => next.values.some((x) => x.name === v)),
-      ),
+    const kept = new Set(
+      [...selected].filter((v) => next.values.some((x) => x.name === v)),
     );
+    setChosenValues(kept);
+    // The URL has to follow this too. Without it, switching scheme left the
+    // query naming the old scheme and values that were no longer selected —
+    // a link that restored a view the reader had already left.
+    syncUrl(id, kept);
   }
 
   // An edge survives only if both its papers do, so a narrowed network never
