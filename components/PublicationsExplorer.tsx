@@ -35,36 +35,60 @@ type Props = { papers: FacetPaper[]; schemes: Scheme[]; network: Network };
 
 const ALL = "__all__";
 
-// A Citation Topic named in the URL: /publications/?topic=1.21%20Psychiatry.
-// The homepage's computational suicidology card links here, so the reader lands
-// on the six papers rather than on a page of seventy-two and a hunt.
+// A value named in the URL: /publications/?scheme=topics&value=1.21%20Psychiatry.
+// The homepage cards link here, so a reader lands on the lab's papers in that
+// area rather than on a page of seventy-two and a hunt. Any scheme and any
+// value work; the cards are just the first callers.
 //
 // Read through useSyncExternalStore rather than an effect. The server has no
-// location, and React uses the server snapshot for the first client render too,
-// so this returns null on both and the markup matches — then the real value
-// arrives and the view re-renders. The alternative, reading window.location in
-// an effect and calling setState, is the pattern the linter now rejects, and it
-// would flash the unfiltered list first.
+// location, and React reuses the server snapshot for the first client render,
+// so both return null and the markup matches before the real value arrives.
+// Reading window.location in an effect would flash the unfiltered list first
+// and trip the lint rule now gating the deploy.
 //
-// The URL is never subscribed to, only read: a static export has no client-side
-// route changes that would alter it in place.
+// Never subscribed to, only read: a static export has no client-side route
+// change that would rewrite the query in place.
 const NO_SUBSCRIPTION = () => () => {};
-const readTopic = () => new URLSearchParams(window.location.search).get("topic");
-const noTopicOnServer = () => null;
+const NULL_ON_SERVER = () => null;
 
-function useTopicFromUrl() {
-  return useSyncExternalStore<string | null>(NO_SUBSCRIPTION, readTopic, noTopicOnServer);
+function useUrlParam(name: string) {
+  const read = useCallback(() => new URLSearchParams(window.location.search).get(name), [name]);
+  return useSyncExternalStore<string | null>(NO_SUBSCRIPTION, read, NULL_ON_SERVER);
+}
+
+/** The scheme and value asked for, or null. ?topic= is kept as a shorthand for
+ *  the Citation Topics scheme: it was the first form of this link and may be
+ *  in someone's history or notes by now. */
+function useDeepLink(): { scheme: string; value: string } | null {
+  const scheme = useUrlParam("scheme");
+  const value = useUrlParam("value");
+  const topic = useUrlParam("topic");
+  if (topic) return { scheme: "topics", value: topic };
+  if (scheme && value) return { scheme, value };
+  return null;
 }
 
 export default function PublicationsExplorer({ papers, schemes, network }: Props) {
-  const topic = useTopicFromUrl();
+  const asked = useDeepLink();
+
+  // Validated here rather than downstream, so an unusable link behaves exactly
+  // like no link at all — the ordinary List view. Validating inside the Explore
+  // view meant a stale or hand-edited URL still forced Explore open, showing all
+  // seventy-two papers under no filter, which reads as a bug rather than as a
+  // page that shrugged.
+  const link = useMemo(() => {
+    if (!asked) return null;
+    const s = schemes.find((x) => x.id === asked.scheme);
+    if (!s || !s.values.some((v) => v.name === asked.value)) return null;
+    return { scheme: s.id, value: asked.value };
+  }, [asked, schemes]);
 
   // Derived, not stored. Storing the initial view would freeze it at the value
   // the first render saw — which is always "no topic", since the URL is not
   // readable until hydration. Null here means "the reader has not chosen", and
   // the moment they do, their choice wins over the link that brought them.
   const [chosen, setChosen] = useState<"list" | "explore" | null>(null);
-  const view = chosen ?? (topic ? "explore" : "list");
+  const view = chosen ?? (link ? "explore" : "list");
   const setView = setChosen;
 
   return (
@@ -106,7 +130,7 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
       {view === "list" ? (
         <SearchableList papers={papers} />
       ) : (
-        <ExploreView papers={papers} schemes={schemes} network={network} topic={topic} />
+        <ExploreView papers={papers} schemes={schemes} network={network} link={link} />
       )}
     </div>
   );
@@ -286,13 +310,18 @@ function PaperList({ papers, highlight }: { papers: FacetPaper[]; highlight?: st
 
 // ── Explore ────────────────────────────────────────────────────────────────
 
-function ExploreView({ papers, schemes, network, topic }: Props & { topic: string | null }) {
-  // Both derived for the same reason as the view above: the topic in the URL is
-  // not known on the first render, so it cannot seed useState.
+function ExploreView({
+  papers,
+  schemes,
+  network,
+  link,
+}: Props & { link: { scheme: SchemeId; value: string } | null }) {
+  // Both derived for the same reason as the view above: the URL is not readable
+  // on the first render, so it cannot seed useState.
   const [chosenScheme, setChosenScheme] = useState<SchemeId | null>(null);
-  const schemeId = chosenScheme ?? (topic ? "topics" : "areas");
+  const schemeId = chosenScheme ?? link?.scheme ?? "areas";
   const [chosenValue, setChosenValue] = useState<string | null>(null);
-  const value = chosenValue ?? topic ?? ALL;
+  const value = chosenValue ?? link?.value ?? ALL;
   const setValue = setChosenValue;
   const [picked, setPicked] = useState<string | null>(null);
   const [moved, setMoved] = useState<Record<string, { x: number; y: number }>>({});
