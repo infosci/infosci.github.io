@@ -46,9 +46,15 @@ jobs:
       # missing topic is not a build failure.
       - run: npm run check
 
+      # Fails only when a paper lands on three or more homepage cards, which has
+      # always meant a card's search went loose — a term naming a data source or
+      # a method rather than an object of study. Papers on no card are reported
+      # and allowed: a method contribution with no domain correctly has none.
+      - run: npm run cards
+
       # next build does not run ESLint, so without this step nothing outside a
-      # local terminal ever reads it. Both gates sit before the build for the
-      # same reason: they are the two failures the site cannot show you itself.
+      # local terminal ever reads it. These gates sit before the build for the
+      # same reason: they are the failures the site cannot show you itself.
       - run: npm run lint
 
       # No BASE_PATH here: this is the live site, served at the root of

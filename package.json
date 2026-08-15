@@ -8,6 +8,7 @@
     "start": "next start",
     "lint": "eslint",
     "check": "node scripts/check-disciplines.mjs",
+    "cards": "node scripts/check-cards.mjs",
     "add-paper": "node scripts/add-paper.mjs",
     "optimize-photos": "node scripts/optimize-photos.mjs"
   },

@@ -92,5 +92,16 @@ console.log(`   add "${doi}" to data/citation-topics.json with its meso and macr
 console.log("   A paper published in the last few months usually has none yet — leave it");
 console.log("   out rather than inventing one, and the Explore view will say so.");
 
+console.log("\n3. HOMEPAGE CARDS. Nothing to edit — the cards find papers by searching");
+console.log("   the list, so this paper is already on whichever cards reach it. Run");
+console.log("   npm run cards to see which, and read the line, not the number.");
+console.log("   Landing on none is fine for a method paper with no domain. Landing on");
+console.log("   three means a card's search has gone loose and the build will say so.");
+console.log("   If it belongs somewhere nothing reaches, widen that card's query in");
+console.log("   app/page.tsx with a word naming what the paper is ABOUT — never the");
+console.log("   platform it used or the technique it applied, since those are shared");
+console.log("   and will drag other papers along.");
+
 console.log("\nThen: node scripts/check-disciplines.mjs   (must exit 0)");
+console.log("      npm run cards");
 console.log("      npm run build");
