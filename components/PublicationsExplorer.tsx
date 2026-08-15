@@ -448,9 +448,9 @@ function ExploreView({
   // Frame what is actually on screen. Keeping the whole network's extent when
   // eleven papers are showing strands them in empty space; the minimum stops a
   // two-paper selection from zooming to absurdity.
-  const viewBox = useMemo(() => {
+  const { viewBox, zoom } = useMemo(() => {
     const vis = network.nodes.filter((d) => visible.has(d.key));
-    if (!vis.length) return network.viewBox;
+    if (!vis.length) return { viewBox: network.viewBox, zoom: 1 };
     const pad = NODE_R * 5;
     const MIN = 360;
     let [minX, maxX] = [
@@ -467,7 +467,22 @@ function ExploreView({
     };
     [minX, maxX] = grow(minX, maxX);
     [minY, maxY] = grow(minY, maxY);
-    return `${minX} ${minY} ${maxX - minX} ${maxY - minY}`;
+
+    // How far this frame is zoomed out against the tightest one. Everything
+    // drawn inside is multiplied by it, so a circle keeps the same size on
+    // screen however wide the frame has had to open.
+    //
+    // Without this, a selection whose papers sit far apart in the layout came
+    // out unreadable: three topics together spanned 588 units against the
+    // usual 360, which dropped the nodes from 6.7px to 4.4px and left 115px of
+    // the column empty. The layout is computed once at build time for all
+    // seventy-two papers, so a selection inherits positions rather than being
+    // laid out afresh — and papers that are unrelated are, correctly, far
+    // apart. The frame has to open; the marks do not have to shrink with it.
+    return {
+      viewBox: `${minX} ${minY} ${maxX - minX} ${maxY - minY}`,
+      zoom: Math.max(maxX - minX, maxY - minY) / MIN,
+    };
   }, [network.nodes, network.viewBox, visible]);
 
   // Citation Topic chips grouped under their macro topic. "4.48" is an address,
@@ -735,7 +750,7 @@ function ExploreView({
                     y1={a.y}
                     x2={b.x}
                     y2={b.y}
-                    strokeWidth={touches ? 1.8 : 1}
+                    strokeWidth={(touches ? 1.8 : 1) * zoom}
                     className={
                       touches
                         ? "stroke-zinc-600 dark:stroke-zinc-300"
@@ -759,14 +774,15 @@ function ExploreView({
                       // Well-connected papers read larger. Unlinked papers stay
                       // visible rather than shrinking to nothing.
                       r={
-                        isPicked
+                        zoom *
+                        (isPicked
                           ? NODE_R * 1.6
                           : NODE_R *
                             (0.8 +
                               0.55 *
                                 Math.sqrt(
                                   (degreeOf.get(d.key) ?? 0) / maxDegree,
-                                ))
+                                )))
                       }
                       className={
                         isPicked
