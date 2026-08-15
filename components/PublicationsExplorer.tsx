@@ -422,7 +422,13 @@ function SearchableList({ papers }: { papers: FacetPaper[] }) {
 
             rows=1 and resize-none keep it a search box rather than a form
             field, and Enter is swallowed: the list filters as you type, so a
-            newline in a search query is never what anyone meant. */}
+            newline in a search query is never what anyone meant.
+
+            The placeholder names the fields and the operator instead of showing
+            an example. It read "try depression or suicide" — the shortest way to
+            demonstrate that or combines, and a grim thing to leave sitting in an
+            empty box on a page anyone might land on. What it was teaching can be
+            said outright. */}
         <textarea
           rows={1}
           value={query}
@@ -430,7 +436,7 @@ function SearchableList({ papers }: { papers: FacetPaper[] }) {
           onKeyDown={(e) => {
             if (e.key === "Enter") e.preventDefault();
           }}
-          placeholder="Search — try depression or suicide"
+          placeholder="Search title, author, venue — combine with or"
           aria-label="Search publications"
           className="field-sizing-content w-full min-w-0 flex-1 resize-none overflow-hidden rounded-2xl border border-zinc-300 px-3 py-1 text-base leading-relaxed text-black placeholder:text-zinc-500 focus:border-zinc-500 focus:outline-none sm:text-xs dark:border-zinc-700 dark:text-zinc-100 dark:placeholder:text-zinc-400"
         />
