@@ -370,20 +370,33 @@ function SearchableList({ papers }: { papers: FacetPaper[] }) {
     });
   };
 
-  const terms = useMemo(
-    () => query.toLowerCase().split(/\s+/).filter(Boolean),
+  // "depression or suicide" is two groups; "choi matthew" is one group of two
+  // words. Words inside a group must all hit, groups are alternatives — or
+  // binds looser than the space between words, which is the convention every
+  // bibliographic database uses and the one a reader will already have.
+  //
+  // It also makes a subject searchable when no single word covers it. Nothing
+  // in this collection is titled "mental health", but "depression or suicide"
+  // finds the work.
+  const groups = useMemo(
+    () =>
+      query
+        .toLowerCase()
+        .split(/\s+or\s+/)
+        .map((g) => g.split(/\s+/).filter(Boolean))
+        .filter((g) => g.length > 0),
     [query],
   );
 
   const shown = useMemo(() => {
-    if (!terms.length) return papers;
+    if (!groups.length) return papers;
     return papers.filter((p) => {
       const hay = [p.title, p.authors.join(" "), venueLine(p), p.year ?? ""]
         .join(" ")
         .toLowerCase();
-      return terms.every((t) => hay.includes(t));
+      return groups.some((g) => g.every((t) => hay.includes(t)));
     });
-  }, [papers, terms]);
+  }, [papers, groups]);
 
   return (
     <div className="mt-10 max-w-3xl">
@@ -396,11 +409,11 @@ function SearchableList({ papers }: { papers: FacetPaper[] }) {
           type="search"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search title, author, venue"
+          placeholder="Search — try depression or suicide"
           aria-label="Search publications"
           className="w-64 rounded-full border border-zinc-300 px-2.5 py-1 text-base text-black placeholder:text-zinc-500 focus:border-zinc-500 focus:outline-none sm:text-xs dark:border-zinc-700 dark:text-zinc-100 dark:placeholder:text-zinc-400"
         />
-        {terms.length > 0 && (
+        {groups.length > 0 && (
           <p className="text-xs text-zinc-500 dark:text-zinc-400">
             {shown.length} of {papers.length}
           </p>
@@ -413,7 +426,8 @@ function SearchableList({ papers }: { papers: FacetPaper[] }) {
         </div>
       ) : (
         <p className="mt-12 text-sm text-zinc-500 dark:text-zinc-400">
-          No paper matches every word of that. Try one word, or{" "}
+          Nothing matches that. Try fewer words, put <em>or</em> between them,
+          or{" "}
           <button
             type="button"
             onClick={() => setQuery("")}
