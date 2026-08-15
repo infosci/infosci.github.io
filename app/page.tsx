@@ -175,6 +175,12 @@ const AREAS = [
     //
     // SIGIR rather than the Manning textbook, on the same reasoning as 4S and
     // IMIA: a body outlasts an edition.
+    //
+    // No bare "search" in the query. The match is a substring — which is what
+    // makes "suicid" find suicidality — and "search" sits inside "research", so
+    // that one word pulled ten scientometrics papers onto this card. "bibliographic"
+    // and "ontology-based" cover what it was there for. Any new term wants
+    // checking against the list for the same trap.
     id: "information-retrieval",
     title: "Information Retrieval",
     Icon: RetrievalIcon,
@@ -182,7 +188,7 @@ const AREAS = [
       href: "https://sigir.org/",
       label: "ACM SIGIR",
     },
-    q: "retrieval or search or query or faceted or semantic web or data modeling or information alignment or recommendation",
+    q: "retrieval or bibliographic or query or faceted or semantic web or data modeling or information alignment or recommendation or ontology-based",
   },
   {
     id: "digital-humanities",
