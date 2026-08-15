@@ -355,7 +355,20 @@ function PaperEntry({
  *  this is a plain string match on our own record of the paper, which is why
  *  it lives over the plain list. */
 function SearchableList({ papers }: { papers: FacetPaper[] }) {
-  const [query, setQuery] = useState("");
+  // Seeded from ?q= and written back to it, so a search is as shareable as a
+  // set of chips. Derived rather than stored for the reason the chips are: the
+  // URL cannot be read on the first render, so it cannot seed useState.
+  const fromUrl = useUrlParam("q");
+  const [typed, setTyped] = useState<string | null>(null);
+  const query = typed ?? fromUrl ?? "";
+
+  const setQuery = (next: string) => {
+    setTyped(next);
+    replaceQuery((p) => {
+      if (next.trim()) p.set("q", next);
+      else p.delete("q");
+    });
+  };
 
   const terms = useMemo(
     () => query.toLowerCase().split(/\s+/).filter(Boolean),
