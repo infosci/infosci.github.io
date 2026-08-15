@@ -1,7 +1,7 @@
 import {
   ComputationalSocialScienceIcon,
   DigitalHumanitiesIcon,
-  MentalHealthIcon,
+  HealthIcon,
   ScienceOfScienceIcon,
   SuicidologyIcon,
   TechnologyStudiesIcon,
@@ -30,13 +30,37 @@ const AREAS = [
     },
   },
   {
-    id: "mental-health-informatics",
-    title: "Mental Health Informatics",
-    Icon: MentalHealthIcon,
+    // Widened from "Mental Health Informatics", and the widening is what earns
+    // the link. Web of Science has no value meaning mental health — the lab's
+    // papers on it scatter across Psychiatry, Nursing and, for the major
+    // depressive disorder paper, Diabetes — so a link under the old name landed
+    // on eleven papers of which four were about mental health. Under this name
+    // all eleven belong: drug repurposing, UMLS mapping and biomedical term
+    // similarity are health informatics, and the card no longer promises
+    // otherwise.
+    //
+    // IMIA rather than AMIA now. AMIA's Mental Health Informatics working group
+    // was exactly right for the old title and says nothing about this one, and
+    // IMIA is the international body — the same reason 4S carries the science
+    // and technology studies card instead of the European association. Its own
+    // wording is "biomedical and health informatics", which contains this
+    // card's name.
+    //
+    // Hersh, BMC Medical Informatics and Decision Making (2009), "A stimulus to
+    // define informatics and health information technology", was the
+    // alternative: a paper that defines the field rather than a body that
+    // represents it. A body ages better, which is the whole point of these
+    // references.
+    id: "health-informatics",
+    title: "Health Informatics",
+    Icon: HealthIcon,
     source: {
-      href: "https://amia.org/community/working-groups/mental-health-informatics",
-      label: "AMIA Working Group",
+      href: "https://imia-medinfo.org/wp/",
+      label: "International Medical Informatics Association",
     },
+    to:
+      "/publications/?scheme=categories&value=" +
+      encodeURIComponent("Medical Informatics"),
   },
   {
     // The one card that cites the lab rather than the field, and the only one
@@ -69,7 +93,7 @@ const AREAS = [
       href: "https://doi.org/10.1111/sltb.12959",
       label: "Kim et al., Suicide and Life-Threatening Behavior (2023)",
     },
-    // The only card that leads back into the site. Web of Science gives all six
+    // One of two cards that lead back into the site. Web of Science gives all six
     // of the lab's suicide papers the same Citation Topic, 1.21 Psychiatry, and
     // it holds nothing else of the seventy-two — so this lands on exactly those
     // six. The value is Clarivate's; the link merely names it.
@@ -78,15 +102,11 @@ const AREAS = [
     // citation takes over the outward link, so the reference stays one click
     // away either way.
     //
-    // Mental health informatics was given the same treatment and had it taken
-    // back. It pointed at the Medical Informatics subject category, eleven
-    // papers, because Web of Science has no value meaning mental health — its
-    // Citation Topics scatter across Psychiatry, Nursing and, for the major
-    // depressive disorder paper, Diabetes. Eleven papers that include drug
-    // repurposing and UMLS mapping are not what a reader clicking "Mental
-    // Health Informatics" is asking for, and a link needing that much
-    // explanation is worse than no link. Only this card keeps one, because only
-    // here does a single Clarivate value hold exactly the work the card names.
+    // The health informatics card links the same way, and the two arrived there
+    // from opposite directions: this one had a Clarivate value that fit its name
+    // exactly, while that one was renamed until its name fit the value. Both
+    // end at the same rule — a card links inward only when a single Web of
+    // Science value holds the work the card names, and nothing else.
     to:
       "/publications/?scheme=topics&value=" +
       encodeURIComponent("1.21 Psychiatry"),

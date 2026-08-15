@@ -34,19 +34,23 @@ export function ScienceOfScienceIcon({ className }: IconProps) {
   );
 }
 
-/** A heart held inside a head. The lab's work here is depression and
- * suicidology, and a network or a pulse inside the head would describe the
- * method while saying nothing about the point of it. The earlier mark was a
- * plain circle around a pulse, which read as a gauge rather than a mind — the
- * open profile, with its gap at the jaw, is what makes it a head.
+/** A heart. The card was mental health informatics and the mark was a heart
+ * held inside a head — the head is what made it mental, and with the card
+ * widened to health informatics the head became a claim the title no longer
+ * makes.
  *
- * A heart reads warmer than clinical. On this subject that is the right
- * register: the people behind the data are the reason for it. */
-export function MentalHealthIcon({ className }: IconProps) {
+ * Left plain, on the same reasoning as the open book below: a pulse line was
+ * tried across the heart and again contained inside it, and both blob at 40px,
+ * where a 2.5 stroke leaves a 13-unit heart almost no interior. A heart alone
+ * risks reading as a "like" — the company it keeps is what stops it, since it
+ * sits under the word Health with an informatics association beneath.
+ *
+ * The warmer register was right for mental health and is still right here: the
+ * people behind the data are the reason for the work. */
+export function HealthIcon({ className }: IconProps) {
   return (
     <svg {...SHARED} className={className ?? "h-10 w-8"}>
-      <path d="M23 32 v-4.5 a10.5 10.5 0 1 0 -8 3.2 v1.3" />
-      <path d="M16.2 23 c-3.9 -3.2 -5.6 -5.4 -3.7 -7.6 c1.6 -1.8 3.7 -0.5 3.7 1 c0 -1.5 2.1 -2.8 3.7 -1 c1.9 2.2 0.2 4.4 -3.7 7.6 z" />
+      <path d="M16 30 c-6.5 -5.4 -9.5 -9 -6.2 -12.7 c2.7 -3 6.2 -0.8 6.2 1.7 c0 -2.5 3.5 -4.7 6.2 -1.7 c3.3 3.7 0.3 7.3 -6.2 12.7 z" />
     </svg>
   );
 }
