@@ -91,6 +91,38 @@ function useUrlParamAll(name: string) {
   return useMemo(() => (joined ? joined.split(SEP) : []), [joined]);
 }
 
+/** A five-pointed star, for the paper currently selected in the network.
+ *
+ *  A bigger circle among circles says "this one is larger"; a different shape
+ *  says "this one is chosen", which is the actual state. It also survives the
+ *  case a size cannot: a well-connected paper is already drawn large, so the
+ *  selected circle and its neighbours were within a couple of pixels of each
+ *  other.
+ *
+ *  Ten points, alternating outer and inner radius, starting at the top. The
+ *  inner radius is 0.42 of the outer — the classic proportion; nearer 0.5 the
+ *  points go stubby and it reads as a cog, and much below 0.38 the arms thin to
+ *  spines at this size. */
+function starPath(cx: number, cy: number, outer: number) {
+  const inner = outer * 0.42;
+  const points = Array.from({ length: 10 }, (_, i) => {
+    const r = i % 2 === 0 ? outer : inner;
+    const angle = (Math.PI / 5) * i - Math.PI / 2;
+    return `${(cx + r * Math.cos(angle)).toFixed(2)} ${(cy + r * Math.sin(angle)).toFixed(2)}`;
+  });
+  return `M${points.join(" L")} Z`;
+}
+
+/** A circle, drawn as a path so that it is the same kind of element as the
+ *  star. Swapping <circle> for <path> on selection destroyed the node mid-drag:
+ *  React removes the old element, and the pointer capture taken on pointerdown
+ *  goes with it. A mouse hid this — hover selects first, so the star is already
+ *  there when the press lands — but on touch there is no hover, and the first
+ *  drag of any node died on contact. One element, two shapes. */
+function circlePath(cx: number, cy: number, r: number) {
+  return `M${cx - r} ${cy} a${r} ${r} 0 1 0 ${r * 2} 0 a${r} ${r} 0 1 0 ${-r * 2} 0 Z`;
+}
+
 /** Rewrite the query in place, leaving parameters the caller does not touch.
  *  Both the view toggle and the chips write to the URL, and each has to survive
  *  the other. */
@@ -514,18 +546,15 @@ function ExploreView({
 
   function chooseScheme(id: SchemeId) {
     setChosenScheme(id);
-    // Values are scheme-specific, so anything the new scheme does not have is
-    // dropped. Names shared between schemes survive the switch, which is the
-    // behaviour a reader expects of "Psychiatry" appearing in two of them.
-    const next = schemes.find((s) => s.id === id)!;
-    const kept = new Set(
-      [...selected].filter((v) => next.values.some((x) => x.name === v)),
-    );
-    setChosenValues(kept);
-    // The URL has to follow this too. Without it, switching scheme left the
-    // query naming the old scheme and values that were no longer selected —
-    // a link that restored a view the reader had already left.
-    syncUrl(id, kept);
+    // A scheme change clears the selection outright, rather than keeping values
+    // the new scheme happens to share. Carrying "Psychiatry" from Research Areas
+    // into Subject Categories looked like continuity and was not: the two are
+    // different values with the same name, assigned on different evidence and
+    // holding different papers. A reader who switches scheme is asking to look
+    // again, not to keep filtering.
+    const cleared = new Set<string>();
+    setChosenValues(cleared);
+    syncUrl(id, cleared);
   }
 
   // An edge survives only if both its papers do, so a narrowed network never
@@ -856,23 +885,67 @@ function ExploreView({
                 .filter((d) => visible.has(d.key))
                 .map((d) => {
                   const isPicked = picked === d.key;
+                  const at = pos(d.key);
+                  // Well-connected papers read larger. Unlinked papers stay
+                  // visible rather than shrinking to nothing.
+                  const r =
+                    zoom *
+                    NODE_R *
+                    (0.8 +
+                      0.55 * Math.sqrt((degreeOf.get(d.key) ?? 0) / maxDegree));
+
+                  // Every handler is shared, so the selected paper behaves
+                  // exactly like the others — it can still be dragged, and a
+                  // drag does not end the moment the shape changes under the
+                  // pointer.
+                  const handlers = {
+                    tabIndex: 0,
+                    role: "button",
+                    "aria-label": byKey.get(d.key)?.title,
+                    onMouseEnter: () => !dragging.current && setPicked(d.key),
+                    onFocus: () => setPicked(d.key),
+                    onPointerDown: (e: React.PointerEvent<SVGElement>) => {
+                      e.currentTarget.setPointerCapture(e.pointerId);
+                      dragging.current = d.key;
+                      setPicked(d.key);
+                    },
+                    onPointerMove: (e: React.PointerEvent<SVGElement>) => {
+                      if (dragging.current !== d.key) return;
+                      const pt = toDiagram(e.clientX, e.clientY);
+                      if (pt) setMoved((m) => ({ ...m, [d.key]: pt }));
+                    },
+                    onPointerUp: (e: React.PointerEvent<SVGElement>) => {
+                      e.currentTarget.releasePointerCapture(e.pointerId);
+                      dragging.current = null;
+                    },
+                    onPointerCancel: () => {
+                      dragging.current = null;
+                    },
+                    // Redundant beside onPointerDown for a real pointer, but
+                    // assistive tech can synthesise a bare click with no pointer
+                    // events at all, and that should still select the paper.
+                    onClick: () => setPicked(d.key),
+                    // touch-none stops a drag from scrolling the page instead.
+                    style: {
+                      cursor: "grab",
+                      outline: "none",
+                      touchAction: "none",
+                    },
+                  };
+
+                  // 1.9 rather than the 1.6 a selected circle used: a star of
+                  // the same radius reads smaller, because most of its area is
+                  // the gaps between the arms.
                   return (
-                    <circle
+                    <path
                       key={d.key}
-                      cx={pos(d.key).x}
-                      cy={pos(d.key).y}
-                      // Well-connected papers read larger. Unlinked papers stay
-                      // visible rather than shrinking to nothing.
-                      r={
-                        zoom *
-                        (isPicked
-                          ? NODE_R * 1.6
-                          : NODE_R *
-                            (0.8 +
-                              0.55 *
-                                Math.sqrt(
-                                  (degreeOf.get(d.key) ?? 0) / maxDegree,
-                                )))
+                      // 1.9 rather than the 1.6 a selected circle used: a star
+                      // of the same radius reads smaller, because most of its
+                      // area is the gaps between the arms.
+                      d={
+                        isPicked
+                          ? starPath(at.x, at.y, zoom * NODE_R * 1.9)
+                          : circlePath(at.x, at.y, r)
                       }
                       className={
                         isPicked
@@ -881,41 +954,10 @@ function ExploreView({
                             ? "fill-zinc-800 dark:fill-zinc-200"
                             : "fill-zinc-500 dark:fill-zinc-500"
                       }
-                      tabIndex={0}
-                      role="button"
-                      aria-label={byKey.get(d.key)?.title}
-                      onMouseEnter={() => !dragging.current && setPicked(d.key)}
-                      onFocus={() => setPicked(d.key)}
-                      onPointerDown={(e) => {
-                        e.currentTarget.setPointerCapture(e.pointerId);
-                        dragging.current = d.key;
-                        setPicked(d.key);
-                      }}
-                      onPointerMove={(e) => {
-                        if (dragging.current !== d.key) return;
-                        const pt = toDiagram(e.clientX, e.clientY);
-                        if (pt) setMoved((m) => ({ ...m, [d.key]: pt }));
-                      }}
-                      onPointerUp={(e) => {
-                        e.currentTarget.releasePointerCapture(e.pointerId);
-                        dragging.current = null;
-                      }}
-                      onPointerCancel={() => {
-                        dragging.current = null;
-                      }}
-                      // Redundant beside onPointerDown for a real pointer, but
-                      // assistive tech can synthesise a bare click with no pointer
-                      // events at all, and that should still select the paper.
-                      onClick={() => setPicked(d.key)}
-                      // touch-none stops a drag from scrolling the page instead.
-                      style={{
-                        cursor: "grab",
-                        outline: "none",
-                        touchAction: "none",
-                      }}
+                      {...handlers}
                     >
                       <title>{byKey.get(d.key)?.title}</title>
-                    </circle>
+                    </path>
                   );
                 })}
             </svg>
