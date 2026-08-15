@@ -38,25 +38,35 @@ const AREAS = [
     },
   },
   {
-    // The one card whose field has no standing reference of its own. The others
-    // each link to something that does not change from year to year — a review,
-    // a professional body, a book chapter. "Computational suicidology" has no
-    // canonical definition, no association, no naming paper: it is a direction
-    // of work rather than an established field, and the honest citation is the
-    // nearest review of the methods it uses. Cox et al. is that — the field's
-    // own review journal, and its title is very nearly this card's.
+    // The one card that cites the lab rather than the field, and the only one
+    // that should. Every other links to something that does not change from
+    // year to year — a review, a professional body, a book chapter — so the
+    // definitional work is done by the field rather than by us.
     //
-    // Franklin et al. (2017) was the alternative, and is the more famous paper:
-    // fifty years of risk factors meta-analysed to near-chance prediction, which
-    // is the finding that sent this work computational in the first place. It
-    // was passed over because it is the reason for the field rather than an
-    // account of it, and every other card here describes rather than motivates.
+    // "Computational suicidology" has no canonical definition, no association
+    // and no naming paper: it is a direction of work rather than an established
+    // field. With nothing at field level to point at, the work that gives this
+    // card its meaning is the lab's own, and saying so is more honest than
+    // borrowing a methods review that does not use the term either. That
+    // argument holds here and nowhere else on this page.
+    //
+    // The venue does much of the work: Suicide and Life-Threatening Behavior is
+    // the journal of the American Association of Suicidology, so the card still
+    // points into the field's own house. The title states both halves of the
+    // name — the machine learning and the risk factors.
+    //
+    // Two references were passed over. Cox et al., Clinical Psychology Review
+    // (2020), "Machine learning for suicidology", is the nearest field-level
+    // review of the methods. Franklin et al., Psychological Bulletin (2017),
+    // meta-analysed fifty years of risk factors down to near-chance prediction,
+    // which is the finding that sent this work computational in the first place
+    // — the reason for the field rather than an account of it.
     id: "computational-suicidology",
     title: "Computational Suicidology",
     Icon: SuicidologyIcon,
     source: {
-      href: "https://doi.org/10.1016/j.cpr.2020.101940",
-      label: "Cox et al., Clinical Psychology Review (2020)",
+      href: "https://doi.org/10.1111/sltb.12959",
+      label: "Kim et al., Suicide and Life-Threatening Behavior (2023)",
     },
   },
   {
