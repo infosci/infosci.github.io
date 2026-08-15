@@ -11,7 +11,29 @@ import Link from "next/link";
 import { TriadFigure } from "@/components/TriadFigure";
 
 // Every card names a field, never a method. The lab is about fields, using
-// diverse methods — that is the sentence to test a new card against.
+// diverse methods — that is the sentence to test a new card against, and it is
+// also how the searches behind the titles are built.
+//
+// Each query names its field's OBJECT of study. Never the data source: Twitter,
+// Reddit and "social media" are where several of these fields look, so those
+// words put the suicide papers on two cards at once and said nothing about
+// either. Never the method: graph, network, learning and classification are
+// what the whole lab does. Objects are what separate fields; sources and
+// methods are what they share, and a query built from them collides by
+// construction.
+//
+// Tuned against the collection rather than guessed, and read as a list rather
+// than as counts. Sixteen papers used to sit on two cards; six do now, and each
+// of the six is genuinely two things — a scientometric review of a biomedical
+// literature, coauthorship predicted with bibliographic embeddings, semantic
+// change in biomedical text. Overlap that means something is worth keeping;
+// overlap from a shared platform name is not.
+//
+// Loosen a term only to reach a paper nothing else reaches, and use the
+// shortest stem that does it: "suicid" catches suicide, suicidal and
+// suicidality. Then check what else the stem catches — the match is a
+// substring, and "search" inside "research" once put ten scientometrics papers
+// on the retrieval card.
 //
 // It is a rule with teeth. A graph learning card was proposed and rejected: it
 // would have held fourteen papers across eight years, more than four of these
@@ -50,7 +72,7 @@ const AREAS = [
       href: "https://www.science.org/doi/10.1126/science.aao0185",
       label: "Fortunato et al., Science (2018)",
     },
-    q: "scientometric or bibliometric or citation or coauthor or collaboration or fund or team or peer review or academic or scholarly or orcid or discipline or knowledge diffusion or domain comparison or scientific article or scientific publication",
+    q: "scientometric or bibliometric or citation or coauthor or collaboration or fund or team or peer review or academic or scholarly or orcid or knowledge diffusion or domain comparison or scientific article or scientific publication",
   },
   {
     // Widened from "Mental Health Informatics", and the widening is what earns
@@ -81,7 +103,7 @@ const AREAS = [
       href: "https://imia-medinfo.org/wp/",
       label: "International Medical Informatics Association",
     },
-    q: "biomedical or drug or medical or disease or molecular or protein or caries or cancer or depress",
+    q: "biomedical or drug or molecular or protein or caries or cancer or disease or medical or depress or umls or clinical",
   },
   {
     // The one card that cites the lab rather than the field, and the only one
@@ -149,7 +171,7 @@ const AREAS = [
       href: "https://www.4sonline.org/what_is_4s.php",
       label: "Society for Social Studies of Science (4S)",
     },
-    q: "ischool or data science or interdisciplin or knowledge trading or teach",
+    q: "ischool or knowledge trading or interdisciplin or teach",
   },
   {
     // Lazer et al. is to this field what Fortunato is to the science of science
@@ -163,7 +185,7 @@ const AREAS = [
       href: "https://www.science.org/doi/10.1126/science.1167742",
       label: "Lazer et al., Science (2009)",
     },
-    q: "social media or reddit or twitter or bullying or stalking or stigma or abuse or victimization",
+    q: "bullying or stalking or stigma or child abuse or victimization or workplace or minority",
   },
   {
     // The lab's earliest work and its largest Web of Science category
@@ -198,7 +220,7 @@ const AREAS = [
       href: "https://dhdebates.gc.cuny.edu/read/untitled-88c11800-9446-469b-a3be-3fdb36bfbd1e/section/f5640d43-b8eb-4d49-bc4b-eb31a16f3d06",
       label: "Kirschenbaum, Debates in the DH (2012)",
     },
-    q: "semantic change or word semantic or ontology or book or opinion mining",
+    q: "word semantic change or opinion mining or book items",
   },
 ];
 
