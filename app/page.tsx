@@ -6,6 +6,7 @@ import {
   SuicidologyIcon,
   TechnologyStudiesIcon,
 } from "@/components/AreaIcons";
+import Link from "next/link";
 import { TriadFigure } from "@/components/TriadFigure";
 
 // The cards are fixed: a mark, the field's name, and the citation. Nothing on
@@ -68,6 +69,17 @@ const AREAS = [
       href: "https://doi.org/10.1111/sltb.12959",
       label: "Kim et al., Suicide and Life-Threatening Behavior (2023)",
     },
+    // The only card that leads back into the site. Web of Science gives all six
+    // of the lab's suicide papers the same Citation Topic, 1.21 Psychiatry, and
+    // it holds nothing else of the seventy-two — so this lands on exactly those
+    // six. The value is Clarivate's; the link merely names it.
+    //
+    // It inverts this one card: the title goes inward and the citation carries
+    // the outward link instead. Five cards send you to the field because that is
+    // where their meaning lives; this one has no field to send you to, which is
+    // why it cites the lab, and the work itself is the next useful thing to
+    // read.
+    to: "/publications/?topic=" + encodeURIComponent("1.21 Psychiatry"),
   },
   {
     // 4S: the field's international body, founded 1975, and the parallel to
@@ -113,15 +125,14 @@ const AREAS = [
   },
 ];
 
-
 /** The arrow that says "this leaves the site". Deliberately not in
  * AreaIcons.tsx — that file holds the research marks, drawn in ddun.ai's 32x42
  * idiom; this is interface furniture at a different scale. */
-function ExternalMark() {
+function ExternalMark({ className }: { className?: string }) {
   return (
     <svg
       viewBox="0 0 24 24"
-      className="h-3 w-3 shrink-0 text-zinc-400 dark:text-zinc-600"
+      className={`h-3 w-3 shrink-0 text-zinc-400 dark:text-zinc-600 ${className ?? ""}`}
       stroke="currentColor"
       strokeWidth={2.5}
       strokeLinecap="round"
@@ -135,7 +146,31 @@ function ExternalMark() {
   );
 }
 
-function AreaCard({ area }: { area: (typeof AREAS)[number] }) {
+/** The arrow for a link that stays on the site: no diagonal, since nothing
+ *  leaves. */
+function InwardMark() {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      className="h-3 w-3 shrink-0 text-zinc-400 dark:text-zinc-600"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      fill="none"
+      aria-hidden="true"
+    >
+      <path d="M5 12 H18" />
+      <path d="M13 7 L18 12 L13 17" />
+    </svg>
+  );
+}
+
+function AreaCard({
+  area,
+}: {
+  area: (typeof AREAS)[number] & { to?: string };
+}) {
   return (
     <section
       // aspect-square from sm up, where the grid has three columns to divide.
@@ -155,22 +190,56 @@ function AreaCard({ area }: { area: (typeof AREAS)[number] }) {
 
           The underline sits on the text span, not the anchor, so the arrow
           beside it is not underlined too. */}
-      <a
-        href={area.source.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="group inline-flex items-center gap-1.5 text-[13px] font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
-      >
-        <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
-          {area.title}
-        </span>
-        <ExternalMark />
-      </a>
+      {area.to ? (
+        <Link
+          href={area.to}
+          className="group inline-flex items-center gap-1.5 text-[13px] font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
+        >
+          <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
+            {area.title}
+          </span>
+          <InwardMark />
+        </Link>
+      ) : (
+        <a
+          href={area.source.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="group inline-flex items-center gap-1.5 text-[13px] font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
+        >
+          <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
+            {area.title}
+          </span>
+          <ExternalMark />
+        </a>
+      )}
       {/* zinc-500/400, not zinc-400/600. The original pair failed WCAG AA in
           both themes at this size — 2.51:1 on the light background and 2.72:1
           on the dark one, against 4.5:1 for text under 18px. Size keeps it
-          secondary; color no longer has to. */}
-      <p className="text-xs text-zinc-500 dark:text-zinc-400">{area.source.label}</p>
+          secondary; color no longer has to.
+
+          On the card whose title points inward, this line carries the outward
+          link, so the reference is still one click away. */}
+      {area.to ? (
+        <a
+          href={area.source.href}
+          target="_blank"
+          rel="noopener noreferrer"
+          // Inline rather than inline-flex, so the mark follows the last word
+          // instead of parking at the end of the first line. This label wraps to
+          // two lines and a flex sibling would sit beside the wrong one.
+          className="text-xs text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-zinc-100"
+        >
+          <span className="underline decoration-zinc-300 underline-offset-2 dark:decoration-zinc-700">
+            {area.source.label}
+          </span>
+          <ExternalMark className="ml-1 inline-block align-[-1px]" />
+        </a>
+      ) : (
+        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          {area.source.label}
+        </p>
+      )}
     </section>
   );
 }

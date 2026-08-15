@@ -25,7 +25,7 @@
 // in a title, and that rule is written out under the network rather than left
 // for the reader to infer from the lines.
 
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import type { FacetPaper, Scheme, SchemeId } from "@/lib/publication-facets";
 import { valuesFor } from "@/lib/publication-facets";
 import type { Network } from "@/lib/publication-network";
@@ -35,8 +35,37 @@ type Props = { papers: FacetPaper[]; schemes: Scheme[]; network: Network };
 
 const ALL = "__all__";
 
+// A Citation Topic named in the URL: /publications/?topic=1.21%20Psychiatry.
+// The homepage's computational suicidology card links here, so the reader lands
+// on the six papers rather than on a page of seventy-two and a hunt.
+//
+// Read through useSyncExternalStore rather than an effect. The server has no
+// location, and React uses the server snapshot for the first client render too,
+// so this returns null on both and the markup matches — then the real value
+// arrives and the view re-renders. The alternative, reading window.location in
+// an effect and calling setState, is the pattern the linter now rejects, and it
+// would flash the unfiltered list first.
+//
+// The URL is never subscribed to, only read: a static export has no client-side
+// route changes that would alter it in place.
+const NO_SUBSCRIPTION = () => () => {};
+const readTopic = () => new URLSearchParams(window.location.search).get("topic");
+const noTopicOnServer = () => null;
+
+function useTopicFromUrl() {
+  return useSyncExternalStore<string | null>(NO_SUBSCRIPTION, readTopic, noTopicOnServer);
+}
+
 export default function PublicationsExplorer({ papers, schemes, network }: Props) {
-  const [view, setView] = useState<"list" | "explore">("list");
+  const topic = useTopicFromUrl();
+
+  // Derived, not stored. Storing the initial view would freeze it at the value
+  // the first render saw — which is always "no topic", since the URL is not
+  // readable until hydration. Null here means "the reader has not chosen", and
+  // the moment they do, their choice wins over the link that brought them.
+  const [chosen, setChosen] = useState<"list" | "explore" | null>(null);
+  const view = chosen ?? (topic ? "explore" : "list");
+  const setView = setChosen;
 
   return (
     <div className="mt-10">
@@ -77,7 +106,7 @@ export default function PublicationsExplorer({ papers, schemes, network }: Props
       {view === "list" ? (
         <SearchableList papers={papers} />
       ) : (
-        <ExploreView papers={papers} schemes={schemes} network={network} />
+        <ExploreView papers={papers} schemes={schemes} network={network} topic={topic} />
       )}
     </div>
   );
@@ -257,9 +286,14 @@ function PaperList({ papers, highlight }: { papers: FacetPaper[]; highlight?: st
 
 // ── Explore ────────────────────────────────────────────────────────────────
 
-function ExploreView({ papers, schemes, network }: Props) {
-  const [schemeId, setSchemeId] = useState<SchemeId>("areas");
-  const [value, setValue] = useState<string>(ALL);
+function ExploreView({ papers, schemes, network, topic }: Props & { topic: string | null }) {
+  // Both derived for the same reason as the view above: the topic in the URL is
+  // not known on the first render, so it cannot seed useState.
+  const [chosenScheme, setChosenScheme] = useState<SchemeId | null>(null);
+  const schemeId = chosenScheme ?? (topic ? "topics" : "areas");
+  const [chosenValue, setChosenValue] = useState<string | null>(null);
+  const value = chosenValue ?? topic ?? ALL;
+  const setValue = setChosenValue;
   const [picked, setPicked] = useState<string | null>(null);
   const [moved, setMoved] = useState<Record<string, { x: number; y: number }>>({});
   const svgRef = useRef<SVGSVGElement>(null);
@@ -277,7 +311,7 @@ function ExploreView({ papers, schemes, network }: Props) {
   const visible = useMemo(() => new Set(shown.map((p) => p.key)), [shown]);
 
   function chooseScheme(id: SchemeId) {
-    setSchemeId(id);
+    setChosenScheme(id);
     const next = schemes.find((s) => s.id === id)!;
     if (value !== ALL && !next.values.some((v) => v.name === value)) setValue(ALL);
   }
