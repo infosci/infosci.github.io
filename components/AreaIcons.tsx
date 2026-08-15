@@ -129,6 +129,24 @@ export function ComputationalSocialScienceIcon({ className }: IconProps) {
   );
 }
 
+/** A magnifier over a line of text: looking into a document rather than at it.
+ *
+ * The plain magnifier everyone draws is a search box's icon, and this site has
+ * a search box eight hundred pixels below — the two lines inside the lens are
+ * what stop it reading as that button. They also keep it clear of the
+ * suicidology mark, which is likewise a ring with something inside it; that one
+ * rings a point among points, this one holds text. */
+export function RetrievalIcon({ className }: IconProps) {
+  return (
+    <svg {...SHARED} className={className ?? "h-10 w-8"}>
+      <circle cx="14" cy="18" r="7.5" />
+      <path d="M19.6 23.4 L26 30" />
+      <path d="M10.5 16 H17.5" />
+      <path d="M10.5 20 H15.5" />
+    </svg>
+  );
+}
+
 /** An open book. The plainest sign of the humanities, left plain on purpose —
  * every attempt to add a "digital" flourish (a node, a cursor) turned to
  * clutter at this stroke weight. The company it keeps carries the rest. */

@@ -2,6 +2,7 @@ import {
   ComputationalSocialScienceIcon,
   DigitalHumanitiesIcon,
   HealthIcon,
+  RetrievalIcon,
   ScienceOfScienceIcon,
   SuicidologyIcon,
   TechnologyStudiesIcon,
@@ -28,6 +29,7 @@ const AREAS = [
       href: "https://www.science.org/doi/10.1126/science.aao0185",
       label: "Fortunato et al., Science (2018)",
     },
+    q: "scientometric or bibliometric or citation or coauthor or collaboration or fund or team or peer review or academic or scholarly or orcid or discipline or knowledge diffusion or domain comparison or scientific article or scientific publication",
   },
   {
     // Widened from "Mental Health Informatics", and the widening is what earns
@@ -58,9 +60,7 @@ const AREAS = [
       href: "https://imia-medinfo.org/wp/",
       label: "International Medical Informatics Association",
     },
-    to:
-      "/publications/?scheme=categories&value=" +
-      encodeURIComponent("Medical Informatics"),
+    q: "biomedical or drug or medical or disease or molecular or protein or caries or cancer or depress",
   },
   {
     // The one card that cites the lab rather than the field, and the only one
@@ -107,9 +107,7 @@ const AREAS = [
     // exactly, while that one was renamed until its name fit the value. Both
     // end at the same rule — a card links inward only when a single Web of
     // Science value holds the work the card names, and nothing else.
-    to:
-      "/publications/?scheme=topics&value=" +
-      encodeURIComponent("1.21 Psychiatry"),
+    q: "suicid",
   },
   {
     // 4S: the field's international body, founded 1975, and the parallel to
@@ -130,6 +128,7 @@ const AREAS = [
       href: "https://www.4sonline.org/what_is_4s.php",
       label: "Society for Social Studies of Science (4S)",
     },
+    q: "ischool or data science or interdisciplin or knowledge trading or teach",
   },
   {
     // Lazer et al. is to this field what Fortunato is to the science of science
@@ -143,6 +142,26 @@ const AREAS = [
       href: "https://www.science.org/doi/10.1126/science.1167742",
       label: "Lazer et al., Science (2009)",
     },
+    q: "social media or reddit or twitter or bullying or stalking or stigma or abuse or victimization",
+  },
+  {
+    // The lab's earliest work and its largest Web of Science category
+    // (Information Science & Library Science, 28 papers), and until now the one
+    // area with no card: graph-based bibliographic search, visual query
+    // interfaces, faceted navigation, entity identification. It was left off
+    // not by decision but by oversight, which is what checking every paper
+    // against the six cards turned up.
+    //
+    // SIGIR rather than the Manning textbook, on the same reasoning as 4S and
+    // IMIA: a body outlasts an edition.
+    id: "information-retrieval",
+    title: "Information Retrieval",
+    Icon: RetrievalIcon,
+    source: {
+      href: "https://sigir.org/",
+      label: "ACM SIGIR",
+    },
+    q: "retrieval or search or query or faceted or semantic web or data modeling or information alignment or recommendation",
   },
   {
     id: "digital-humanities",
@@ -152,6 +171,7 @@ const AREAS = [
       href: "https://dhdebates.gc.cuny.edu/read/untitled-88c11800-9446-469b-a3be-3fdb36bfbd1e/section/f5640d43-b8eb-4d49-bc4b-eb31a16f3d06",
       label: "Kirschenbaum, Debates in the DH (2012)",
     },
+    q: "semantic change or word semantic or ontology or book or opinion mining",
   },
 ];
 
@@ -196,11 +216,21 @@ function InwardMark() {
   );
 }
 
-function AreaCard({
-  area,
-}: {
-  area: (typeof AREAS)[number] & { to?: string };
-}) {
+function AreaCard({ area }: { area: (typeof AREAS)[number] }) {
+  // Every card leads to the same place: the publications list, searched for the
+  // words that name this area. The chips on that page are Clarivate's and these
+  // words are ours, which is the honest division — a card says what the lab
+  // works on in the lab's own terms, and the search box it lands in shows
+  // exactly which terms, editable by anyone who disagrees with them.
+  //
+  // Web of Science values were tried first and fitted two cards out of seven:
+  // one Citation Topic held the suicide papers exactly, one Subject Category
+  // held the health work, and nothing in Clarivate's schemes corresponds to the
+  // other five. Keywords fit all seven, at the cost of being a claim we make
+  // rather than one we cite — which is why they land somewhere visible and
+  // editable rather than sitting inside a chip that looks authoritative.
+  const to = `/publications/?q=${encodeURIComponent(area.q)}`;
+
   return (
     <section
       // aspect-square from sm up, where the grid has three columns to divide.
@@ -212,64 +242,45 @@ function AreaCard({
           detail than the marks they replaced, and at 32px their strokes nearly
           touched. */}
       <area.Icon className="h-10 w-8 text-black dark:text-zinc-50" />
+
       {/* Titles hold one line. At 13px the longest — Science and Technology
           Studies, with its arrow — measures 206px against the 217px the card
           gives it. Eleven pixels, measured rather than assumed, and only safe
           at this card width: a narrower grid or a longer area name would clip,
           so measure again when adding a card.
 
-          The underline sits on the text span, not the anchor, so the arrow
-          beside it is not underlined too. */}
-      {area.to ? (
-        <Link
-          href={area.to}
-          className="group inline-flex items-center gap-1.5 text-[13px] font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
-        >
-          <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
-            {area.title}
-          </span>
-          <InwardMark />
-        </Link>
-      ) : (
-        <a
-          href={area.source.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="group inline-flex items-center gap-1.5 text-[13px] font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
-        >
-          <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
-            {area.title}
-          </span>
-          <ExternalMark />
-        </a>
-      )}
+          The underline sits on the text span, not the arrow beside it. */}
+      <Link
+        href={to}
+        className="group inline-flex items-center gap-1.5 text-[13px] font-semibold tracking-tight whitespace-nowrap text-black dark:text-zinc-50"
+      >
+        <span className="underline decoration-zinc-300 underline-offset-4 transition-colors group-hover:decoration-zinc-500 dark:decoration-zinc-700 dark:group-hover:decoration-zinc-400">
+          {area.title}
+        </span>
+        <InwardMark />
+      </Link>
+
       {/* zinc-500/400, not zinc-400/600. The original pair failed WCAG AA in
           both themes at this size — 2.51:1 on the light background and 2.72:1
           on the dark one, against 4.5:1 for text under 18px. Size keeps it
           secondary; color no longer has to.
 
-          On the card whose title points inward, this line carries the outward
-          link, so the reference is still one click away. */}
-      {area.to ? (
-        <a
-          href={area.source.href}
-          target="_blank"
-          rel="noopener noreferrer"
-          // Inline rather than inline-flex, so the mark follows the last word
-          // instead of parking at the end of the first line. This label wraps to
-          // two lines and a flex sibling would sit beside the wrong one.
-          className="text-xs text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-zinc-100"
-        >
-          <span className="underline decoration-zinc-300 underline-offset-2 dark:decoration-zinc-700">
-            {area.source.label}
-          </span>
-          <ExternalMark className="ml-1 inline-block align-[-1px]" />
-        </a>
-      ) : (
-        <p className="text-xs text-zinc-500 dark:text-zinc-400">
+          The title goes inward, so this line carries the outward link: the
+          field's own reference stays one click away from every card. */}
+      <a
+        href={area.source.href}
+        target="_blank"
+        rel="noopener noreferrer"
+        // Inline rather than inline-flex, so the mark follows the last word
+        // instead of parking at the end of the first line. Several of these
+        // labels wrap to two lines.
+        className="text-xs text-zinc-500 hover:text-black dark:text-zinc-400 dark:hover:text-zinc-100"
+      >
+        <span className="underline decoration-zinc-300 underline-offset-2 dark:decoration-zinc-700">
           {area.source.label}
-        </p>
-      )}
+        </span>
+        <ExternalMark className="ml-1 inline-block align-[-1px]" />
+      </a>
     </section>
   );
 }
@@ -318,7 +329,9 @@ export default function Home() {
 
       <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
 
-      {/* Three across, three beneath.
+      {/* Three across, and as many rows as there are cards — mapped rather than
+          listed by index, since the list has grown twice and each time the grid
+          had to be edited to match.
           
           The triad is not among them. It used to sit in the middle with the
           cards arranged around it, which read as a mapping — as though each
@@ -331,12 +344,9 @@ export default function Home() {
           room, under the 266px the longest title needs at 14px, which is why
           the titles are 13px and the padding px-3. */}
       <div className="mt-10 grid w-full max-w-3xl gap-5 sm:grid-cols-3">
-        <AreaCard area={AREAS[0]} />
-        <AreaCard area={AREAS[1]} />
-        <AreaCard area={AREAS[2]} />
-        <AreaCard area={AREAS[3]} />
-        <AreaCard area={AREAS[4]} />
-        <AreaCard area={AREAS[5]} />
+        {AREAS.map((area) => (
+          <AreaCard key={area.id} area={area} />
+        ))}
       </div>
     </div>
   );
