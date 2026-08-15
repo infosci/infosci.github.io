@@ -37,25 +37,6 @@ const AREAS = [
       href: "https://amia.org/community/working-groups/mental-health-informatics",
       label: "AMIA Working Group",
     },
-    // Medical Informatics, not mental health: Web of Science has no value that
-    // means the latter, and this link will not invent one.
-    //
-    // Citation Topics were tried first and do not work here. The lab's mental
-    // health papers scatter — six under 1.21 Psychiatry, one under 1.14
-    // Nursing, and the major depressive disorder paper under 1.26 Diabetes,
-    // which is what citation clustering does with a paper about a literature
-    // rather than a disease. Worse, all six under Psychiatry are the suicide
-    // papers, so this card would land exactly where the suicidology card lands.
-    //
-    // Medical Informatics is a Subject Category, assigned by venue, and holds
-    // eleven papers. It is broader than this card's name — drug repurposing and
-    // UMLS mapping sit in it too — and that is the honest cost. What makes it
-    // defensible is that the destination says so: the chip on the page reads
-    // "Medical Informatics 11", so a reader sees exactly which Clarivate value
-    // they were handed and can judge the fit themselves.
-    to:
-      "/publications/?scheme=categories&value=" +
-      encodeURIComponent("Medical Informatics"),
   },
   {
     // The one card that cites the lab rather than the field, and the only one
@@ -88,16 +69,24 @@ const AREAS = [
       href: "https://doi.org/10.1111/sltb.12959",
       label: "Kim et al., Suicide and Life-Threatening Behavior (2023)",
     },
-    // One of two cards that lead back into the site. Web of Science gives all six
+    // The only card that leads back into the site. Web of Science gives all six
     // of the lab's suicide papers the same Citation Topic, 1.21 Psychiatry, and
     // it holds nothing else of the seventy-two — so this lands on exactly those
     // six. The value is Clarivate's; the link merely names it.
     //
     // Inverting a card is what a "to" does: the title goes inward and the
     // citation takes over the outward link, so the reference stays one click
-    // away either way. The rule across the six is that a title goes wherever is
-    // most useful to read next — the lab's own papers where a Clarivate value
-    // collects them, the field where it does not.
+    // away either way.
+    //
+    // Mental health informatics was given the same treatment and had it taken
+    // back. It pointed at the Medical Informatics subject category, eleven
+    // papers, because Web of Science has no value meaning mental health — its
+    // Citation Topics scatter across Psychiatry, Nursing and, for the major
+    // depressive disorder paper, Diabetes. Eleven papers that include drug
+    // repurposing and UMLS mapping are not what a reader clicking "Mental
+    // Health Informatics" is asking for, and a link needing that much
+    // explanation is worse than no link. Only this card keeps one, because only
+    // here does a single Clarivate value hold exactly the work the card names.
     to:
       "/publications/?scheme=topics&value=" +
       encodeURIComponent("1.21 Psychiatry"),
