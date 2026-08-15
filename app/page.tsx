@@ -10,10 +10,31 @@ import {
 import Link from "next/link";
 import { TriadFigure } from "@/components/TriadFigure";
 
-// The cards are fixed: a mark, the field's name, and the citation. Nothing on
-// them is in our words — each title links to the field's standing reference,
-// the thing that does not change from year to year, so the definitional work
-// is done by the field rather than by us.
+// Every card names a field, never a method. The lab is about fields, using
+// diverse methods — that is the sentence to test a new card against.
+//
+// It is a rule with teeth. A graph learning card was proposed and rejected: it
+// would have held fourteen papers across eight years, more than four of these
+// seven, and it still had no place here. Methods have no natural boundary — if
+// technique earns a card, so do contrastive learning, deep learning and network
+// analysis, each equally true of the lab and each arguable only case by case.
+// Fields carry their own edges: a body, a literature, a reference that does not
+// move. Note that Computational Social Science and Computational Suicidology
+// pass the test despite naming a method, because each also names an object of
+// study; graph learning names only the tool.
+//
+// The cost is two papers of seventy-two that no card reaches — a graph neural
+// network architecture and an attention network for sentiment. Both are method
+// contributions with no domain, so under this rule they should have no card,
+// and neither is hidden: both sit in Publications under Clarivate's categories
+// and both answer to a search. Coverage is a question worth asking when a paper
+// is added, not a quota to satisfy.
+//
+// Each card carries a mark, the field's name and a citation. Nothing in the
+// citation is in our words — each links to the field's standing reference, the
+// thing that does not change from year to year, so the definitional work is
+// done by the field rather than by us. The search behind the title is ours, and
+// visibly so.
 //
 // Digital Humanities is cited differently on purpose. Science of science has a
 // canonical review and mental health informatics has a professional body that
