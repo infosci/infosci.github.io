@@ -91,6 +91,20 @@ function useUrlParamAll(name: string) {
   return useMemo(() => (joined ? joined.split(SEP) : []), [joined]);
 }
 
+/** Rewrite the query in place, leaving parameters the caller does not touch.
+ *  Both the view toggle and the chips write to the URL, and each has to survive
+ *  the other. */
+function replaceQuery(mutate: (params: URLSearchParams) => void) {
+  const url = new URL(window.location.href);
+  mutate(url.searchParams);
+  const query = url.searchParams.toString();
+  window.history.replaceState(
+    null,
+    "",
+    url.pathname + (query ? `?${query}` : ""),
+  );
+}
+
 /** The scheme and values asked for, or null. Several value= are allowed, since
  *  the chips combine and a reader should be able to send someone the view they
  *  are looking at.
@@ -132,12 +146,32 @@ export default function PublicationsExplorer({
   }, [asked, schemes]);
 
   // Derived, not stored. Storing the initial view would freeze it at the value
-  // the first render saw — which is always "no topic", since the URL is not
+  // the first render saw — which is always "no view", since the URL is not
   // readable until hydration. Null here means "the reader has not chosen", and
   // the moment they do, their choice wins over the link that brought them.
+  const urlView = useUrlParam("view");
   const [chosen, setChosen] = useState<"list" | "explore" | null>(null);
-  const view = chosen ?? (link ? "explore" : "list");
-  const setView = setChosen;
+  const view =
+    chosen ??
+    (urlView === "list" || urlView === "explore"
+      ? urlView
+      : link
+        ? "explore"
+        : "list");
+
+  // Written explicitly, including view=list. A reader who arrives on a filtered
+  // link and switches to List is saying something the absence of a parameter
+  // cannot: the filter values stay in the query, and without view=list the page
+  // would reopen in Explore because they are there.
+  //
+  // Keeping the values is what lets the chips survive the trip. The Explore
+  // view unmounts when List takes over, taking its selection with it, so the
+  // URL is the only thing that remembers — go to List, come back, and the chips
+  // are as they were.
+  const setView = (next: "list" | "explore") => {
+    setChosen(next);
+    replaceQuery((p) => p.set("view", next));
+  };
 
   return (
     <div className="mt-10">
@@ -426,15 +460,15 @@ function ExploreView({
   // would bury the way back under one entry per click. The cost is that Back
   // does not undo a chip — the chips themselves do that.
   const syncUrl = useCallback((scheme: SchemeId, values: Set<string>) => {
-    const url = new URL(window.location.href);
-    url.searchParams.delete("topic");
-    url.searchParams.delete("scheme");
-    url.searchParams.delete("value");
-    if (values.size) {
-      url.searchParams.set("scheme", scheme);
-      for (const v of values) url.searchParams.append("value", v);
-    }
-    window.history.replaceState(null, "", url.pathname + url.search);
+    replaceQuery((p) => {
+      p.delete("topic");
+      p.delete("scheme");
+      p.delete("value");
+      if (values.size) {
+        p.set("scheme", scheme);
+        for (const v of values) p.append("value", v);
+      }
+    });
   }, []);
 
   // Computed outside the updater on purpose. React may call a state updater
