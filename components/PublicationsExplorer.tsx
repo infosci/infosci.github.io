@@ -550,6 +550,12 @@ function PaperList({
  *  none. Dot area carries the count, which is the standard activity profile the
  *  field already reads, and it works in one ink.
  *
+ *  Nothing explains the grid underneath it. Two facts went with that note —
+ *  that rows do not sum to the totals, six papers answering two areas, and that
+ *  the current year is still running — and both are still true. They are in
+ *  lib/publication-timeline.ts for whoever maintains this, and off the page at
+ *  the lab's request.
+ *
  *  The gaps are the point. Three areas stop — information retrieval after 2022,
  *  digital humanities after 2019, science and technology studies after 2017 —
  *  and two open in the 2020s. Nobody has to claim a direction; the record shows
@@ -558,7 +564,6 @@ function PaperList({
  *  comes next is not ours to print. */
 function TimelineView({ timeline }: { timeline: Timeline }) {
   const { years, rows, totals, busiest } = timeline;
-  const thisYear = new Date().getFullYear();
 
   // Area, not radius, carries the count — a paper is a paper, and doubling the
   // radius would quadruple the ink for two papers instead of one.
@@ -570,8 +575,7 @@ function TimelineView({ timeline }: { timeline: Timeline }) {
         <span className="font-medium text-black dark:text-zinc-200">
           Where the work has been.
         </span>{" "}
-        Each row is a research area from the home page, found by the same search
-        its card links to. Bigger dot, more papers that year.
+        Bigger dot, more papers that year.
       </p>
 
       <div className="mt-6 overflow-x-auto">
@@ -661,17 +665,6 @@ function TimelineView({ timeline }: { timeline: Timeline }) {
           </tfoot>
         </table>
       </div>
-
-      {/* Both caveats sit under the grid they qualify, not in a footnote
-          somebody has to go looking for. */}
-      <p className="mt-5 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
-        Rows do not add up to the totals: six papers answer two areas — a
-        scientometric review of a biomedical literature is both — so they are
-        counted in each row and once in the total.
-        {years.at(-1) === thisYear && (
-          <> {thisYear} is still running, so its column is not final.</>
-        )}
-      </p>
     </div>
   );
 }
