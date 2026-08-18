@@ -1,15 +1,18 @@
 "use client";
 
-// Two ways to read the same 72 papers.
+// Three ways to read the same 72 papers.
 //
 // List is the plain record — every paper, newest first, nothing to configure.
-// Explore is where the narrowing happens: pick a Web of Science value or a
-// paper in the graph, and the list beneath answers either.
+// Subjects is where the narrowing happens: pick a Web of Science value or a
+// paper in the graph, and the list beneath answers either. Timeline counts the
+// areas by year.
 //
-// The tab says Explore rather than Network because the view outgrew the graph.
-// The graph is one of three controls in it, and probably the least used —
-// someone looking for the lab's medical informatics work would never think to
-// click a tab called Network to find a subject filter.
+// The middle tab has been called Network, then Explore, and is now Subjects.
+// Network was wrong because the view outgrew the graph — the graph is one of
+// three controls in it and probably the least used, and nobody hunting for the
+// lab's medical informatics work would click "Network" to find a subject
+// filter. Explore was wrong once a third view existed, since all three are ways
+// of exploring. Subjects says what is actually in it: Clarivate's schemes.
 //
 // The values in this view are Clarivate's, read from Web of Science, and each
 // scheme is named exactly as the field is labelled on a Web of Science record
@@ -59,18 +62,34 @@ type Props = {
 //
 // Never subscribed to, only read: a static export has no client-side route
 // change that would rewrite the query in place.
-// Three questions about the same seventy-two papers: what they are, where they
-// sit, and when they were written. All three are ways of exploring, so the
-// labels have to do more work than "explore" does — Explore means the Web of
-// Science schemes and the graph specifically, and Timeline means the years.
-const VIEWS = ["list", "explore", "timeline"] as const;
+// Three questions about the same seventy-two papers: what they are, what they
+// are about, and when they were written. Three nouns, each naming what is on
+// screen.
+//
+// The middle one was called Explore, which was right when the choice was
+// two-way and the alternative was Network — the view had outgrown the graph. A
+// third view made "broad" into "vague": exploring is what you do in all three,
+// and the word said nothing about Clarivate's schemes being what is in this
+// one. That matters next to a home page whose cards are the lab's OWN areas; a
+// reader had no way to tell the two apart.
+const VIEWS = ["list", "subjects", "timeline"] as const;
 type View = (typeof VIEWS)[number];
 const VIEW_LABEL: Record<View, string> = {
   list: "List",
-  explore: "Explore",
+  subjects: "Subjects",
   timeline: "Timeline",
 };
-const isView = (v: string | null): v is View => VIEWS.includes(v as View);
+
+// ?view=explore still works. It was live for days, it is in the URL of anything
+// shared in that time, and honouring an old name costs one line.
+const VIEW_ALIAS: Record<string, View> = { explore: "subjects" };
+
+const asView = (v: string | null): View | null =>
+  v && VIEWS.includes(v as View)
+    ? (v as View)
+    : v
+      ? (VIEW_ALIAS[v] ?? null)
+      : null;
 
 const NO_SUBSCRIPTION = () => () => {};
 const NULL_ON_SERVER = () => null;
@@ -181,8 +200,8 @@ export default function PublicationsExplorer({
   const asked = useDeepLink();
 
   // Validated here rather than downstream, so an unusable link behaves exactly
-  // like no link at all — the ordinary List view. Validating inside the Explore
-  // view meant a stale or hand-edited URL still forced Explore open, showing all
+  // like no link at all — the ordinary List view. Validating inside the Subjects
+  // view meant a stale or hand-edited URL still forced Subjects open, showing all
   // seventy-two papers under no filter, which reads as a bug rather than as a
   // page that shrugged.
   const link = useMemo(() => {
@@ -204,15 +223,14 @@ export default function PublicationsExplorer({
   // the moment they do, their choice wins over the link that brought them.
   const urlView = useUrlParam("view");
   const [chosen, setChosen] = useState<View | null>(null);
-  const view =
-    chosen ?? (isView(urlView) ? urlView : link ? "explore" : "list");
+  const view = chosen ?? asView(urlView) ?? (link ? "subjects" : "list");
 
   // Written explicitly, including view=list. A reader who arrives on a filtered
   // link and switches to List is saying something the absence of a parameter
   // cannot: the filter values stay in the query, and without view=list the page
-  // would reopen in Explore because they are there.
+  // would reopen in Subjects because they are there.
   //
-  // Keeping the values is what lets the chips survive the trip. The Explore
+  // Keeping the values is what lets the chips survive the trip. The Subjects
   // view unmounts when List takes over, taking its selection with it, so the
   // URL is the only thing that remembers — go to List, come back, and the chips
   // are as they were.
@@ -258,8 +276,8 @@ export default function PublicationsExplorer({
       </div>
 
       {view === "list" && <SearchableList papers={papers} />}
-      {view === "explore" && (
-        <ExploreView
+      {view === "subjects" && (
+        <SubjectsView
           papers={papers}
           schemes={schemes}
           network={network}
@@ -366,7 +384,7 @@ function PaperEntry({
  *  nothing it hides. A hit on an invisible field reads as a bug: the paper
  *  appears, and the reason it appeared is nowhere on screen.
  *
- *  Distinct from the chips in Explore, and deliberately so. The chips carry
+ *  Distinct from the chips in Subjects, and deliberately so. The chips carry
  *  Clarivate's values and can only ever offer what Web of Science recorded;
  *  this is a plain string match on our own record of the paper, which is why
  *  it lives over the plain list. */
@@ -658,9 +676,9 @@ function TimelineView({ timeline }: { timeline: Timeline }) {
   );
 }
 
-// ── Explore ────────────────────────────────────────────────────────────────
+// ── Subjects ───────────────────────────────────────────────────────────────
 
-function ExploreView({
+function SubjectsView({
   papers,
   schemes,
   network,
