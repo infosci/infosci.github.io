@@ -621,42 +621,33 @@ function ExploreView({
   // Frame what is actually on screen. Keeping the whole network's extent when
   // eleven papers are showing strands them in empty space; the minimum stops a
   // two-paper selection from zooming to absurdity.
+  // One frame, always: the whole network's extent, whatever is selected.
+  //
+  // It used to re-fit to the visible nodes, which sounds helpful and is not.
+  // Every chip changed the frame — 894x936 for all papers, 894x842 with computer
+  // science, 617x483 with one topic — so the same paper landed somewhere new on
+  // screen after each click. Selecting and unselecting a few values made the
+  // whole graph pan and zoom under the pointer while the panel around it never
+  // moved a pixel. A reader trying to keep track of one dot could not.
+  //
+  // Holding the frame means a node is in the same place all session. Choosing
+  // values only takes nodes away and puts them back; nothing moves. The cost is
+  // white space — six papers sit scattered in a frame built for seventy-two,
+  // rather than filling it — and that is the honest picture: those six really
+  // are spread across the collection.
+  //
+  // zoom is now constant too. It exists because the marks are drawn in frame
+  // units: the full extent is 2.5x the tightest frame the old code would build,
+  // so a radius of NODE_R would render at under 3px. Multiplying by it puts the
+  // nodes back at their intended size on screen.
+  const MIN_FRAME = 360;
   const { viewBox, zoom } = useMemo(() => {
-    const vis = network.nodes.filter((d) => visible.has(d.key));
-    if (!vis.length) return { viewBox: network.viewBox, zoom: 1 };
-    const pad = NODE_R * 5;
-    const MIN = 360;
-    let [minX, maxX] = [
-      Math.min(...vis.map((d) => d.x)) - pad,
-      Math.max(...vis.map((d) => d.x)) + pad,
-    ];
-    let [minY, maxY] = [
-      Math.min(...vis.map((d) => d.y)) - pad,
-      Math.max(...vis.map((d) => d.y)) + pad,
-    ];
-    const grow = (lo: number, hi: number): [number, number] => {
-      const short = MIN - (hi - lo);
-      return short > 0 ? [lo - short / 2, hi + short / 2] : [lo, hi];
-    };
-    [minX, maxX] = grow(minX, maxX);
-    [minY, maxY] = grow(minY, maxY);
-
-    // How far this frame is zoomed out against the tightest one. Everything
-    // drawn inside is multiplied by it, so a circle keeps the same size on
-    // screen however wide the frame has had to open.
-    //
-    // Without this, a selection whose papers sit far apart in the layout came
-    // out unreadable: three topics together spanned 588 units against the
-    // usual 360, which dropped the nodes from 6.7px to 4.4px and left 115px of
-    // the column empty. The layout is computed once at build time for all
-    // seventy-two papers, so a selection inherits positions rather than being
-    // laid out afresh — and papers that are unrelated are, correctly, far
-    // apart. The frame has to open; the marks do not have to shrink with it.
+    const [, , w, h] = network.viewBox.split(" ").map(Number);
     return {
-      viewBox: `${minX} ${minY} ${maxX - minX} ${maxY - minY}`,
-      zoom: Math.max(maxX - minX, maxY - minY) / MIN,
+      viewBox: network.viewBox,
+      zoom: Math.max(w, h) / MIN_FRAME,
     };
-  }, [network.nodes, network.viewBox, visible]);
+  }, [network.viewBox]);
 
   // Citation Topic chips grouped under their macro topic. "4.48" is an address,
   // not a decimal — topic 48 inside broad topic 4 — and a heading carries that
@@ -682,16 +673,25 @@ function ExploreView({
       .map(([macro, values]) => ({ macro, values }));
   }, [schemeId, papers, scheme.values]);
 
-  // Degree of what is actually on screen, so a node's size reflects the current
-  // selection rather than its standing in the full network.
+  // Degree in the whole network, not in the current selection.
+  //
+  // It was the selection's degree, so that a node's size reflected what was on
+  // screen. That made every node resize on every chip — the same paper drawn at
+  // 15px, then 18px, then 15px again as values came and went. With the frame now
+  // held still, that was the only thing left moving, and it was moving for a
+  // reason a reader cannot see.
+  //
+  // How connected a paper is reads better as a fact about the paper than about
+  // the filter: this one shares words with eleven others, whether or not those
+  // eleven are on screen right now.
   const degreeOf = useMemo(() => {
     const m = new Map<string, number>();
-    for (const e of shownEdges) {
+    for (const e of network.edges) {
       m.set(e.a, (m.get(e.a) ?? 0) + 1);
       m.set(e.b, (m.get(e.b) ?? 0) + 1);
     }
     return m;
-  }, [shownEdges]);
+  }, [network.edges]);
   const maxDegree = Math.max(1, ...degreeOf.values());
 
   // Where a node is drawn: wherever it was dragged to, else where the build-time
