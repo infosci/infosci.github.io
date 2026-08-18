@@ -9,12 +9,15 @@
 
 import { getPublications, yearOf, type Publication } from "./publications";
 import { disciplinesOf, researchAreasOf, citationTopicOf, NOT_INDEXED } from "./disciplines";
+import { slugFor } from "./paper-pages";
 import glossary from "@/data/wos-glossary.json";
 
 export type SchemeId = "categories" | "areas" | "topics";
 
 export type FacetPaper = {
   key: string;
+  /** Address of this paper's own page, /publications/<slug>/. */
+  slug: string;
   title: string;
   authors: string[];
   venue: string;
@@ -63,6 +66,7 @@ function toFacetPaper(pub: Publication): FacetPaper {
   const topic = citationTopicOf(pub);
   return {
     key: pub.doi ?? pub.title,
+    slug: slugFor(pub),
     title: pub.title,
     authors: pub.authors,
     venue: (pub.venue ?? pub.journal ?? "").trim(),

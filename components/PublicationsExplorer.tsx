@@ -331,19 +331,15 @@ function PaperEntry({
           : undefined
       }
     >
+      {/* The title leads to the paper's own page on this site, not out to the
+          publisher. Every other route to a paper — the network, the areas, a
+          search — ends at the same place, and the publisher is one click on from
+          there. Sending the title outward instead made the record itself
+          unreachable except by URL. */}
       <h3 className="leading-snug font-medium text-black dark:text-zinc-50">
-        {pub.url ? (
-          <a
-            href={pub.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hover:underline"
-          >
-            {pub.title}
-          </a>
-        ) : (
-          pub.title
-        )}
+        <Link href={`/publications/${pub.slug}/`} className="hover:underline">
+          {pub.title}
+        </Link>
       </h3>
       <p className="mt-1.5 text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
         {pub.authors.join(", ")}
