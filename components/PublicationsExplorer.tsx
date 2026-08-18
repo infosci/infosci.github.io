@@ -31,6 +31,7 @@
 import Link from "next/link";
 import {
   useCallback,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -565,6 +566,17 @@ function PaperList({
 function TimelineView({ timeline }: { timeline: Timeline }) {
   const { years, rows, totals, busiest } = timeline;
 
+  // Opens at the newest year on a narrow screen, where fifteen columns cannot
+  // fit and the grid scrolls. Left-aligned it showed 2012 first and hid the
+  // current work off the right edge — the wrong half of a timeline to lead
+  // with. Scrolls back by hand, and on a wide screen there is nothing to
+  // scroll and this does nothing.
+  const scroller = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = scroller.current;
+    if (el) el.scrollLeft = el.scrollWidth;
+  }, []);
+
   // Area, not radius, carries the count — a paper is a paper, and doubling the
   // radius would quadruple the ink for two papers instead of one.
   const radius = (n: number) => (n === 0 ? 0 : 3 + 5 * Math.sqrt(n / busiest));
@@ -578,7 +590,7 @@ function TimelineView({ timeline }: { timeline: Timeline }) {
         Bigger dot, more papers that year.
       </p>
 
-      <div className="mt-6 overflow-x-auto">
+      <div ref={scroller} className="mt-6 overflow-x-auto">
         <table className="w-full border-collapse text-xs">
           <caption className="sr-only">
             Papers per research area per year, {years[0]} to {years.at(-1)}
@@ -592,7 +604,9 @@ function TimelineView({ timeline }: { timeline: Timeline }) {
                 <th
                   key={y}
                   scope="col"
-                  className="pb-2 text-center font-normal text-zinc-500 tabular-nums dark:text-zinc-400"
+                  // 10px on a phone. At 12px in a 16px column the labels touch
+                  // and fifteen years read as one number — 121314151617.
+                  className="pb-2 text-center text-[10px] font-normal text-zinc-500 tabular-nums sm:text-xs dark:text-zinc-400"
                 >
                   {/* Two digits: fourteen four-digit years do not fit the
                       column and the century is not in question. */}
@@ -609,7 +623,7 @@ function TimelineView({ timeline }: { timeline: Timeline }) {
                   // Wraps on a phone, holds one line from sm up. At 375px the
                   // longest label alone took 290 of the 375, leaving the grid a
                   // sliver to scroll inside; wrapped, it takes about half.
-                  className="max-w-[9rem] py-1 pr-3 text-right font-normal whitespace-normal sm:max-w-none sm:whitespace-nowrap"
+                  className="max-w-[7.5rem] py-1 pr-2 text-right font-normal whitespace-normal sm:max-w-none sm:pr-3 sm:whitespace-nowrap"
                 >
                   <Link
                     href={`/publications/?q=${encodeURIComponent(row.q)}`}
@@ -628,7 +642,10 @@ function TimelineView({ timeline }: { timeline: Timeline }) {
                     </span>
                     <svg
                       viewBox="0 0 20 20"
-                      className="mx-auto h-5 w-5 text-black dark:text-zinc-100"
+                      // 16px cells on a phone, 20 from sm up: fifteen columns
+                      // at 20 need 300px before the labels, which a 375px
+                      // screen does not have.
+                      className="mx-auto h-4 w-4 text-black sm:h-5 sm:w-5 dark:text-zinc-100"
                       aria-hidden="true"
                     >
                       {n > 0 && (
@@ -656,7 +673,7 @@ function TimelineView({ timeline }: { timeline: Timeline }) {
               {totals.map((n, i) => (
                 <td
                   key={years[i]}
-                  className="border-t border-zinc-200 pt-2 text-center tabular-nums text-zinc-600 dark:border-zinc-800 dark:text-zinc-400"
+                  className="border-t border-zinc-200 pt-2 text-center text-[10px] tabular-nums text-zinc-600 sm:text-xs dark:border-zinc-800 dark:text-zinc-400"
                 >
                   {n || "·"}
                 </td>
