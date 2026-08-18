@@ -621,12 +621,23 @@ function TimelineView({ timeline }: { timeline: Timeline }) {
                   // sliver to scroll inside; wrapped, it takes about half.
                   className="max-w-[7.5rem] py-1 pr-2 text-right font-normal whitespace-normal sm:max-w-none sm:pr-3 sm:whitespace-nowrap"
                 >
-                  <Link
-                    href={`/publications/?q=${encodeURIComponent(row.q)}`}
+                  {/* A plain anchor, not next/link, and the one place on this
+                      page that needs to be.
+                      
+                      This link goes to the page it is already on and changes
+                      only the query. next/link makes that a client navigation:
+                      the URL changes and this component is never re-rendered,
+                      so the state that reads the URL — read once at mount, by
+                      design — never learns. The row links did nothing at all.
+                      
+                      A full load resets that state, which is exactly what is
+                      wanted here: arrive at the list, searched for this area. */}
+                  <a
+                    href={`/publications/?view=list&q=${encodeURIComponent(row.q)}`}
                     className="text-zinc-600 underline decoration-zinc-300 underline-offset-2 hover:text-black dark:text-zinc-400 dark:decoration-zinc-700 dark:hover:text-zinc-100"
                   >
                     {row.title}
-                  </Link>
+                  </a>
                 </th>
                 {row.counts.map((n, i) => (
                   <td
