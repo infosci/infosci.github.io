@@ -13,8 +13,15 @@
 // The current year is partial. It is the only column that will still change,
 // and without saying so the newest column reads as a fall or a peak that has
 // not happened yet.
+//
+// The year is yearOf(), not the record's own — the conference year where a paper
+// has one, the publisher's otherwise. One paper here was held in 2012 and
+// published in 2013, and reading the raw field put this grid a year and a column
+// out of step with the list beside it: the list starts in 2012, the grid started
+// in 2013. Any view that shows a year has to ask the same question.
 
 import { AREAS } from "@/lib/areas";
+import { yearOf } from "@/lib/publications";
 import publications from "@/data/publications.json";
 import manual from "@/data/manual-publications.json";
 
@@ -36,12 +43,11 @@ export type Timeline = {
   busiest: number;
 };
 
-type Record = {
+type Record = Parameters<typeof yearOf>[0] & {
   title: string;
   authors?: string[];
   venue?: string | null;
   journal?: string | null;
-  year?: number | null;
 };
 
 /** The same matching the search box does — words inside a group must all
@@ -51,7 +57,7 @@ function reaches(q: string, paper: Record) {
     paper.title,
     (paper.authors ?? []).join(" "),
     paper.venue ?? paper.journal ?? "",
-    paper.year ?? "",
+    yearOf(paper) ?? "",
   ]
     .join(" ")
     .toLowerCase();
@@ -64,12 +70,12 @@ function reaches(q: string, paper: Record) {
 
 export function getTimeline(): Timeline {
   const papers = [...(publications as Record[]), ...(manual as Record[])].filter(
-    (p) => p.year,
+    (p) => yearOf(p),
   );
 
   const years: number[] = [];
-  const min = Math.min(...papers.map((p) => p.year!));
-  const max = Math.max(...papers.map((p) => p.year!));
+  const min = Math.min(...papers.map((p) => yearOf(p)!));
+  const max = Math.max(...papers.map((p) => yearOf(p)!));
   // Every year in the span, including the empty ones. A year with nothing in it
   // is part of the shape — leaving it out would close the gaps that are the
   // most honest thing here.
@@ -77,19 +83,19 @@ export function getTimeline(): Timeline {
 
   const rows = AREAS.map((area) => {
     const mine = papers.filter((p) => reaches(area.q, p));
-    const counts = years.map((y) => mine.filter((p) => p.year === y).length);
+    const counts = years.map((y) => mine.filter((p) => yearOf(p) === y).length);
     return {
       id: area.id,
       title: area.title,
       q: area.q,
       counts,
       total: mine.length,
-      first: Math.min(...mine.map((p) => p.year!)),
-      last: Math.max(...mine.map((p) => p.year!)),
+      first: Math.min(...mine.map((p) => yearOf(p)!)),
+      last: Math.max(...mine.map((p) => yearOf(p)!)),
     };
   }).sort((a, b) => b.total - a.total);
 
-  const totals = years.map((y) => papers.filter((p) => p.year === y).length);
+  const totals = years.map((y) => papers.filter((p) => yearOf(p) === y).length);
 
   return {
     years,

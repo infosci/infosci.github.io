@@ -59,8 +59,17 @@ const cards = titles.map((title, i) => ({ title, q: queries[i] }));
 // "journal" and sometimes "venue", and the site searches whichever is set — a
 // checker reading only one of them scores a query differently from the page it
 // is checking.
+// displayYear ?? year, as lib/publications.ts resolves it: the conference year
+// where a paper has one, the publisher's otherwise. One record here was held in
+// 2012 and published in 2013, and a checker reading the raw field scores a query
+// mentioning either year differently from the site.
 const haystack = (p) =>
-  [p.title, (p.authors ?? []).join(" "), p.venue ?? p.journal ?? "", p.year ?? ""]
+  [
+    p.title,
+    (p.authors ?? []).join(" "),
+    p.venue ?? p.journal ?? "",
+    p.displayYear ?? p.year ?? "",
+  ]
     .join(" ")
     .toLowerCase();
 

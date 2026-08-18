@@ -10,6 +10,7 @@ import {
 import Link from "next/link";
 import { TriadFigure } from "@/components/TriadFigure";
 import { AREAS } from "@/lib/areas";
+import { yearOf } from "@/lib/publications";
 import publications from "@/data/publications.json";
 import manual from "@/data/manual-publications.json";
 
@@ -149,7 +150,7 @@ function reach(q: string) {
       p.title,
       (p.authors ?? []).join(" "),
       p.venue ?? p.journal ?? "",
-      p.year ?? "",
+      yearOf(p) ?? "",
     ]
       .join(" ")
       .toLowerCase();
