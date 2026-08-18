@@ -2,12 +2,14 @@ import type { Metadata } from "next";
 import PublicationsExplorer from "@/components/PublicationsExplorer";
 import { getFacetData } from "@/lib/publication-facets";
 import { getNetwork } from "@/lib/publication-network";
+import { getTimeline } from "@/lib/publication-timeline";
 
 export const metadata: Metadata = { title: "Publications" };
 
 export default function PublicationsPage() {
   const { papers, schemes } = getFacetData();
   const network = getNetwork();
+  const timeline = getTimeline();
 
   return (
     // Held to max-w-3xl, the rule's width, like People and Grants. The page
@@ -24,7 +26,12 @@ export default function PublicationsPage() {
 
       <div className="mt-8 max-w-3xl border-b border-zinc-200 dark:border-zinc-800" />
 
-      <PublicationsExplorer papers={papers} schemes={schemes} network={network} />
+      <PublicationsExplorer
+        papers={papers}
+        schemes={schemes}
+        network={network}
+        timeline={timeline}
+      />
     </div>
   );
 }

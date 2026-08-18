@@ -25,6 +25,7 @@
 // in a title, and that rule is written out under the network rather than left
 // for the reader to infer from the lines.
 
+import Link from "next/link";
 import {
   useCallback,
   useMemo,
@@ -36,8 +37,14 @@ import type { FacetPaper, Scheme, SchemeId } from "@/lib/publication-facets";
 import { valuesFor } from "@/lib/publication-facets";
 import type { Network } from "@/lib/publication-network";
 import { NODE_R } from "@/lib/publication-network";
+import type { Timeline } from "@/lib/publication-timeline";
 
-type Props = { papers: FacetPaper[]; schemes: Scheme[]; network: Network };
+type Props = {
+  papers: FacetPaper[];
+  schemes: Scheme[];
+  network: Network;
+  timeline: Timeline;
+};
 
 // A value named in the URL: /publications/?scheme=topics&value=1.21%20Psychiatry.
 // The homepage cards link here, so a reader lands on the lab's papers in that
@@ -52,6 +59,18 @@ type Props = { papers: FacetPaper[]; schemes: Scheme[]; network: Network };
 //
 // Never subscribed to, only read: a static export has no client-side route
 // change that would rewrite the query in place.
+// Three questions about the same seventy-two papers: what they are, where they
+// sit, and when they were written. The labels name the question rather than the
+// machinery — Explore is a place you go, Over time is a thing you see.
+const VIEWS = ["list", "explore", "over-time"] as const;
+type View = (typeof VIEWS)[number];
+const VIEW_LABEL: Record<View, string> = {
+  list: "List",
+  explore: "Explore",
+  "over-time": "Over time",
+};
+const isView = (v: string | null): v is View => VIEWS.includes(v as View);
+
 const NO_SUBSCRIPTION = () => () => {};
 const NULL_ON_SERVER = () => null;
 
@@ -156,6 +175,7 @@ export default function PublicationsExplorer({
   papers,
   schemes,
   network,
+  timeline,
 }: Props) {
   const asked = useDeepLink();
 
@@ -182,14 +202,9 @@ export default function PublicationsExplorer({
   // readable until hydration. Null here means "the reader has not chosen", and
   // the moment they do, their choice wins over the link that brought them.
   const urlView = useUrlParam("view");
-  const [chosen, setChosen] = useState<"list" | "explore" | null>(null);
+  const [chosen, setChosen] = useState<View | null>(null);
   const view =
-    chosen ??
-    (urlView === "list" || urlView === "explore"
-      ? urlView
-      : link
-        ? "explore"
-        : "list");
+    chosen ?? (isView(urlView) ? urlView : link ? "explore" : "list");
 
   // Written explicitly, including view=list. A reader who arrives on a filtered
   // link and switches to List is saying something the absence of a parameter
@@ -200,7 +215,7 @@ export default function PublicationsExplorer({
   // view unmounts when List takes over, taking its selection with it, so the
   // URL is the only thing that remembers — go to List, come back, and the chips
   // are as they were.
-  const setView = (next: "list" | "explore") => {
+  const setView = (next: View) => {
     setChosen(next);
     replaceQuery((p) => p.set("view", next));
   };
@@ -224,7 +239,7 @@ export default function PublicationsExplorer({
         role="group"
         aria-label="View"
       >
-        {(["list", "explore"] as const).map((v) => (
+        {VIEWS.map((v) => (
           <button
             key={v}
             type="button"
@@ -236,14 +251,13 @@ export default function PublicationsExplorer({
                 : "text-zinc-600 hover:text-black dark:text-zinc-400 dark:hover:text-zinc-100"
             }`}
           >
-            {v === "list" ? "List" : "Explore"}
+            {VIEW_LABEL[v]}
           </button>
         ))}
       </div>
 
-      {view === "list" ? (
-        <SearchableList papers={papers} />
-      ) : (
+      {view === "list" && <SearchableList papers={papers} />}
+      {view === "explore" && (
         <ExploreView
           papers={papers}
           schemes={schemes}
@@ -251,6 +265,7 @@ export default function PublicationsExplorer({
           link={link}
         />
       )}
+      {view === "over-time" && <TimelineView timeline={timeline} />}
     </div>
   );
 }
@@ -508,6 +523,140 @@ function PaperList({
   );
 }
 
+// ── Over time ──────────────────────────────────────────────────────────────
+
+/** Papers per area per year, as a grid of dots.
+ *
+ *  Not a line chart: seven series would need seven colours and this site has
+ *  none. Dot area carries the count, which is the standard activity profile the
+ *  field already reads, and it works in one ink.
+ *
+ *  The gaps are the point. Three areas stop — information retrieval after 2022,
+ *  digital humanities after 2019, science and technology studies after 2017 —
+ *  and two open in the 2020s. Nobody has to claim a direction; the record shows
+ *  one, and a reader draws their own conclusion. That is why this view exists
+ *  and why it is not called "future work": the trajectory is a fact, and what
+ *  comes next is not ours to print. */
+function TimelineView({ timeline }: { timeline: Timeline }) {
+  const { years, rows, totals, busiest } = timeline;
+  const thisYear = new Date().getFullYear();
+
+  // Area, not radius, carries the count — a paper is a paper, and doubling the
+  // radius would quadruple the ink for two papers instead of one.
+  const radius = (n: number) => (n === 0 ? 0 : 3 + 5 * Math.sqrt(n / busiest));
+
+  return (
+    <div className="mt-10 max-w-3xl">
+      <p className="text-sm leading-relaxed text-zinc-600 dark:text-zinc-400">
+        <span className="font-medium text-black dark:text-zinc-200">
+          Where the work has been.
+        </span>{" "}
+        Each row is a research area from the home page, found by the same search
+        its card links to. Bigger dot, more papers that year.
+      </p>
+
+      <div className="mt-6 overflow-x-auto">
+        <table className="w-full border-collapse text-xs">
+          <caption className="sr-only">
+            Papers per research area per year, {years[0]} to {years.at(-1)}
+          </caption>
+          <thead>
+            <tr>
+              <th className="w-[1%] pr-3 text-left font-normal text-zinc-500 dark:text-zinc-400">
+                <span className="sr-only">Research area</span>
+              </th>
+              {years.map((y) => (
+                <th
+                  key={y}
+                  scope="col"
+                  className="pb-2 text-center font-normal text-zinc-500 tabular-nums dark:text-zinc-400"
+                >
+                  {/* Two digits: fourteen four-digit years do not fit the
+                      column and the century is not in question. */}
+                  {String(y).slice(2)}
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.id} className="group">
+                <th
+                  scope="row"
+                  // Wraps on a phone, holds one line from sm up. At 375px the
+                  // longest label alone took 290 of the 375, leaving the grid a
+                  // sliver to scroll inside; wrapped, it takes about half.
+                  className="max-w-[9rem] py-1 pr-3 text-right font-normal whitespace-normal sm:max-w-none sm:whitespace-nowrap"
+                >
+                  <Link
+                    href={`/publications/?q=${encodeURIComponent(row.q)}`}
+                    className="text-zinc-600 underline decoration-zinc-300 underline-offset-2 hover:text-black dark:text-zinc-400 dark:decoration-zinc-700 dark:hover:text-zinc-100"
+                  >
+                    {row.title}
+                  </Link>
+                </th>
+                {row.counts.map((n, i) => (
+                  <td
+                    key={years[i]}
+                    className="px-0 py-1 text-center align-middle"
+                  >
+                    <span className="sr-only">
+                      {years[i]}: {n} {n === 1 ? "paper" : "papers"}
+                    </span>
+                    <svg
+                      viewBox="0 0 20 20"
+                      className="mx-auto h-5 w-5 text-black dark:text-zinc-100"
+                      aria-hidden="true"
+                    >
+                      {n > 0 && (
+                        <circle
+                          cx="10"
+                          cy="10"
+                          r={radius(n)}
+                          fill="currentColor"
+                        />
+                      )}
+                    </svg>
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+          <tfoot>
+            <tr>
+              <th
+                scope="row"
+                className="border-t border-zinc-200 pt-2 pr-3 text-right font-normal text-zinc-500 dark:border-zinc-800 dark:text-zinc-400"
+              >
+                All papers
+              </th>
+              {totals.map((n, i) => (
+                <td
+                  key={years[i]}
+                  className="border-t border-zinc-200 pt-2 text-center tabular-nums text-zinc-600 dark:border-zinc-800 dark:text-zinc-400"
+                >
+                  {n || "·"}
+                </td>
+              ))}
+            </tr>
+          </tfoot>
+        </table>
+      </div>
+
+      {/* Both caveats sit under the grid they qualify, not in a footnote
+          somebody has to go looking for. */}
+      <p className="mt-5 text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">
+        Rows do not add up to the totals: six papers answer two areas — a
+        scientometric review of a biomedical literature is both — so they are
+        counted in each row and once in the total.
+        {years.at(-1) === thisYear && (
+          <> {thisYear} is still running, so its column is not final.</>
+        )}
+      </p>
+    </div>
+  );
+}
+
 // ── Explore ────────────────────────────────────────────────────────────────
 
 function ExploreView({
@@ -515,7 +664,9 @@ function ExploreView({
   schemes,
   network,
   link,
-}: Props & { link: { scheme: SchemeId; values: string[] } | null }) {
+}: Omit<Props, "timeline"> & {
+  link: { scheme: SchemeId; values: string[] } | null;
+}) {
   // Both derived for the same reason as the view above: the URL is not readable
   // on the first render, so it cannot seed useState.
   const [chosenScheme, setChosenScheme] = useState<SchemeId | null>(null);

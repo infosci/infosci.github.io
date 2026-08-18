@@ -34,16 +34,17 @@ const pubs = [
   ...(await read("data/manual-publications.json")),
 ];
 
-// Parsed out of the page rather than duplicated into a data file: the cards are
-// components — a mark, a title, a citation — and splitting the query away from
-// them would leave two places to edit and one to forget.
-const page = await readFile(new URL("app/page.tsx", root), "utf8");
-const titles = [...page.matchAll(/title: "([^"]+)"/g)].map((m) => m[1]);
-const queries = [...page.matchAll(/q: "([^"]+)"/g)].map((m) => m[1]);
+// Read from lib/areas.ts, the one place the areas are defined — the home page
+// draws them as cards and Publications counts them per year, and both import
+// from there. Parsed by shape rather than imported because this is a plain node
+// script and that file is TypeScript.
+const source = await readFile(new URL("lib/areas.ts", root), "utf8");
+const titles = [...source.matchAll(/title: "([^"]+)"/g)].map((m) => m[1]);
+const queries = [...source.matchAll(/q: "([^"]+)"/g)].map((m) => m[1]);
 
 if (!titles.length || titles.length !== queries.length) {
   console.error(
-    `Could not read the cards from app/page.tsx — found ${titles.length} titles and ` +
+    `Could not read the areas from lib/areas.ts — found ${titles.length} titles and ` +
       `${queries.length} queries. This script parses them by shape; if the file was ` +
       "restructured, fix the patterns here.",
   );
