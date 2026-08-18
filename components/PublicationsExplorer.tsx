@@ -60,14 +60,15 @@ type Props = {
 // Never subscribed to, only read: a static export has no client-side route
 // change that would rewrite the query in place.
 // Three questions about the same seventy-two papers: what they are, where they
-// sit, and when they were written. The labels name the question rather than the
-// machinery — Explore is a place you go, Over time is a thing you see.
-const VIEWS = ["list", "explore", "over-time"] as const;
+// sit, and when they were written. All three are ways of exploring, so the
+// labels have to do more work than "explore" does — Explore means the Web of
+// Science schemes and the graph specifically, and Timeline means the years.
+const VIEWS = ["list", "explore", "timeline"] as const;
 type View = (typeof VIEWS)[number];
 const VIEW_LABEL: Record<View, string> = {
   list: "List",
   explore: "Explore",
-  "over-time": "Over time",
+  timeline: "Timeline",
 };
 const isView = (v: string | null): v is View => VIEWS.includes(v as View);
 
@@ -265,7 +266,7 @@ export default function PublicationsExplorer({
           link={link}
         />
       )}
-      {view === "over-time" && <TimelineView timeline={timeline} />}
+      {view === "timeline" && <TimelineView timeline={timeline} />}
     </div>
   );
 }
