@@ -1128,27 +1128,27 @@ function SubjectsView({
                     (0.8 +
                       0.55 * Math.sqrt((degreeOf.get(d.key) ?? 0) / maxDegree));
 
-                  // Every handler is shared, so the selected paper behaves
-                  // exactly like the others — it can still be dragged, and a
-                  // drag does not end the moment the shape changes under the
-                  // pointer.
+                  // Every handler sits on the group, so the selected paper
+                  // behaves exactly like the others — it can still be dragged,
+                  // and a drag does not end when the shape changes under the
+                  // pointer, because the group does not change.
                   const handlers = {
                     tabIndex: 0,
                     role: "button",
                     "aria-label": byKey.get(d.key)?.title,
                     onMouseEnter: () => !dragging.current && setPicked(d.key),
                     onFocus: () => setPicked(d.key),
-                    onPointerDown: (e: React.PointerEvent<SVGElement>) => {
+                    onPointerDown: (e: React.PointerEvent<SVGGElement>) => {
                       e.currentTarget.setPointerCapture(e.pointerId);
                       dragging.current = d.key;
                       setPicked(d.key);
                     },
-                    onPointerMove: (e: React.PointerEvent<SVGElement>) => {
+                    onPointerMove: (e: React.PointerEvent<SVGGElement>) => {
                       if (dragging.current !== d.key) return;
                       const pt = toDiagram(e.clientX, e.clientY);
                       if (pt) setMoved((m) => ({ ...m, [d.key]: pt }));
                     },
-                    onPointerUp: (e: React.PointerEvent<SVGElement>) => {
+                    onPointerUp: (e: React.PointerEvent<SVGGElement>) => {
                       e.currentTarget.releasePointerCapture(e.pointerId);
                       dragging.current = null;
                     },
@@ -1171,27 +1171,45 @@ function SubjectsView({
                   // the same radius reads smaller, because most of its area is
                   // the gaps between the arms.
                   return (
-                    <path
-                      key={d.key}
-                      // 1.9 rather than the 1.6 a selected circle used: a star
-                      // of the same radius reads smaller, because most of its
-                      // area is the gaps between the arms.
-                      d={
-                        isPicked
-                          ? starPath(at.x, at.y, zoom * NODE_R * 1.9)
-                          : circlePath(at.x, at.y, r)
-                      }
-                      className={
-                        isPicked
-                          ? "fill-current"
-                          : neighbours.has(d.key)
-                            ? "fill-zinc-800 dark:fill-zinc-200"
-                            : "fill-zinc-500 dark:fill-zinc-500"
-                      }
-                      {...handlers}
-                    >
+                    <g key={d.key} {...handlers}>
+                      {/* An invisible target, because the marks are too small to
+                          tap. On a phone the graph renders 327px wide for a
+                          894-unit frame, so a median node is 14px across and 71
+                          of 72 fall under the 24px minimum — a finger hits a
+                          neighbour or nothing. This circle takes the events at
+                          26 units, about 19px there and 23px on a desktop.
+
+                          Not larger, though the guideline asks for 24px: the
+                          nodes in the middle of this graph sit closer together
+                          than that, and a target wide enough to satisfy the
+                          rule everywhere would swallow its neighbours in the
+                          one place precision matters most. */}
+                      <circle
+                        cx={at.x}
+                        cy={at.y}
+                        r={Math.max(r, 26)}
+                        fill="none"
+                        pointerEvents="all"
+                      />
+                      <path
+                        // 1.9 rather than the 1.6 a selected circle used: a star
+                        // of the same radius reads smaller, because most of its
+                        // area is the gaps between the arms.
+                        d={
+                          isPicked
+                            ? starPath(at.x, at.y, zoom * NODE_R * 1.9)
+                            : circlePath(at.x, at.y, r)
+                        }
+                        className={
+                          isPicked
+                            ? "fill-current"
+                            : neighbours.has(d.key)
+                              ? "fill-zinc-800 dark:fill-zinc-200"
+                              : "fill-zinc-500 dark:fill-zinc-500"
+                        }
+                      />
                       <title>{byKey.get(d.key)?.title}</title>
-                    </path>
+                    </g>
                   );
                 })}
             </svg>
