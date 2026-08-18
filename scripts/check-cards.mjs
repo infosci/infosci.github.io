@@ -63,12 +63,14 @@ const cards = titles.map((title, i) => ({ title, q: queries[i] }));
 // where a paper has one, the publisher's otherwise. One record here was held in
 // 2012 and published in 2013, and a checker reading the raw field scores a query
 // mentioning either year differently from the site.
+const shownYear = (p) => p.displayYear ?? p.year;
+
 const haystack = (p) =>
   [
     p.title,
     (p.authors ?? []).join(" "),
     p.venue ?? p.journal ?? "",
-    p.displayYear ?? p.year ?? "",
+    shownYear(p) ?? "",
   ]
     .join(" ")
     .toLowerCase();
@@ -104,8 +106,10 @@ console.log(
 for (const { title } of cards) {
   console.log(`${String(hits.get(title).length).padStart(3)}  ${title}`);
   if (list) {
-    for (const p of hits.get(title).sort((a, b) => (b.year ?? 0) - (a.year ?? 0))) {
-      console.log(`       ${p.year ?? "????"}  ${p.title.slice(0, 66)}`);
+    for (const p of hits
+      .get(title)
+      .sort((a, b) => (shownYear(b) ?? 0) - (shownYear(a) ?? 0))) {
+      console.log(`       ${shownYear(p) ?? "????"}  ${p.title.slice(0, 66)}`);
     }
   }
 }
@@ -120,7 +124,8 @@ if (shared.length) {
 
 if (orphans.length) {
   console.log("\nOn no card — fine if it is a method paper with no domain:");
-  for (const p of orphans) console.log(`   ${p.year ?? "????"}  ${p.title.slice(0, 66)}`);
+  for (const p of orphans)
+    console.log(`   ${shownYear(p) ?? "????"}  ${p.title.slice(0, 66)}`);
 }
 
 if (crowded.length) {

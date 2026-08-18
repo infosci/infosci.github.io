@@ -68,20 +68,24 @@ const ordered = [...byValue.entries()].sort(
     a[0].localeCompare(b[0]),
 );
 
-const byYear = (a, b) => (b.displayYear ?? b.year ?? 0) - (a.displayYear ?? a.year ?? 0);
+// The year a reader sees, as lib/publications.ts resolves it: the conference
+// year where a record has one, the publisher's otherwise. Sorting used it and
+// printing did not, so a 2012 conference paper sorted as 2012 and printed 2013.
+const shownYear = (p) => p.displayYear ?? p.year;
+const byYear = (a, b) => (shownYear(b) ?? 0) - (shownYear(a) ?? 0);
 
 if (mode === "--tsv") {
   console.log(["discipline", "year", "venue", "title", "doi"].join("\t"));
   for (const [d, items] of ordered) {
     for (const p of [...items].sort(byYear)) {
-      console.log([d, p.year ?? "", venueOf(p), p.title, p.doi ?? ""].join("\t"));
+      console.log([d, shownYear(p) ?? "", venueOf(p), p.title, p.doi ?? ""].join("\t"));
     }
   }
 } else if (mode === "--list") {
   for (const [d, items] of ordered) {
     console.log(`\n${d}  (${items.length})\n${"-".repeat(64)}`);
     for (const p of [...items].sort(byYear)) {
-      console.log(`${p.year ?? "????"}  ${venueOf(p).slice(0, 34).padEnd(34)}  ${p.title.slice(0, 62)}`);
+      console.log(`${shownYear(p) ?? "????"}  ${venueOf(p).slice(0, 34).padEnd(34)}  ${p.title.slice(0, 62)}`);
     }
   }
 } else {

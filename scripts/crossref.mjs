@@ -195,10 +195,14 @@ export function titleSimilarity(a, b) {
 
 // Newest first, and stable for papers sharing a month so the file does not
 // churn between runs.
+//
+// By displayYear where a record has one, which is what the comment on
+// OWNED_FIELDS above promises and what the site does. Sorting on the raw year
+// put the JIST 2012 paper a row away from where every view shows it.
 export function sortRecords(records) {
   return [...records].sort(
     (a, b) =>
-      (b.year ?? 0) - (a.year ?? 0) ||
+      ((b.displayYear ?? b.year) ?? 0) - ((a.displayYear ?? a.year) ?? 0) ||
       (b.month ?? 0) - (a.month ?? 0) ||
       (a.title ?? "").localeCompare(b.title ?? ""),
   );
