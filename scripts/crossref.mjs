@@ -27,7 +27,7 @@ const ENTITIES = {
   "&#39;": "'",
 };
 
-function clean(value) {
+export function clean(value) {
   if (typeof value !== "string") return value;
   return value
     .replace(/<[^>]+>/g, "")
@@ -104,19 +104,27 @@ export function doiCandidates(input) {
   return out;
 }
 
-export async function byDoi(doi) {
+// The raw Crossref work, before normalize() collapses given/family into one
+// display string. sync-center.mjs needs given/family kept apart to write
+// "Family, Given" — the order BibTeX expects and normalize()'s output cannot
+// be reversed out of correctly for multi-word names.
+export async function workByDoi(doi) {
   const candidates = doiCandidates(doi);
   if (!candidates.length) throw new Error(`"${doi}" is not a DOI`);
 
   let last;
   for (const candidate of candidates) {
     try {
-      return normalize(await crossref(`/works/${encodeURIComponent(candidate)}`));
+      return await crossref(`/works/${encodeURIComponent(candidate)}`);
     } catch (err) {
       last = err;
     }
   }
   throw last;
+}
+
+export async function byDoi(doi) {
+  return normalize(await workByDoi(doi));
 }
 
 // Fallback for the papers that predate DOIs in our .bib. Crossref's relevance

@@ -9,6 +9,7 @@
 
 import { readFile, writeFile } from "node:fs/promises";
 import { byDoi, mergeRecord, sortRecords } from "./crossref.mjs";
+import { syncCenter } from "./sync-center.mjs";
 import wosCategories from "../data/wos-categories.json" with { type: "json" };
 
 const DATA = new URL("../data/publications.json", import.meta.url);
@@ -105,3 +106,9 @@ console.log("   and will drag other papers along.");
 console.log("\nThen: node scripts/check-disciplines.mjs   (must exit 0)");
 console.log("      npm run cards");
 console.log("      npm run build");
+
+// scienceofscience.github.io is a spin-off covering science of science and
+// STS. A paper mirrors there exactly when it lands on this site's own
+// "Science of Science" or "Science and Technology Studies" card, so this
+// check runs on every add rather than waiting to be asked.
+await syncCenter([merged.doi]);
