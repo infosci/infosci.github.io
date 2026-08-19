@@ -150,6 +150,26 @@
     "order": 38
   },
   {
+    "slug": "jiyoonpark",
+    "name": "Jiyoon Park",
+    "role": "master's students",
+    "status": "current",
+    "now": null,
+    "photo": "/people/jiyoonpark.webp",
+    "link": "https://sites.google.com/view/jiyoonswebportfolio",
+    "order": 39
+  },
+  {
+    "slug": "dohyunpark",
+    "name": "Dohyun Park",
+    "role": "master's students",
+    "status": "current",
+    "now": null,
+    "photo": "/people/dohyunpark.webp",
+    "link": "https://tinted-gopher-fda.notion.site/dohyun9041",
+    "order": 40
+  },
+  {
     "slug": "peiliangzhang",
     "name": "Peiliang Zhang",
     "role": "visiting scholars",
