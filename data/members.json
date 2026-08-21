@@ -170,14 +170,14 @@
     "order": 40
   },
   {
-    "slug": "peiliangzhang",
-    "name": "Peiliang Zhang",
+    "slug": "hongchengwei",
+    "name": "Hongcheng Wei",
     "role": "visiting scholars",
     "status": "current",
     "now": null,
-    "photo": "/people/peiliangzhang.webp",
-    "link": "https://papercode-for-cheung.github.io",
-    "order": 41
+    "photo": null,
+    "link": "https://orcid.org/0000-0002-0025-7709",
+    "order": 42
   },
   {
     "slug": "donghunkim",
@@ -248,5 +248,15 @@
     "photo": "/people/qimingchen.webp",
     "link": "https://www.linkedin.com/in/qiming-chen-845049327",
     "order": 64
+  },
+  {
+    "slug": "peiliangzhang",
+    "name": "Peiliang Zhang",
+    "role": "visiting scholars",
+    "status": "former",
+    "now": null,
+    "photo": "/people/peiliangzhang.webp",
+    "link": "https://papercode-for-cheung.github.io",
+    "order": 65
   }
 ]
