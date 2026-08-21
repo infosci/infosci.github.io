@@ -238,9 +238,23 @@ function Person({ person, mono }: { person: Member; mono: boolean }) {
         </span>
       )}
       {person.now && (
-        <span className="mt-0.5 block text-center text-sm leading-snug text-zinc-500 dark:text-zinc-400">
-          Now {person.now}
-        </span>
+        <>
+          {/* A rule between what they were here and what they are now. The two
+              lines are the same size and colour and sat 2px apart, so "Master's
+              student, former" and "Now Researcher at KHIS" read as one run-on
+              caption — the reader had to parse the words to find where the past
+              ended. A line does that before anything is read.
+              
+              Only where both lines exist. A former member whose next post we do
+              not know has one line and nothing to divide. */}
+          <span
+            aria-hidden="true"
+            className="mx-auto mt-2 block h-px w-6 bg-zinc-300 dark:bg-zinc-700"
+          />
+          <span className="mt-2 block text-center text-sm leading-snug text-zinc-500 dark:text-zinc-400">
+            Now {person.now}
+          </span>
+        </>
       )}
     </>
   );
