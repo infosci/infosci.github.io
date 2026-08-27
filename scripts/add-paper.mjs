@@ -11,6 +11,8 @@ import { readFile, writeFile } from "node:fs/promises";
 import { byDoi, mergeRecord, sortRecords } from "./crossref.mjs";
 import { syncCenter } from "./sync-center.mjs";
 import wosCategories from "../data/wos-categories.json" with { type: "json" };
+import wosByPaper from "../data/wos-categories-by-paper.json" with { type: "json" };
+import citationTopics from "../data/citation-topics.json" with { type: "json" };
 
 const DATA = new URL("../data/publications.json", import.meta.url);
 
@@ -92,6 +94,48 @@ console.log("   Citation Topics meso value from the Categories/Classification bl
 console.log(`   add "${doi}" to data/citation-topics.json with its meso and macro.`);
 console.log("   A paper published in the last few months usually has none yet — leave it");
 console.log("   out rather than inventing one, and the Explore view will say so.");
+
+// The backlog, printed while the reader is already thinking about Web of
+// Science. Clarivate assigns a Citation Topic months after publication, so a
+// paper added today will not have one — and by the time it does, nobody is
+// looking. Adding the next paper is the moment someone is.
+//
+// Only papers the Core Collection actually holds. A conference paper it has no
+// record of will never be clustered, and listing it every time would train the
+// reader to skip the whole block.
+const NOT_INDEXED = "Not WoS-indexed";
+const venueOfRecord = (p) => (p.venue ?? p.journal ?? "").trim();
+const keyOfRecord = (p) => (p.doi ? p.doi.toLowerCase() : p.title);
+
+function inCoreCollection(p) {
+  const entry = wosCategories[venueOfRecord(p)];
+  if (!entry) return false;
+  if (entry.perPaper) {
+    const record = wosByPaper[keyOfRecord(p)];
+    return Boolean(record && record.categories.length);
+  }
+  if (entry.categories.length) return true;
+  return entry.fallback !== NOT_INDEXED && Boolean(entry.fallback);
+}
+
+const awaiting = records.filter(
+  (p) =>
+    keyOfRecord(p) !== keyOfRecord(merged) &&
+    !citationTopics[keyOfRecord(p)] &&
+    inCoreCollection(p),
+);
+
+if (awaiting.length) {
+  console.log(
+    `\n   While you are in there: ${awaiting.length} other ${awaiting.length === 1 ? "paper is" : "papers are"} indexed but still`,
+  );
+  console.log("   without a topic. Worth a look on the same visit —");
+  for (const p of awaiting.sort((a, b) => (b.year ?? 0) - (a.year ?? 0))) {
+    console.log(`     ${p.year ?? "????"}  ${p.title.slice(0, 58)}`);
+    console.log(`             ${p.doi ?? "(no doi)"}`);
+  }
+  console.log("   Anything not listed has no Core Collection record and never will.");
+}
 
 console.log("\n3. HOMEPAGE CARDS. Nothing to edit — the cards find papers by searching");
 console.log("   the list, so this paper is already on whichever cards reach it. Run");
