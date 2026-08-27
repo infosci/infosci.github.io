@@ -1,5 +1,30 @@
 [
   {
+    "doi": "10.1016/j.joi.2026.101867",
+    "title": "Influence of various novelty types on delayed scientific recognition: Insights from citation classics essays",
+    "authors": [
+      "Yi Zhao",
+      "Heng Zhang",
+      "Yuzhuo Wang",
+      "Ziyi Xie",
+      "Yongjun Zhu"
+    ],
+    "journal": "Journal of Informetrics",
+    "volume": "20",
+    "issue": "4",
+    "pages": "101867",
+    "year": 2026,
+    "month": 12,
+    "type": "journal-article",
+    "url": "https://doi.org/10.1016/j.joi.2026.101867",
+    "selected": false,
+    "pdf": null,
+    "code": null,
+    "note": null,
+    "venue": null,
+    "displayYear": null
+  },
+  {
     "doi": "10.1016/j.joi.2026.101849",
     "title": "Does the Matthew effect exist in open peer review? An empirical study of institutional prestige effects on review outcomes",
     "authors": [
